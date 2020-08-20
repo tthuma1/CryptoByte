@@ -1,0 +1,42 @@
+{
+  "name": "cryptobyte",
+  "version": "1.0.0",
+  "description": "An ERC721 token project",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "dev": "node server.js",
+    "build": "next build",
+    "heroku-postbuild": "next build",
+    "start": "NODE_ENV=production node server.js",
+    "export": "next export"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TimThuma/Crypto-Byte-new.git"
+  },
+  "keywords": [
+    "Crypto",
+    "Byte",
+    "ERC721",
+    "ethereum"
+  ],
+  "author": "Tim Thuma",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TimThuma/Crypto-Byte-new/issues"
+  },
+  "homepage": "https://github.com/TimThuma/Crypto-Byte-new#readme",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bignumber.js": "^9.0.0",
+    "dotenv": "^8.2.0",
+    "jdenticon": "^2.0.0",
+    "next": "^9.0.1",
+    "next-routes": "^1.4.2",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "semantic-ui-react": "^0.87.3",
+    "web3": "^1.2.11"
+  }
+}
