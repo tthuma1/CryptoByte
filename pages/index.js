@@ -299,12 +299,7 @@ class CryptoByteIndex extends Component {
           }}
         >
           Contact:{' '}
-          <a
-            href="mailto:erc721.collectible@gmail.com"
-            style={{ color: 'white' }}
-          >
-            erc721.collectible@gmail.com
-          </a>
+          <a href="mailto:info@crypto-byte.com">info@crypto-byte.com</a>
           <span style={{ marginLeft: '5vw' }}>Etherscan:</span>{' '}
           <a
             href={`https://rinkeby.etherscan.io/address/${process.env.ADDRESS_721}`}
