@@ -1,0 +1,1 @@
+{"ast":null,"code":"import web3 from './web3';\nimport CompiledCryptoByte721 from './build/CryptoByte721.json';\nconst instance = new web3.eth.Contract(CompiledCryptoByte721.abi, process.env.ADDRESS_721);\nexport default instance;","map":null,"metadata":{},"sourceType":"module"}
