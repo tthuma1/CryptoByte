@@ -23,11 +23,8 @@ class Paused extends React.Component {
             }}
             attached="bottom"
           >
-            <Message.Header>Warning: This is a test website!</Message.Header>
-            <p>
-              The ERC721 smart contract is currently on TestNet only. Full
-              Ethereum MainNet experience coming soon.
-            </p>
+            <Message.Header>Crypto Byte is currently paused!</Message.Header>
+            <p>No transactions can be made at the moment.</p>
           </Message>
         )}
       </Container>

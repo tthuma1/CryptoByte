@@ -49,7 +49,10 @@ class Header extends React.Component {
     return (
       <div>
         {this.state.visibleFull === 'visible' && (
-          <Paused headerHeight={height} isPaused={isPaused} />
+          <Paused
+            headerHeight={height}
+            isPaused={true} /*isPaused={isPaused}*/
+          />
         )}
         <Menu
           stackable
