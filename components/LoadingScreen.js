@@ -1,10 +1,6 @@
 import React from 'react';
 
 class LoadingScreen extends React.Component {
-  state = {
-    display: ''
-  };
-
   render() {
     return (
       <div>
@@ -69,10 +65,15 @@ class LoadingScreen extends React.Component {
     }
 }
                 `}</style>
-        <div className="container c1" style={{ display: this.state.display }}>
+        <div className="container c1">
           <div className="loader1">
             <div className="l1" />
             <div className="l2" />
+          </div>
+          <div className="container">
+            <p style={{ color: 'white', position: 'relative', top: '70px' }}>
+              The page is loading. This may take a while.
+            </p>
           </div>
         </div>
       </div>

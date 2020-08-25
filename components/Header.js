@@ -34,7 +34,7 @@ class Header extends React.Component {
     const interval = setInterval(() => {
       if (this.props.mounted == true) {
         clearInterval(interval);
-        this.props.updateState();
+        this.props.updateState(true);
         this.setState({ visibleFull: 'visible' });
       }
     }, 100);
@@ -43,6 +43,11 @@ class Header extends React.Component {
     window.addEventListener('resize', () => {
       height = document.getElementById('header').clientHeight;
     });
+  }
+
+  hideAll() {
+    this.setState({ visibleFull: 'hidden' });
+    this.props.updateState(false);
   }
 
   render() {
@@ -80,10 +85,24 @@ class Header extends React.Component {
           <Dropdown item text="Collectible Tokens">
             <Dropdown.Menu>
               <Link href="/tokens">
-                <a className="item">All Tokens</a>
+                <a
+                  className="item"
+                  onClick={() => {
+                    this.hideAll();
+                  }}
+                >
+                  All Tokens
+                </a>
               </Link>
               <Link href={`/tokens/${currentAccount}`}>
-                <a className="item">My Tokens</a>
+                <a
+                  className="item"
+                  onClick={() => {
+                    this.hideAll();
+                  }}
+                >
+                  My Tokens
+                </a>
               </Link>
               <Link href="/buy_tokens/721">
                 <a className="item">Buy New Tokens</a>

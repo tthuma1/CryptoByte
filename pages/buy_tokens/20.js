@@ -151,7 +151,7 @@ class BuyTokens extends Component {
 
   render() {
     return (
-      <Layout mounted={true}>
+      <Layout mounted={this.state.mounted}>
         <Head>
           <title>Crypto Byte - Buy tokens</title>
         </Head>

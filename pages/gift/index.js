@@ -75,7 +75,7 @@ class GiftToken extends Component {
 
   render() {
     return (
-      <Layout mounted={true}>
+      <Layout mounted={this.state.mounted}>
         <MMPrompt />
 
         <Container
