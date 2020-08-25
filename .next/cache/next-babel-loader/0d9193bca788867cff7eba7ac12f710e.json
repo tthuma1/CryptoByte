@@ -1,1 +1,0 @@
-{"ast":null,"code":"var routes = module.exports = require('next-routes')();\n\nroutes.add('/account/:address', '/account').add('/gift/:id', '/gift').add('/sell/:id', '/sell').add('/token/:id', '/token').add('/tokens/:owner', '/tokens/owner');","map":null,"metadata":{},"sourceType":"script"}
