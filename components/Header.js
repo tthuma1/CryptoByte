@@ -12,9 +12,11 @@ class Header extends React.Component {
     isAdmin: 'none',
     visibleFull: 'hidden',
     pausedMounted: false,
+    hasMounted: false,
   };
 
   async componentDidMount() {
+    this.setState({ hasMounted: false });
     currentAccount = (await web3.eth.getAccounts())[0];
 
     if (
@@ -32,12 +34,18 @@ class Header extends React.Component {
     isPaused = await cryptoByte.methods.paused().call();
 
     const interval = setInterval(() => {
-      if (this.props.mounted == true) {
-        clearInterval(interval);
+      if (!this.state.hasMounted && this.props.mounted == true) {
+        //clearInterval(interval);
         this.props.updateState(true);
         this.setState({ visibleFull: 'visible' });
+        this.state.hasMounted = true;
       }
-    }, 100);
+
+      if (this.props.mounted == false) {
+        this.props.updateState(false);
+        this.setState({ visibleFull: 'hidden' });
+      }
+    }, 500);
 
     height = document.getElementById('header').clientHeight;
     window.addEventListener('resize', () => {
@@ -88,7 +96,12 @@ class Header extends React.Component {
                 <a
                   className="item"
                   onClick={() => {
-                    this.hideAll();
+                    if (!(location.pathname == '/tokens')) {
+                      this.hideAll();
+                    } else {
+                      this.hideAll();
+                      location.reload();
+                    }
                   }}
                 >
                   All Tokens

@@ -26,7 +26,7 @@ class AllTokens extends Component {
     pausedHeight: 0,
     images: {},
     buyLoading: false,
-    jdentHeigth: 270,
+    jdentHeigth: 136,
   };
 
   static async getInitialProps() {
@@ -112,7 +112,7 @@ class AllTokens extends Component {
   };
 
   updateImage = async (e, { calculations }) => {
-    this.setState({ jdentHeigth: calculations.height - 60 });
+    this.setState({ jdentHeigth: calculations.height - 40 });
   };
 
   renderTokens() {
@@ -134,8 +134,8 @@ class AllTokens extends Component {
               style={{
                 background: 'rgba(0,0,0,.05)',
                 overflow: 'auto',
-                paddingTop: '30px',
-                paddingBottom: '30px',
+                paddingTop: '20px',
+                paddingBottom: '20px',
               }}
             >
               <Jdenticon value={id} size={this.state.jdentHeigth} />
@@ -169,7 +169,11 @@ class AllTokens extends Component {
           </Card.Content>
           <Card.Content extra>
             <Link route={`/token/${id}`}>
-              <a>
+              <a
+                onClick={() => {
+                  this.setState({ mounted: false });
+                }}
+              >
                 <Button>
                   View Details
                   <Icon name="chevron circle right" />
@@ -183,8 +187,9 @@ class AllTokens extends Component {
                 name={id}
                 primary
                 onClick={this.buyToken}
-                loading={this.state.buyLoading}
+                //loading={this.state.buyLoading}
                 disabled={this.state.buyLoading}
+                style={{ marginTop: '5px' }}
               >
                 Buy token
                 <Icon name="shopping cart right" />

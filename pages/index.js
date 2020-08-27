@@ -276,14 +276,26 @@ class CryptoByteIndex extends Component {
               <p style={{ fontSize: '16px' }}>
                 To get a full list of tokens you own, navigate to{' '}
                 <Link href={`/tokens/${currentAccount}`}>
-                  <a>My Tokens</a>
+                  <a
+                    onClick={() => {
+                      this.setState({ mounted: false });
+                    }}
+                  >
+                    My Tokens
+                  </a>
                 </Link>{' '}
                 page. There you can put your tokens up for sale or gift them to
                 someone.
                 <br />
                 To get a list of all existing tokens, navigate to{' '}
                 <Link href="/tokens">
-                  <a>All Tokens</a>
+                  <a
+                    onClick={() => {
+                      this.setState({ mounted: false });
+                    }}
+                  >
+                    All Tokens
+                  </a>
                 </Link>{' '}
                 page. If any tokens are up for sale, you can buy them there.
               </p>

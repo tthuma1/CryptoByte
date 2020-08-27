@@ -184,8 +184,9 @@ class TokensOfOwner extends Component {
                 name={id}
                 primary
                 onClick={this.buyToken}
-                loading={this.state.buyLoading}
+                //loading={this.state.buyLoading}
                 disabled={this.state.buyLoading}
+                style={{ marginTop: '5px' }}
               >
                 Buy token
                 <Icon name="shopping cart right" />

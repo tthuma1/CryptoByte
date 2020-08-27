@@ -151,7 +151,11 @@ class TokenDetails extends Component {
               {this.props.tokenInfo['owner'] == currentAccount ? (
                 <div>
                   <Link route={`/sell/${this.props.id}`}>
-                    <a>
+                    <a
+                      onClick={() => {
+                        this.setState({ mounted: false });
+                      }}
+                    >
                       <Button>
                         {Number(this.props.tokenInfo['price'])
                           ? 'Change price or remove from sale'
@@ -161,7 +165,11 @@ class TokenDetails extends Component {
                     </a>
                   </Link>
                   <Link route={`/gift/${this.props.id}`}>
-                    <a>
+                    <a
+                      onClick={() => {
+                        this.setState({ mounted: false });
+                      }}
+                    >
                       <Button>
                         Gift token
                         <Icon name="gift right" />
