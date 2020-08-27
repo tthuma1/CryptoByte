@@ -11,6 +11,7 @@ import {
 import cryptoByte721 from '../../ethereum/cryptoByte721';
 import MMPrompt from '../../components/MMPrompt';
 import web3 from '../../ethereum/web3';
+import { Router } from '../../routes';
 
 let currentAccount, headerEl, pausedEl;
 
@@ -70,6 +71,7 @@ class SellToken extends Component {
       });
 
       this.setState({ saleLoading: false, success: true });
+      Router.pushRoute(`/token/${this.props.id}`);
     } catch (err) {
       this.setState({ saleLoading: false, msgErr: err.message });
     }
@@ -99,6 +101,7 @@ class SellToken extends Component {
         });
 
       this.setState({ loading: false, success: true });
+      Router.pushRoute(`/token/${this.props.id}`);
     } catch (err) {
       this.setState({ loading: false, msgErr: err.message });
     }

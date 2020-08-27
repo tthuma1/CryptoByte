@@ -240,12 +240,12 @@ class CryptoByteIndex extends Component {
                 How to use Crypto Byte Collectible?
               </Header>
               <p style={{ fontSize: '16px' }}>
-                To start off, you'll need to have{' '}
+                To start, all you need is{' '}
                 <Link route="https://metamask.io/">
                   <a target="_blank"> MetaMask</a>
                 </Link>{' '}
-                installed in your browser. To see how to use MetaMask, click on
-                this button.{' '}
+                installed in your browser. To learn how to use MetaMask, view
+                the instructions.{' '}
                 <MMPrompt
                   trigger={
                     <Button size="small" compact>
@@ -255,26 +255,27 @@ class CryptoByteIndex extends Component {
                   visible={false}
                 />
                 <br />
-                Your MetaMask account will be used to login you to Crypto Byte's
-                webpage.
+                Your MetaMask account will be used to log you in to Crypto
+                Byte's webpage.
               </p>
               <Divider horizontal style={{ color: 'DarkGray' }}>
                 THEN
               </Divider>
               <p style={{ fontSize: '16px' }}>
-                Once you have your account set up, you can start by buying a
-                brand new token. Use the menu at the top to navigate to{' '}
+                Once you have your account set up, you can start buying
+                collectible tokens or create your own brand new tokens. To
+                create a new token, go to the{' '}
                 <Link route={'/buy_tokens/721'}>
-                  <a>Buy New Tokens</a>
+                  <a>Create New Tokens</a>
                 </Link>{' '}
-                page. Once there, you can buy your first token for{' '}
+                page. Once there you can create your brand new token for{' '}
                 {web3.utils.fromWei(mintPrice, 'ether')} ETH.
               </p>
               <Divider horizontal style={{ color: 'DarkGray' }}>
                 THEN
               </Divider>
               <p style={{ fontSize: '16px' }}>
-                To get a full list of tokens you own, navigate to{' '}
+                To get a full list of tokens you own, go to the{' '}
                 <Link href={`/tokens/${currentAccount}`}>
                   <a
                     onClick={() => {
@@ -287,7 +288,7 @@ class CryptoByteIndex extends Component {
                 page. There you can put your tokens up for sale or gift them to
                 someone.
                 <br />
-                To get a list of all existing tokens, navigate to{' '}
+                To get a list of all existing tokens, go to the{' '}
                 <Link href="/tokens">
                   <a
                     onClick={() => {
@@ -312,7 +313,7 @@ class CryptoByteIndex extends Component {
         >
           Contact:{' '}
           <a href="mailto:info@crypto-byte.com">info@crypto-byte.com</a>
-          <span style={{ marginLeft: '5vw' }}>Etherscan:</span>{' '}
+          <span style={{ marginLeft: '5vw' }}>Contract address:</span>{' '}
           <a
             href={`https://rinkeby.etherscan.io/address/${process.env.ADDRESS_721}`}
             target="_blank"

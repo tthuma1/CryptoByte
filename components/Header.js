@@ -35,7 +35,6 @@ class Header extends React.Component {
 
     const interval = setInterval(() => {
       if (!this.state.hasMounted && this.props.mounted == true) {
-        //clearInterval(interval);
         this.props.updateState(true);
         this.setState({ visibleFull: 'visible' });
         this.state.hasMounted = true;
@@ -118,7 +117,7 @@ class Header extends React.Component {
                 </a>
               </Link>
               <Link href="/buy_tokens/721">
-                <a className="item">Buy New Tokens</a>
+                <a className="item">Create New Tokens</a>
               </Link>
             </Dropdown.Menu>
           </Dropdown>

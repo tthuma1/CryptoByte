@@ -17,6 +17,7 @@ import { Router } from '../../routes';
 
 let headerEl, pausedEl, currentAccount;
 let priceETH = 0;
+let vikingAmount = process.env.VIKING_AMOUNT;
 
 class BuyToken721 extends Component {
   state = {
@@ -25,7 +26,6 @@ class BuyToken721 extends Component {
     pausedHeight: 0,
     msgErr: false,
     success: false,
-    priceUSD: 0,
     id: 0,
     initialId: 0,
     loading: false,
@@ -56,28 +56,21 @@ class BuyToken721 extends Component {
 
     this.setState({
       initialId: Number(await cryptoByte721.methods.totalSupply().call()) + 1,
+      id: Number(await cryptoByte721.methods.totalSupply().call()) + 1,
     });
-    await this.updateInfo();
-    setInterval(this.updateInfo, 30000);
 
-    this.setState({ mounted: true });
-  }
-
-  updateInfo = () => {
-    fetch(
-      `https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=USD&api_key=${process.env.CRYPTOCOMPARE_KEY}`
-    ).then(async (response) => {
-      let ETHtoUSD = (await response.json()).USD;
+    setInterval(async () => {
       this.setState({
-        priceUSD: priceETH.times(ETHtoUSD).toFixed(),
         id: Number(await cryptoByte721.methods.totalSupply().call()) + 1,
       });
 
       if (this.state.id != this.state.initialId) {
         location.reload();
       }
-    });
-  };
+    }, 15000);
+
+    this.setState({ mounted: true });
+  }
 
   onSubmit = async (event) => {
     event.preventDefault();
@@ -126,17 +119,19 @@ class BuyToken721 extends Component {
                   </div>
                 </Segment>
                 <Message>
-                  The ID of your newly bought token will be #{this.state.id}.
+                  The ID of your newly bought token will be #
+                  {this.state.id - vikingAmount}.
                   <br />
-                  Above image will be used to identify your token.
+                  Above image will be used to identify your token. If you'd like
+                  to use a custom image, please contact us at{' '}
+                  <a href="mailto:info@crypto-byte.com">info@crypto-byte.com</a>
                 </Message>
               </Form.Field>
 
               <Form.Field>
                 <label />
                 <Message>
-                  This purchase is going to cost you {priceETH.toFixed()} ETH (~
-                  ${this.state.priceUSD}).
+                  This purchase is going to cost you {priceETH.toFixed()} ETH.
                   <br />
                   Gas isn't included in the price above.
                 </Message>
