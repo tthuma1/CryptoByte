@@ -72,7 +72,7 @@ class LoadingScreen extends React.Component {
           </div>
           <div className="container">
             <p style={{ color: 'white', position: 'relative', top: '70px' }}>
-              The page is loading. This may take a while.
+              Reading smart contract, please wait ...
             </p>
           </div>
         </div>

@@ -161,9 +161,11 @@ class AllTokens extends Component {
             </Card.Description>
             <Card.Meta style={{ overflow: 'auto', fontSize: '0.9em' }}>
               Owner
-              {currentAccount == this.props.tokenInfo[id]['owner']
-                ? ' (You)'
-                : ''}
+              {currentAccount == this.props.tokenInfo[id]['owner'] ? (
+                <b style={{ color: 'rgba(0,0,0,.68)' }}> (You)</b>
+              ) : (
+                ''
+              )}
               : {this.props.tokenInfo[id]['owner']}
             </Card.Meta>
           </Card.Content>

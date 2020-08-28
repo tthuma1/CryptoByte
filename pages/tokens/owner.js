@@ -28,7 +28,7 @@ class TokensOfOwner extends Component {
     pausedHeight: 0,
     images: {},
     buyLoading: false,
-    jdentHeigth: 270,
+    jdentHeigth: 220,
   };
 
   static async getInitialProps({ query }) {
@@ -119,7 +119,7 @@ class TokensOfOwner extends Component {
   };
 
   updateImage = async (e, { calculations }) => {
-    this.setState({ jdentHeigth: calculations.height - 60 });
+    this.setState({ jdentHeigth: calculations.height - 50 });
   };
 
   renderTokens() {
@@ -137,8 +137,8 @@ class TokensOfOwner extends Component {
               style={{
                 background: 'rgba(0,0,0,.05)',
                 overflow: 'auto',
-                paddingTop: '30px',
-                paddingBottom: '30px',
+                paddingTop: '25px',
+                paddingBottom: '25px',
               }}
             >
               <Jdenticon value={id} size={this.state.jdentHeigth} />
@@ -163,9 +163,7 @@ class TokensOfOwner extends Component {
               </b>
             </Card.Description>
             <Card.Meta style={{ overflow: 'auto' }}>
-              Owner
-              {currentAccount == this.props.owner ? ' (You)' : ''}:{' '}
-              {this.props.owner}
+              Owner : {this.props.owner}
             </Card.Meta>
           </Card.Content>
           <Card.Content extra>
