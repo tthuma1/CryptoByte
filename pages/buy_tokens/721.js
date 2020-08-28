@@ -103,8 +103,8 @@ class BuyToken721 extends Component {
           }}
         >
           <Header as="h3" inverted dividing textAlign="center">
-            You can buy new ERC721 Crypto Byte tokens with ETH with the form
-            below.
+            You can create new Crypto Byte Collectible tokens with ETH with the
+            form below.
           </Header>
 
           <Form inverted onSubmit={this.onSubmit}>
@@ -119,19 +119,24 @@ class BuyToken721 extends Component {
                   </div>
                 </Segment>
                 <Message>
-                  The ID of your newly bought token will be #
-                  {this.state.id - vikingAmount}.
+                  The ID of your newly created token will be{' '}
+                  <b>#{this.state.id - vikingAmount}</b>.
                   <br />
                   Above image will be used to identify your token. If you'd like
                   to use a custom image, please contact us at{' '}
-                  <a href="mailto:info@crypto-byte.com">info@crypto-byte.com</a>
+                  <b>
+                    <a href="mailto:info@crypto-byte.com">
+                      info@crypto-byte.com
+                    </a>
+                  </b>
                 </Message>
               </Form.Field>
 
               <Form.Field>
                 <label />
                 <Message>
-                  This purchase is going to cost you {priceETH.toFixed()} ETH.
+                  The creation of a new token is going to cost you{' '}
+                  <b>{priceETH.toFixed()} ETH</b>.
                   <br />
                   Gas isn't included in the price above.
                 </Message>
@@ -162,7 +167,7 @@ class BuyToken721 extends Component {
               loading={this.state.loading}
               disabled={this.state.loading}
             >
-              Purchase
+              Create
             </Button>
           </Form>
         </Container>

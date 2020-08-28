@@ -203,7 +203,7 @@ class CryptoByteIndex extends Component {
               <Grid.Row>
                 <Grid.Column>
                   <p>
-                    Price to buy new token:{' '}
+                    Price to create a new token:{' '}
                     <b>{web3.utils.fromWei(mintPrice, 'ether')} ETH</b>
                   </p>
                 </Grid.Column>
