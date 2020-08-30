@@ -190,7 +190,8 @@ class TokenDetails extends Component {
             </Card.Content>
 
             <Card.Content extra>
-              {this.state.tokenInfo['owner'] == currentAccount ? (
+              {this.state.tokenInfo['owner'] &&
+              this.state.tokenInfo['owner'] == currentAccount ? (
                 <div>
                   <Link route={`/sell/${this.props.id}`}>
                     <a
