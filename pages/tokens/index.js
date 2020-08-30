@@ -8,6 +8,7 @@ import {
   Button,
   Image,
   Visibility,
+  Placeholder,
 } from 'semantic-ui-react';
 import cryptoByte721 from '../../ethereum/cryptoByte721';
 import { Link, Router } from '../../routes';
@@ -25,35 +26,14 @@ class AllTokens extends Component {
     headerHeight: 0,
     pausedHeight: 0,
     images: {},
-    buyLoading: false,
+    buyLoading: {},
     jdentHeigth: 136,
+    tokenInfo: {},
   };
 
   static async getInitialProps() {
-    let tokens = [];
     const supply = await cryptoByte721.methods.totalSupply().call();
-
-    for (let i = 0; i < supply; i++) {
-      let token = await cryptoByte721.methods.tokenByIndex(i).call();
-      tokens.push(token);
-    }
-
-    let tokenInfo = {};
-    for (let i = 0; i < tokens.length; i++) {
-      let id = tokens[i];
-      tokenInfo[id] = {};
-
-      tokenInfo[id]['owner'] = await cryptoByte721.methods.ownerOf(id).call();
-
-      tokenInfo[id]['price'] = await cryptoByte721.methods
-        .getTokenPrice(id)
-        .call();
-    }
-    tokens.sort(function (a, b) {
-      return a - b;
-    });
-
-    return { tokens, supply, tokenInfo };
+    return { supply };
   }
 
   async componentDidMount() {
@@ -77,38 +57,59 @@ class AllTokens extends Component {
       this.setState({ pausedHeight: 0 });
     });
 
-    // check if token has image and save it in state
+    this.setState({ mounted: true });
+
+    this.getTokenInfo();
+  }
+
+  getTokenInfo = async () => {
+    let tokenInfo = {};
     let images = {};
-    for (let i = 0; i < this.props.supply; i++) {
-      let id = this.props.tokens[i];
+    for (let id = 1; id <= this.props.supply; id++) {
+      tokenInfo[id] = {};
+
+      tokenInfo[id]['owner'] = await cryptoByte721.methods.ownerOf(id).call();
+
+      tokenInfo[id]['price'] = await cryptoByte721.methods
+        .getTokenPrice(id)
+        .call();
+
+      // check if token has image and save it in state
       try {
         await axios.get(`../static/images/ERC721/${id}.jpg`);
         images[id] = true;
       } catch (error) {
         images[id] = false;
       }
-    }
-    await this.setState({ images });
 
-    this.setState({ mounted: true });
-  }
+      this.setState({ tokenInfo, images });
+    }
+  };
 
   buyToken = async (event) => {
-    let id = event.target.name;
+    var id = event.target.name;
     event.preventDefault();
 
-    this.setState({ buyLoading: true });
+    this.setState((prevState) => {
+      let buyLoading = Object.assign({}, prevState.buyLoading);
+      buyLoading[id] = true;
+      return { buyLoading };
+    });
 
     try {
       await cryptoByte721.methods.buyToken(id).send({
         from: currentAccount,
-        value: this.props.tokenInfo[id]['price'],
+        value: this.state.tokenInfo[id]['price'],
       });
 
       Router.replaceRoute('/tokens');
     } catch {}
 
-    this.setState({ buyLoading: false });
+    this.setState((prevState) => {
+      let buyLoading = Object.assign({}, prevState.buyLoading);
+      buyLoading[id] = false;
+      return { buyLoading };
+    });
   };
 
   updateImage = async (e, { calculations }) => {
@@ -116,59 +117,83 @@ class AllTokens extends Component {
   };
 
   renderTokens() {
-    const items = this.props.tokens.map((id) => {
-      id = Number(id);
-      return (
+    let items = [];
+    for (let id = 1; id <= this.props.supply; id++) {
+      items.push(
         <Card key={id}>
-          {this.state.images[id] ? (
-            id == 1 ? (
-              <Visibility onUpdate={this.updateImage}>
+          {this.state.tokenInfo[id] ? (
+            this.state.images[id] ? (
+              id == 1 ? (
+                <Visibility onUpdate={this.updateImage}>
+                  <Image src={`/static/images/ERC721/${id}.jpg`} wrapped />
+                </Visibility>
+              ) : (
                 <Image src={`/static/images/ERC721/${id}.jpg`} wrapped />
-              </Visibility>
+              )
             ) : (
-              <Image src={`/static/images/ERC721/${id}.jpg`} wrapped />
+              <Container
+                textAlign="center"
+                style={{
+                  background: 'rgba(0,0,0,.05)',
+                  overflow: 'auto',
+                  paddingTop: '20px',
+                  paddingBottom: '20px',
+                }}
+              >
+                <Jdenticon value={id} size={this.state.jdentHeigth} />
+              </Container>
             )
           ) : (
-            <Container
-              textAlign="center"
-              style={{
-                background: 'rgba(0,0,0,.05)',
-                overflow: 'auto',
-                paddingTop: '20px',
-                paddingBottom: '20px',
-              }}
-            >
-              <Jdenticon value={id} size={this.state.jdentHeigth} />
-            </Container>
+            <Placeholder fluid>
+              <Placeholder.Image
+                style={{ height: this.state.jdentHeigth + 40 }}
+              />
+            </Placeholder>
           )}
           <Card.Content>
             <Card.Header>
               {id <= vikingAmount
                 ? 'Viking Collection #' + id
-                : 'Classic Token #' + (Number(id) - vikingAmount)}
+                : 'Classic Token #' + (id - vikingAmount)}
             </Card.Header>
-            <Card.Description>
-              <b>
-                {Number(this.props.tokenInfo[id]['price'])
-                  ? 'Token price: ' +
-                    web3.utils.fromWei(
-                      this.props.tokenInfo[id]['price'],
-                      'ether'
-                    ) +
-                    ' ETH'
-                  : 'Token not for sale'}
-              </b>
-            </Card.Description>
-            <Card.Meta style={{ overflow: 'auto', fontSize: '0.9em' }}>
-              Owner
-              {currentAccount == this.props.tokenInfo[id]['owner'] ? (
-                <b style={{ color: 'rgba(0,0,0,.68)' }}> (You)</b>
-              ) : (
-                ''
-              )}
-              : {this.props.tokenInfo[id]['owner']}
-            </Card.Meta>
+
+            {this.state.tokenInfo[id] ? (
+              <div>
+                <Card.Description>
+                  <b>
+                    {Number(this.state.tokenInfo[id]['price'])
+                      ? 'Token price: ' +
+                        web3.utils.fromWei(
+                          this.state.tokenInfo[id]['price'],
+                          'ether'
+                        ) +
+                        ' ETH'
+                      : 'Token not for sale'}
+                  </b>
+                </Card.Description>
+                <Card.Meta style={{ overflow: 'auto', fontSize: '0.9em' }}>
+                  Owner
+                  {currentAccount == this.state.tokenInfo[id]['owner'] ? (
+                    <b style={{ color: 'rgba(0,0,0,.68)' }}> (You)</b>
+                  ) : (
+                    ''
+                  )}
+                  : {this.state.tokenInfo[id]['owner']}
+                </Card.Meta>
+              </div>
+            ) : (
+              <Placeholder style={{ marginTop: '10px' }}>
+                <Placeholder.Header>
+                  <Placeholder.Line length="very short" />
+                  <Placeholder.Line length="medium" />
+                </Placeholder.Header>
+                <Placeholder.Paragraph>
+                  <Placeholder.Line length="short" />
+                </Placeholder.Paragraph>
+              </Placeholder>
+            )}
           </Card.Content>
+
           <Card.Content extra>
             <Link route={`/token/${id}`}>
               <a
@@ -183,26 +208,30 @@ class AllTokens extends Component {
               </a>
             </Link>
 
-            {Number(this.props.tokenInfo[id]['price']) &&
-            this.props.tokenInfo[id]['owner'] != currentAccount ? (
-              <Button
-                name={id}
-                primary
-                onClick={this.buyToken}
-                //loading={this.state.buyLoading}
-                disabled={this.state.buyLoading}
-                style={{ marginTop: '5px' }}
-              >
-                Buy token
-                <Icon name="shopping cart right" />
-              </Button>
+            {this.state.tokenInfo[id] ? (
+              Number(this.state.tokenInfo[id]['price']) &&
+              this.state.tokenInfo[id]['owner'] != currentAccount ? (
+                <Button
+                  name={id}
+                  primary
+                  onClick={this.buyToken}
+                  loading={this.state.buyLoading[id]}
+                  disabled={this.state.buyLoading[id]}
+                  style={{ marginTop: '5px' }}
+                >
+                  Buy token
+                  <Icon name="shopping cart right" />
+                </Button>
+              ) : (
+                ''
+              )
             ) : (
               ''
             )}
           </Card.Content>
         </Card>
       );
-    });
+    }
 
     return <Card.Group itemsPerRow={3}>{items}</Card.Group>;
   }

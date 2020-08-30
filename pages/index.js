@@ -228,7 +228,7 @@ class CryptoByteIndex extends Component {
               </p>
             </Message>
 
-            <div style={{ marginBottom: '8vh' }}>
+            <div>
               <Header
                 as="h2"
                 inverted
@@ -303,24 +303,6 @@ class CryptoByteIndex extends Component {
             </div>
           </Segment>
         </Container>
-        <div
-          style={{
-            backgroundColor: 'rgba(255,255,255,.05)',
-            color: 'white',
-            padding: '2vh',
-            textAlign: 'center',
-          }}
-        >
-          Contact:{' '}
-          <a href="mailto:info@crypto-byte.com">info@crypto-byte.com</a>
-          <span style={{ marginLeft: '5vw' }}>Contract address:</span>{' '}
-          <a
-            href={`https://rinkeby.etherscan.io/address/${process.env.ADDRESS_721}`}
-            target="_blank"
-          >
-            {process.env.ADDRESS_721}
-          </a>
-        </div>
       </Layout>
     );
   }

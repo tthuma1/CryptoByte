@@ -7,6 +7,7 @@ import {
   Icon,
   Button,
   Message,
+  Placeholder,
 } from 'semantic-ui-react';
 import Jdenticon from '../../components/Jdenticon';
 import cryptoByte721 from '../../ethereum/cryptoByte721';
@@ -25,16 +26,12 @@ class TokenDetails extends Component {
     image: false,
     buyLoading: false,
     msgErr: '',
+    tokenInfo: {},
+    jdentHeigth: 310,
   };
 
   static async getInitialProps({ query }) {
-    let tokenInfo = {};
-    let id = query.id;
-
-    tokenInfo['owner'] = await cryptoByte721.methods.ownerOf(id).call();
-    tokenInfo['price'] = await cryptoByte721.methods.getTokenPrice(id).call();
-
-    return { id: query.id, tokenInfo };
+    return { id: query.id };
   }
 
   async componentDidMount() {
@@ -58,6 +55,21 @@ class TokenDetails extends Component {
       this.setState({ pausedHeight: 0 });
     });
 
+    this.setState({ mounted: true });
+
+    this.getTokenInfo();
+  }
+
+  getTokenInfo = async () => {
+    let tokenInfo = {};
+
+    tokenInfo['owner'] = await cryptoByte721.methods
+      .ownerOf(this.props.id)
+      .call();
+    tokenInfo['price'] = await cryptoByte721.methods
+      .getTokenPrice(this.props.id)
+      .call();
+
     // check if token has image and save it in state
     try {
       await axios.get(`/static/images/ERC721/${this.props.id}.jpg`);
@@ -66,19 +78,17 @@ class TokenDetails extends Component {
       await this.setState({ image: false });
     }
 
-    this.setState({ mounted: true });
-  }
+    this.setState({ tokenInfo });
+  };
 
   buyToken = async (event) => {
     event.preventDefault();
 
     this.setState({ buyLoading: true, msgErr: '' });
-    let price = await cryptoByte721.methods.getTokenPrice(this.props.id).call();
-
     try {
       await cryptoByte721.methods.buyToken(this.props.id).send({
         from: currentAccount,
-        value: price,
+        value: this.state.tokenInfo['price'],
       });
 
       Router.replaceRoute(`/token/${this.props.id}`);
@@ -101,24 +111,38 @@ class TokenDetails extends Component {
           }}
         >
           <Card fluid>
-            {this.state.image ? (
-              <Container
-                textAlign="center"
-                style={{ background: 'rgba(0,0,0,.05)', overflow: 'auto' }}
-              >
-                <Image
-                  src={`/static/images/ERC721/${this.props.id}.jpg`}
-                  size="big"
-                  wrapped
-                />
-              </Container>
+            {this.state.tokenInfo['owner'] ? (
+              this.state.image ? (
+                <Container
+                  textAlign="center"
+                  style={{ background: 'rgba(0,0,0,.05)', overflow: 'auto' }}
+                >
+                  <Image
+                    src={`/static/images/ERC721/${this.props.id}.jpg`}
+                    size="big"
+                    wrapped
+                  />
+                </Container>
+              ) : (
+                <Container
+                  textAlign="center"
+                  style={{
+                    background: 'rgba(0,0,0,.05)',
+                    overflow: 'auto',
+                    paddingTop: '15px',
+                    paddingBottom: '15px',
+                  }}
+                >
+                  <Jdenticon
+                    value={this.props.id}
+                    size={this.state.jdentHeigth}
+                  />
+                </Container>
+              )
             ) : (
-              <Container
-                textAlign="center"
-                style={{ background: 'rgba(0,0,0,.05)', overflow: 'auto' }}
-              >
-                <Jdenticon value={this.props.id} size={270} />
-              </Container>
+              <Placeholder fluid>
+                <Placeholder.Image style={{ height: this.state.jdentHeigth }} />
+              </Placeholder>
             )}
 
             <Card.Content>
@@ -127,28 +151,46 @@ class TokenDetails extends Component {
                   ? 'Viking Collection #' + this.props.id
                   : 'Classic Token #' + (Number(this.props.id) - vikingAmount)}
               </Card.Header>
-              <Card.Description>
-                <b>
-                  {Number(this.props.tokenInfo['price'])
-                    ? 'Token price: ' +
-                      web3.utils.fromWei(
-                        this.props.tokenInfo['price'],
-                        'ether'
-                      ) +
-                      ' ETH'
-                    : 'Token not for sale'}
-                </b>
-              </Card.Description>
-              <Card.Meta style={{ overflow: 'auto' }}>
-                Owner
-                {currentAccount == this.props.tokenInfo['owner']
-                  ? ' (You)'
-                  : ''}
-                : {this.props.tokenInfo['owner']}
-              </Card.Meta>
+
+              {this.state.tokenInfo['owner'] ? (
+                <div>
+                  <Card.Description>
+                    <b>
+                      {Number(this.state.tokenInfo['price'])
+                        ? 'Token price: ' +
+                          web3.utils.fromWei(
+                            this.state.tokenInfo['price'],
+                            'ether'
+                          ) +
+                          ' ETH'
+                        : 'Token not for sale'}
+                    </b>
+                  </Card.Description>
+                  <Card.Meta style={{ overflow: 'auto' }}>
+                    Owner
+                    {currentAccount == this.state.tokenInfo['owner'] ? (
+                      <b style={{ color: 'rgba(0,0,0,.68)' }}> (You)</b>
+                    ) : (
+                      ''
+                    )}
+                    : {this.state.tokenInfo['owner']}
+                  </Card.Meta>
+                </div>
+              ) : (
+                <Placeholder style={{ marginTop: '10px' }}>
+                  <Placeholder.Header>
+                    <Placeholder.Line length="very short" />
+                    <Placeholder.Line length="medium" />
+                  </Placeholder.Header>
+                  <Placeholder.Paragraph>
+                    <Placeholder.Line length="short" />
+                  </Placeholder.Paragraph>
+                </Placeholder>
+              )}
             </Card.Content>
+
             <Card.Content extra>
-              {this.props.tokenInfo['owner'] == currentAccount ? (
+              {this.state.tokenInfo['owner'] == currentAccount ? (
                 <div>
                   <Link route={`/sell/${this.props.id}`}>
                     <a
@@ -157,7 +199,7 @@ class TokenDetails extends Component {
                       }}
                     >
                       <Button>
-                        {Number(this.props.tokenInfo['price'])
+                        {Number(this.state.tokenInfo['price'])
                           ? 'Change price or remove from sale'
                           : 'Put up for sale'}
                         <Icon name="tag right" />
@@ -181,8 +223,8 @@ class TokenDetails extends Component {
                 ''
               )}
 
-              {this.props.tokenInfo['owner'] != currentAccount &&
-              Number(this.props.tokenInfo['price']) ? (
+              {this.state.tokenInfo['owner'] != currentAccount &&
+              Number(this.state.tokenInfo['price']) ? (
                 <Button
                   primary
                   onClick={this.buyToken}
