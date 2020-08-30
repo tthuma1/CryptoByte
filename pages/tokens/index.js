@@ -15,6 +15,7 @@ import { Link, Router } from '../../routes';
 import web3 from '../../ethereum/web3';
 import Jdenticon from '../../components/Jdenticon';
 import axios from 'axios';
+import MMPrompt from '../../components/MMPrompt';
 
 let headerEl;
 let currentAccount;
@@ -232,6 +233,8 @@ class AllTokens extends Component {
   render() {
     return (
       <Layout mounted={this.state.mounted}>
+        <MMPrompt />
+
         <Container
           textAlign="center"
           style={{
