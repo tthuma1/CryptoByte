@@ -17,7 +17,7 @@ import { Link } from '../routes';
 import web3 from '../ethereum/web3';
 import Head from 'next/head';
 
-let headerEl, name, symbol, currentAccount, pausedEl;
+let headerEl, name, symbol, currentAccount;
 let mintPrice = '0';
 let totalSupply = '0';
 
@@ -27,7 +27,6 @@ class CryptoByteIndex extends Component {
     pulseOn: true,
     mounted: false,
     headerHeight: 0,
-    pausedHeight: 0,
   };
 
   async componentDidMount() {
@@ -35,11 +34,9 @@ class CryptoByteIndex extends Component {
 
     const headerVisible = setInterval(() => {
       if (headerEl.style.visibility === 'visible') {
-        pausedEl = document.getElementById('pausedmsg');
         this.setState({
           topDivVisible: true,
           headerHeight: headerEl.clientHeight,
-          pausedHeight: pausedEl.clientHeight,
         });
         clearInterval(headerVisible);
       }
@@ -47,9 +44,6 @@ class CryptoByteIndex extends Component {
 
     setInterval(this.pulse, 1600);
     await this.getCryptoByteInfo();
-    window.addEventListener('pausedClosed', (_e) => {
-      this.setState({ pausedHeight: 0 });
-    });
 
     this.setState({ mounted: true });
   }
@@ -99,8 +93,7 @@ class CryptoByteIndex extends Component {
                 'url(../static/images/crypto-byte-2-transparent2.png)',
               backgroundAttachment: 'fixed',
               backgroundRepeat: 'no-repeat',
-              backgroundPositionY:
-                this.state.headerHeight + this.state.pausedHeight,
+              backgroundPositionY: this.state.headerHeight,
               backgroundSize: 'contain',
             }}
           >
@@ -109,9 +102,7 @@ class CryptoByteIndex extends Component {
               inverted
               textAlign="center"
               style={{
-                paddingTop: !this.state.pausedHeight
-                  ? this.state.headerHeight + 50
-                  : 20,
+                paddingTop: this.state.headerHeight + 50,
                 textShadow:
                   '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
                 marginLeft: '5px',

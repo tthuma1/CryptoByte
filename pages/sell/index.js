@@ -13,13 +13,12 @@ import MMPrompt from '../../components/MMPrompt';
 import web3 from '../../ethereum/web3';
 import { Router } from '../../routes';
 
-let currentAccount, headerEl, pausedEl;
+let currentAccount, headerEl;
 
 class SellToken extends Component {
   state = {
     mounted: false,
     headerHeight: 0,
-    pausedHeight: 0,
     newPrice: '',
     newPriceErr: false,
     msgErr: false,
@@ -40,18 +39,12 @@ class SellToken extends Component {
 
     const headerVisible = setInterval(() => {
       if (headerEl.style.visibility === 'visible') {
-        pausedEl = document.getElementById('pausedmsg');
         this.setState({
           headerHeight: headerEl.clientHeight,
-          pausedHeight: pausedEl.clientHeight,
         });
         clearInterval(headerVisible);
       }
     }, 100);
-
-    window.addEventListener('pausedClosed', (_e) => {
-      this.setState({ pausedHeight: 0 });
-    });
 
     this.setState({
       currentPrice: await cryptoByte721.methods
@@ -114,9 +107,7 @@ class SellToken extends Component {
 
         <Container
           style={{
-            marginTop: !this.state.pausedHeight
-              ? this.state.headerHeight + 20
-              : 20,
+            marginTop: this.state.headerHeight + 20,
           }}
         >
           <Header as="h3" inverted dividing textAlign="center">

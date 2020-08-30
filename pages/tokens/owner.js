@@ -19,14 +19,13 @@ import web3 from '../../ethereum/web3';
 import Jdenticon from '../../components/Jdenticon';
 import axios from 'axios';
 
-let currentAccount, headerEl, pausedEl;
+let currentAccount, headerEl;
 let vikingAmount = process.env.VIKING_AMOUNT;
 
 class TokensOfOwner extends Component {
   state = {
     mounted: false,
     headerHeight: 0,
-    pausedHeight: 0,
     images: {},
     buyLoading: {},
     jdentHeigth: 220,
@@ -62,19 +61,13 @@ class TokensOfOwner extends Component {
 
     const headerVisible = setInterval(() => {
       if (headerEl.style.visibility === 'visible') {
-        pausedEl = document.getElementById('pausedmsg');
         this.setState({
           transVisible: true,
           headerHeight: headerEl.clientHeight,
-          pausedHeight: pausedEl.clientHeight,
         });
         clearInterval(headerVisible);
       }
     }, 100);
-
-    window.addEventListener('pausedClosed', (_e) => {
-      this.setState({ pausedHeight: 0 });
-    });
 
     this.setState({ mounted: true });
 
@@ -255,9 +248,7 @@ class TokensOfOwner extends Component {
         <Container
           textAlign="center"
           style={{
-            marginTop: !this.state.pausedHeight
-              ? this.state.headerHeight + 20
-              : 20,
+            marginTop: this.state.headerHeight + 20,
           }}
         >
           {this.props.isValidAccount ? (

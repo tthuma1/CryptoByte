@@ -15,14 +15,13 @@ import web3 from '../../ethereum/web3';
 import { Link, Router } from '../../routes';
 import axios from 'axios';
 
-let currentAccount, headerEl, pausedEl;
+let currentAccount, headerEl;
 let vikingAmount = process.env.VIKING_AMOUNT;
 
 class TokenDetails extends Component {
   state = {
     mounted: false,
     headerHeight: 0,
-    pausedHeight: 0,
     image: false,
     buyLoading: false,
     msgErr: '',
@@ -41,19 +40,13 @@ class TokenDetails extends Component {
 
     const headerVisible = setInterval(() => {
       if (headerEl.style.visibility === 'visible') {
-        pausedEl = document.getElementById('pausedmsg');
         this.setState({
           transVisible: true,
           headerHeight: headerEl.clientHeight,
-          pausedHeight: pausedEl.clientHeight,
         });
         clearInterval(headerVisible);
       }
     }, 100);
-
-    window.addEventListener('pausedClosed', (_e) => {
-      this.setState({ pausedHeight: 0 });
-    });
 
     this.setState({ mounted: true });
 
@@ -105,9 +98,7 @@ class TokenDetails extends Component {
         <Container
           textAlign="center"
           style={{
-            marginTop: !this.state.pausedHeight
-              ? this.state.headerHeight + 20
-              : 20,
+            marginTop: this.state.headerHeight + 20,
           }}
         >
           <Card fluid>

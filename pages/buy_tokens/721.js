@@ -15,7 +15,7 @@ import BigNumber from 'bignumber.js';
 import Jdenticon from '../../components/Jdenticon';
 import { Router } from '../../routes';
 
-let headerEl, pausedEl, currentAccount;
+let headerEl, currentAccount;
 let priceETH = 0;
 let vikingAmount = process.env.VIKING_AMOUNT;
 
@@ -23,7 +23,6 @@ class BuyToken721 extends Component {
   state = {
     mounted: false,
     headerHeight: 0,
-    pausedHeight: 0,
     msgErr: false,
     success: false,
     id: 0,
@@ -38,18 +37,12 @@ class BuyToken721 extends Component {
 
     const headerVisible = setInterval(() => {
       if (headerEl.style.visibility === 'visible') {
-        pausedEl = document.getElementById('pausedmsg');
         this.setState({
           headerHeight: headerEl.clientHeight,
-          pausedHeight: pausedEl.clientHeight,
         });
         clearInterval(headerVisible);
       }
     }, 100);
-
-    window.addEventListener('pausedClosed', (_e) => {
-      this.setState({ pausedHeight: 0 });
-    });
 
     priceETH = await cryptoByte721.methods.getMintPrice().call();
     priceETH = BigNumber(priceETH).div('1e+18');
@@ -97,9 +90,7 @@ class BuyToken721 extends Component {
 
         <Container
           style={{
-            marginTop: !this.state.pausedHeight
-              ? this.state.headerHeight + 20
-              : 20,
+            marginTop: this.state.headerHeight + 20,
           }}
         >
           <Header as="h3" inverted dividing textAlign="center">

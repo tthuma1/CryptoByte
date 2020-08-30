@@ -16,7 +16,7 @@ import web3 from '../../ethereum/web3';
 import Jdenticon from '../../components/Jdenticon';
 import axios from 'axios';
 
-let headerEl, pausedEl;
+let headerEl;
 let currentAccount;
 let vikingAmount = process.env.VIKING_AMOUNT;
 
@@ -24,7 +24,6 @@ class AllTokens extends Component {
   state = {
     mounted: false,
     headerHeight: 0,
-    pausedHeight: 0,
     images: {},
     buyLoading: {},
     jdentHeigth: 136,
@@ -43,19 +42,13 @@ class AllTokens extends Component {
 
     const headerVisible = setInterval(() => {
       if (headerEl.style.visibility === 'visible') {
-        pausedEl = document.getElementById('pausedmsg');
         this.setState({
           transVisible: true,
           headerHeight: headerEl.clientHeight,
-          pausedHeight: pausedEl.clientHeight,
         });
         clearInterval(headerVisible);
       }
     }, 100);
-
-    window.addEventListener('pausedClosed', (_e) => {
-      this.setState({ pausedHeight: 0 });
-    });
 
     this.setState({ mounted: true });
 
@@ -242,9 +235,7 @@ class AllTokens extends Component {
         <Container
           textAlign="center"
           style={{
-            marginTop: !this.state.pausedHeight
-              ? this.state.headerHeight + 20
-              : 20,
+            marginTop: this.state.headerHeight + 20,
           }}
         >
           <Header as="h2" dividing inverted>

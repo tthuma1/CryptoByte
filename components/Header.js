@@ -1,11 +1,10 @@
 import React from 'react';
 import { Menu, Dropdown } from 'semantic-ui-react';
 import { Link } from '../routes';
-import cryptoByte from '../ethereum/cryptoByte';
 import web3 from '../ethereum/web3';
-import Paused from '../components/Paused';
+import cryptoByte721 from '../ethereum/cryptoByte721';
 
-let currentAccount, height, isPaused;
+let currentAccount;
 
 class Header extends React.Component {
   state = {
@@ -23,15 +22,14 @@ class Header extends React.Component {
       (await web3.eth.net.getNetworkType()) === process.env.NETWORK_TYPE &&
       typeof currentAccount !== 'undefined'
     ) {
-      const isMinter = await cryptoByte.methods.isMinter(currentAccount).call();
-      const isPauser = await cryptoByte.methods.isPauser(currentAccount).call();
+      const isMinter = await cryptoByte721.methods
+        .isMinter(currentAccount)
+        .call();
 
-      if (isMinter || isPauser) {
+      if (isMinter) {
         this.setState({ isAdmin: 'flex' });
       }
     }
-
-    isPaused = await cryptoByte.methods.paused().call();
 
     const interval = setInterval(() => {
       if (!this.state.hasMounted && this.props.mounted == true) {
@@ -45,11 +43,6 @@ class Header extends React.Component {
         this.setState({ visibleFull: 'hidden' });
       }
     }, 500);
-
-    height = document.getElementById('header').clientHeight;
-    window.addEventListener('resize', () => {
-      height = document.getElementById('header').clientHeight;
-    });
   }
 
   hideAll() {
@@ -60,12 +53,6 @@ class Header extends React.Component {
   render() {
     return (
       <div>
-        {this.state.visibleFull === 'visible' && (
-          <Paused
-            headerHeight={height}
-            isPaused={true} /*isPaused={isPaused}*/
-          />
-        )}
         <Menu
           stackable
           inverted
