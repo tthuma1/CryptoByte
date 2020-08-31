@@ -7,10 +7,9 @@ class Footer extends Component {
       <Grid
         columns={2}
         style={{
-          marginTop: '8vh',
+          marginTop: '10vh',
           backgroundColor: 'rgba(255,255,255,.05)',
           color: 'white',
-          padding: '2vh',
         }}
       >
         <Grid.Row>

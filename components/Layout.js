@@ -67,11 +67,22 @@ html, body {
         )}
 
         {!this.state.allMounted && <LoadingScreen />}
-        <Header mounted={this.props.mounted} updateState={this.updateState} />
 
-        {this.state.allMounted && this.props.children}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: '100vh',
+          }}
+        >
+          <Header mounted={this.props.mounted} updateState={this.updateState} />
 
-        {this.state.allMounted && <Footer />}
+          <div style={{ flex: 1 }}>
+            {this.state.allMounted && this.props.children}
+          </div>
+
+          {this.state.allMounted && <Footer />}
+        </div>
       </div>
     );
   }
