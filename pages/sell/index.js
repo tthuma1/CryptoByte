@@ -106,6 +106,10 @@ class SellToken extends Component {
       <Layout mounted={this.state.mounted}>
         <Head>
           <title>Crypto Byte Collectible - Sell Tokens</title>
+          <meta
+            name="description"
+            content="Put your Crypto Byte Collectible tokens up for sale in exchange of Ether (ETH)."
+          />
         </Head>
         <MMPrompt />
 

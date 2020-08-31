@@ -72,6 +72,10 @@ class GiftToken extends Component {
       <Layout mounted={this.state.mounted}>
         <Head>
           <title>Crypto Byte Collectible - Gift Tokens</title>
+          <meta
+            name="description"
+            content="Gift your Crypto Byte Collectible tokens for free."
+          />
         </Head>
         <MMPrompt />
 

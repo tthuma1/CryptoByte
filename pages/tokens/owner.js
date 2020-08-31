@@ -250,6 +250,10 @@ class TokensOfOwner extends Component {
       <Layout mounted={this.state.mounted}>
         <Head>
           <title>Crypto Byte Collectible - Your Tokens</title>
+          <meta
+            name="description"
+            content="View and manage all Crypto Byte Collectible tokens that you own."
+          />
         </Head>
         <MMPrompt />
 

@@ -240,6 +240,10 @@ class AllTokens extends Component {
       <Layout mounted={this.state.mounted}>
         <Head>
           <title>Crypto Byte Collectible - All Tokens</title>
+          <meta
+            name="description"
+            content="View all existing Crypto Byte Collectible tokens and buy the ones that are up for sale."
+          />
         </Head>
         <MMPrompt />
 

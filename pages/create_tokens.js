@@ -91,6 +91,10 @@ class BuyToken721 extends Component {
       <Layout mounted={this.state.mounted}>
         <Head>
           <title>Crypto Byte Collectible - Create New Tokens</title>
+          <meta
+            name="description"
+            content="Create new Crypto Byte Collectible tokens in exchange of Ether (ETH)."
+          />
         </Head>
         <MMPrompt />
 

@@ -101,6 +101,10 @@ class TokenDetails extends Component {
       <Layout mounted={this.state.mounted}>
         <Head>
           <title>Crypto Byte Collectible - Token #{this.props.id}</title>
+          <meta
+            name="description"
+            content="View details about a Crypto Byte Collectible token."
+          />
         </Head>
         <MMPrompt />
 

@@ -77,6 +77,10 @@ class CryptoByteIndex extends Component {
       <Layout mounted={this.state.mounted} isHome>
         <Head>
           <title>Crypto Byte Collectible - Home</title>
+          <meta
+            name="description"
+            content="Home page of Crypto Byte Collectible tokens - your unique collectible ERC721 tokens."
+          />
         </Head>
 
         <Transition
