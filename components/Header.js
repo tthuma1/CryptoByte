@@ -15,7 +15,6 @@ class Header extends React.Component {
   };
 
   async componentDidMount() {
-    this.setState({ hasMounted: false });
     currentAccount = (await web3.eth.getAccounts())[0];
 
     if (
@@ -34,8 +33,7 @@ class Header extends React.Component {
     const interval = setInterval(() => {
       if (!this.state.hasMounted && this.props.mounted == true) {
         this.props.updateState(true);
-        this.setState({ visibleFull: 'visible' });
-        this.state.hasMounted = true;
+        this.setState({ visibleFull: 'visible', hasMounted: true });
       }
 
       if (this.props.mounted == false) {
@@ -70,12 +68,6 @@ class Header extends React.Component {
           <Link href="/">
             <a className="item">Home</a>
           </Link>
-          {/*<Link href={`/account/${currentAccount}`}>
-            <a className="item">My Account</a>
-          </Link>
-          <Link href="/buy_tokens/20">
-            <a className="item">Buy Tokens</a>
-        </Link>*/}
           <Dropdown item text="Collectible Tokens">
             <Dropdown.Menu>
               <Link href="/tokens">
