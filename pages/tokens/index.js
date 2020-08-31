@@ -19,7 +19,9 @@ import MMPrompt from '../../components/MMPrompt';
 
 let headerEl;
 let currentAccount;
-let vikingAmount = process.env.VIKING_AMOUNT;
+let vikingAmount = Number(process.env.VIKING_AMOUNT);
+let specialEdition = Number(process.env.SPECIAL_EDITION);
+let specialTokens = vikingAmount + specialEdition;
 
 class AllTokens extends Component {
   state = {
@@ -148,7 +150,9 @@ class AllTokens extends Component {
             <Card.Header>
               {id <= vikingAmount
                 ? 'Viking Collection #' + id
-                : 'Classic Token #' + (id - vikingAmount)}
+                : id <= vikingAmount + specialEdition
+                ? 'Special Edition #' + (id - vikingAmount)
+                : 'Classic Token #' + (id - specialTokens)}
             </Card.Header>
 
             {this.state.tokenInfo[id] ? (

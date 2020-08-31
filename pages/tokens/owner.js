@@ -20,7 +20,9 @@ import Jdenticon from '../../components/Jdenticon';
 import axios from 'axios';
 
 let currentAccount, headerEl;
-let vikingAmount = process.env.VIKING_AMOUNT;
+let vikingAmount = Number(process.env.VIKING_AMOUNT);
+let specialEdition = Number(process.env.SPECIAL_EDITION);
+let specialTokens = vikingAmount + specialEdition;
 
 class TokensOfOwner extends Component {
   state = {
@@ -167,7 +169,9 @@ class TokensOfOwner extends Component {
             <Card.Header>
               {id <= vikingAmount
                 ? 'Viking Collection #' + id
-                : 'Classic Token #' + (Number(id) - vikingAmount)}
+                : id <= vikingAmount + specialEdition
+                ? 'Special Edition #' + (id - vikingAmount)
+                : 'Classic Token #' + (id - specialTokens)}
             </Card.Header>
 
             {this.state.tokenInfo[id] ? (

@@ -16,7 +16,9 @@ import { Link, Router } from '../../routes';
 import axios from 'axios';
 
 let currentAccount, headerEl;
-let vikingAmount = process.env.VIKING_AMOUNT;
+let vikingAmount = Number(process.env.VIKING_AMOUNT);
+let specialEdition = Number(process.env.SPECIAL_EDITION);
+let specialTokens = vikingAmount + specialEdition;
 
 class TokenDetails extends Component {
   state = {
@@ -30,7 +32,7 @@ class TokenDetails extends Component {
   };
 
   static async getInitialProps({ query }) {
-    return { id: query.id };
+    return { id: Number(query.id) };
   }
 
   async componentDidMount() {
@@ -138,9 +140,11 @@ class TokenDetails extends Component {
 
             <Card.Content>
               <Card.Header>
-                {Number(this.props.id) <= vikingAmount
+                {this.props.id <= vikingAmount
                   ? 'Viking Collection #' + this.props.id
-                  : 'Classic Token #' + (Number(this.props.id) - vikingAmount)}
+                  : this.props.id <= vikingAmount + specialEdition
+                  ? 'Special Edition #' + (this.props.id - vikingAmount)
+                  : 'Classic Token #' + (this.props.id - specialTokens)}
               </Card.Header>
 
               {this.state.tokenInfo['owner'] ? (
