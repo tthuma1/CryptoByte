@@ -17,7 +17,9 @@ import { Router } from '../../routes';
 
 let headerEl, currentAccount;
 let priceETH = 0;
-let vikingAmount = process.env.VIKING_AMOUNT;
+let vikingAmount = Number(process.env.VIKING_AMOUNT);
+let specialEdition = Number(process.env.SPECIAL_EDITION);
+let specialTokens = vikingAmount + specialEdition;
 
 class BuyToken721 extends Component {
   state = {
@@ -111,7 +113,7 @@ class BuyToken721 extends Component {
                 </Segment>
                 <Message>
                   The ID of your newly created token will be{' '}
-                  <b>#{this.state.id - vikingAmount}</b>.
+                  <b>#{this.state.id - specialTokens}</b>.
                   <br />
                   Above image will be used to identify your token. If you'd like
                   to use a custom image, please contact us at{' '}

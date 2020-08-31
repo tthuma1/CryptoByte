@@ -47,14 +47,14 @@ class MMPrompt extends React.Component {
           <Image size="medium" src="/static/images/metamask-network.png" />
           <Modal.Description>
             <p>
-              If you would like to interact with the Crypto Byte contract,
-              you'll need to have{' '}
+              If you would like to interact with the Crypto Byte Collectible
+              contract, you'll need to have{' '}
               <Link route="https://metamask.io/">
                 <a target="_blank"> MetaMask</a>
               </Link>{' '}
               installed in your browser.
               <br />
-              Then also make sure you're connected to the Rinkeby Test Net.
+              Then make sure you're connected to the Main Ethereum Network.
             </p>
           </Modal.Description>
         </Modal.Content>
