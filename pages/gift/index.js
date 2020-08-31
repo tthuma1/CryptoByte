@@ -11,6 +11,7 @@ import {
 import cryptoByte721 from '../../ethereum/cryptoByte721';
 import MMPrompt from '../../components/MMPrompt';
 import web3 from '../../ethereum/web3';
+import Head from 'next/head';
 
 let currentAccount, headerEl;
 
@@ -69,6 +70,9 @@ class GiftToken extends Component {
   render() {
     return (
       <Layout mounted={this.state.mounted}>
+        <Head>
+          <title>Crypto Byte Collectible - Gift Tokens</title>
+        </Head>
         <MMPrompt />
 
         <Container

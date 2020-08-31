@@ -16,6 +16,7 @@ import web3 from '../../ethereum/web3';
 import Jdenticon from '../../components/Jdenticon';
 import axios from 'axios';
 import MMPrompt from '../../components/MMPrompt';
+import Head from 'next/head';
 
 let headerEl;
 let currentAccount;
@@ -237,6 +238,9 @@ class AllTokens extends Component {
   render() {
     return (
       <Layout mounted={this.state.mounted}>
+        <Head>
+          <title>Crypto Byte Collectible - All Tokens</title>
+        </Head>
         <MMPrompt />
 
         <Container

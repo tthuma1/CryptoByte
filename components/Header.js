@@ -95,7 +95,7 @@ class Header extends React.Component {
                   My Tokens
                 </a>
               </Link>
-              <Link href="/buy_tokens/721">
+              <Link href="/create_tokens">
                 <a className="item">Create New Tokens</a>
               </Link>
             </Dropdown.Menu>

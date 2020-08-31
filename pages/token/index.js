@@ -15,6 +15,7 @@ import web3 from '../../ethereum/web3';
 import { Link, Router } from '../../routes';
 import axios from 'axios';
 import MMPrompt from '../../components/MMPrompt';
+import Head from 'next/head';
 
 let currentAccount, headerEl;
 let vikingAmount = Number(process.env.VIKING_AMOUNT);
@@ -98,6 +99,9 @@ class TokenDetails extends Component {
   render() {
     return (
       <Layout mounted={this.state.mounted}>
+        <Head>
+          <title>Crypto Byte Collectible - Token #{this.props.id}</title>
+        </Head>
         <MMPrompt />
 
         <Container

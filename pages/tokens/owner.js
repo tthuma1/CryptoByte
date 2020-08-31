@@ -18,6 +18,7 @@ import { Link, Router } from '../../routes';
 import web3 from '../../ethereum/web3';
 import Jdenticon from '../../components/Jdenticon';
 import axios from 'axios';
+import Head from 'next/head';
 
 let currentAccount, headerEl;
 let vikingAmount = Number(process.env.VIKING_AMOUNT);
@@ -247,6 +248,9 @@ class TokensOfOwner extends Component {
   render() {
     return (
       <Layout mounted={this.state.mounted}>
+        <Head>
+          <title>Crypto Byte Collectible - Your Tokens</title>
+        </Head>
         <MMPrompt />
 
         <Container

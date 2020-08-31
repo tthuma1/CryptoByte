@@ -76,7 +76,7 @@ class CryptoByteIndex extends Component {
     return (
       <Layout mounted={this.state.mounted} isHome>
         <Head>
-          <title>Crypto Byte - Home</title>
+          <title>Crypto Byte Collectible - Home</title>
         </Head>
 
         <Transition
@@ -256,7 +256,7 @@ class CryptoByteIndex extends Component {
                 Once you have your account set up, you can start buying
                 collectible tokens or create your own brand new tokens. To
                 create a new token, go to the{' '}
-                <Link route={'/buy_tokens/721'}>
+                <Link route={'/create_tokens'}>
                   <a>Create New Tokens</a>
                 </Link>{' '}
                 page. Once there you can create your brand new token for{' '}

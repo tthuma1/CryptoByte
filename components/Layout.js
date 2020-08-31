@@ -35,14 +35,17 @@ class Layout extends React.Component {
             href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
           />
           <meta name="viewport" content="width=1024" />
-          <title>Crypto Byte</title>
+          <title>Crypto Byte Collectible</title>
           <link
             rel="shortcut icon"
             type="image/ico"
             href="/static/favicon.ico"
           />
           <meta charSet="UTF-8" />
-          <meta name="description" content="Official website of Crypto Byte." />
+          <meta
+            name="description"
+            content="Official website of Crypto Byte Collectible tokens. Your unique collectible ERC721 tokens."
+          />
         </Head>
         <style>
           {`

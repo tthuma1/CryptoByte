@@ -1,6 +1,6 @@
 import { Component } from 'react';
-import Layout from '../../components/Layout';
-import MMPrompt from '../../components/MMPrompt';
+import Layout from '../components/Layout';
+import MMPrompt from '../components/MMPrompt';
 import {
   Container,
   Header,
@@ -9,11 +9,12 @@ import {
   Button,
   Segment,
 } from 'semantic-ui-react';
-import web3 from '../../ethereum/web3';
-import cryptoByte721 from '../../ethereum/cryptoByte721';
+import web3 from '../ethereum/web3';
+import cryptoByte721 from '../ethereum/cryptoByte721';
 import BigNumber from 'bignumber.js';
-import Jdenticon from '../../components/Jdenticon';
-import { Router } from '../../routes';
+import Jdenticon from '../components/Jdenticon';
+import { Router } from '../routes';
+import Head from 'next/head';
 
 let headerEl, currentAccount;
 let priceETH = 0;
@@ -88,6 +89,9 @@ class BuyToken721 extends Component {
   render() {
     return (
       <Layout mounted={this.state.mounted}>
+        <Head>
+          <title>Crypto Byte Collectible - Create New Tokens</title>
+        </Head>
         <MMPrompt />
 
         <Container
