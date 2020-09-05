@@ -198,7 +198,24 @@ class TokenDetails extends Component {
             <Card.Content extra>
               {this.state.tokenInfo['owner'] &&
               this.state.tokenInfo['owner'] == currentAccount ? (
-                <div>
+                <Container textAlign="center">
+                  <Container
+                    textAlign="left"
+                    style={{ marginBottom: '-35.6px' }}
+                  >
+                    <Link route="/tokens">
+                      <a
+                        onClick={() => {
+                          this.setState({ mounted: false });
+                        }}
+                      >
+                        <Button>
+                          <Icon name="arrow alternate circle left" /> Back
+                        </Button>
+                      </a>
+                    </Link>
+                  </Container>
+
                   <Link route={`/sell/${this.props.id}`}>
                     <a
                       onClick={() => {
@@ -225,7 +242,7 @@ class TokenDetails extends Component {
                       </Button>
                     </a>
                   </Link>
-                </div>
+                </Container>
               ) : (
                 ''
               )}

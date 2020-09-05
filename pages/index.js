@@ -79,7 +79,7 @@ class CryptoByteIndex extends Component {
           <title>Crypto Byte Collectible - Home</title>
           <meta
             name="description"
-            content="Home page of Crypto Byte Collectible tokens - your unique collectible ERC721 tokens."
+            content="Official website of Crypto Byte Collectible tokens - your unique collectible ERC721 tokens. Interact with a smart contract deployed on the Ethereum blockchain."
           />
         </Head>
 
@@ -253,9 +253,7 @@ class CryptoByteIndex extends Component {
                 Your MetaMask account will be used to log you in to Crypto
                 Byte's webpage.
               </p>
-              <Divider horizontal style={{ color: 'DarkGray' }}>
-                THEN
-              </Divider>
+              <Divider horizontal></Divider>
               <p style={{ fontSize: '16px' }}>
                 Once you have your account set up, you can start buying
                 collectible tokens or create your own brand new tokens. To
@@ -266,9 +264,7 @@ class CryptoByteIndex extends Component {
                 page. Once there you can create your brand new token for{' '}
                 {web3.utils.fromWei(mintPrice, 'ether')} ETH.
               </p>
-              <Divider horizontal style={{ color: 'DarkGray' }}>
-                THEN
-              </Divider>
+              <Divider horizontal></Divider>
               <p style={{ fontSize: '16px' }}>
                 To get a full list of tokens you own, go to the{' '}
                 <Link href={`/tokens/${currentAccount}`}>

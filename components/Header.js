@@ -62,7 +62,7 @@ class Header extends React.Component {
         >
           <Link href="/">
             <a className="item">
-              <img src="/static/favicon.ico" />
+              <img src="/static/favicon2.png" />
             </a>
           </Link>
           <Link href="/">
