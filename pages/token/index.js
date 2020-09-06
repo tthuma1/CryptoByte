@@ -196,26 +196,23 @@ class TokenDetails extends Component {
             </Card.Content>
 
             <Card.Content extra>
+              <Container textAlign="left">
+                <Link route="/tokens">
+                  <a
+                    onClick={() => {
+                      this.setState({ mounted: false });
+                    }}
+                  >
+                    <Button>
+                      <Icon name="arrow alternate circle left" /> Back
+                    </Button>
+                  </a>
+                </Link>
+              </Container>
+
               {this.state.tokenInfo['owner'] &&
               this.state.tokenInfo['owner'] == currentAccount ? (
-                <Container textAlign="center">
-                  <Container
-                    textAlign="left"
-                    style={{ marginBottom: '-35.6px' }}
-                  >
-                    <Link route="/tokens">
-                      <a
-                        onClick={() => {
-                          this.setState({ mounted: false });
-                        }}
-                      >
-                        <Button>
-                          <Icon name="arrow alternate circle left" /> Back
-                        </Button>
-                      </a>
-                    </Link>
-                  </Container>
-
+                <div style={{ marginTop: '-35.6px' }}>
                   <Link route={`/sell/${this.props.id}`}>
                     <a
                       onClick={() => {
@@ -242,22 +239,24 @@ class TokenDetails extends Component {
                       </Button>
                     </a>
                   </Link>
-                </Container>
+                </div>
               ) : (
                 ''
               )}
 
               {this.state.tokenInfo['owner'] != currentAccount &&
               Number(this.state.tokenInfo['price']) ? (
-                <Button
-                  primary
-                  onClick={this.buyToken}
-                  loading={this.state.buyLoading}
-                  disabled={this.state.buyLoading}
-                >
-                  Buy token
-                  <Icon name="shopping cart right" />
-                </Button>
+                <div style={{ marginTop: '-35.6px' }}>
+                  <Button
+                    primary
+                    onClick={this.buyToken}
+                    loading={this.state.buyLoading}
+                    disabled={this.state.buyLoading}
+                  >
+                    Buy token
+                    <Icon name="shopping cart right" />
+                  </Button>
+                </div>
               ) : (
                 ''
               )}

@@ -122,10 +122,10 @@ class AllTokens extends Component {
             this.state.images[id] ? (
               id == 1 ? (
                 <Visibility onUpdate={this.updateImage}>
-                  <Image src={`/static/images/ERC721/${id}.jpg`} wrapped />
+                  <Image src={`/static/images/ERC721/${id}.jpg`} />
                 </Visibility>
               ) : (
-                <Image src={`/static/images/ERC721/${id}.jpg`} wrapped />
+                <Image src={`/static/images/ERC721/${id}.jpg`} />
               )
             ) : (
               <Container
