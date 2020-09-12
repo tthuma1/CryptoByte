@@ -123,8 +123,8 @@ class BuyToken721 extends Component {
                   The ID of your newly created token will be{' '}
                   <b>#{this.state.id - specialTokens}</b>.
                   <br />
-                  Above image will be used to identify your token. If you'd like
-                  to use a custom image, please contact us at{' '}
+                  The unique image above will be used to identify your token. If
+                  you'd like to use a custom image, please contact us at{' '}
                   <b>
                     <a href="mailto:info@crypto-byte.com">
                       info@crypto-byte.com

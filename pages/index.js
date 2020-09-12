@@ -177,7 +177,7 @@ class CryptoByteIndex extends Component {
 
             <Divider horizontal>
               <Header as="h1">
-                <Icon name="ethereum" color="grey" />
+                <Icon name="ethereum" color="grey" style={{ margin: '0' }} />
               </Header>
             </Divider>
 
@@ -237,10 +237,10 @@ class CryptoByteIndex extends Component {
               <p style={{ fontSize: '16px' }}>
                 To start, all you need is{' '}
                 <Link route="https://metamask.io/">
-                  <a target="_blank"> MetaMask</a>
+                  <a target="_blank">MetaMask</a>
                 </Link>{' '}
-                installed in your browser. To learn how to use MetaMask, view
-                the instructions.{' '}
+                browser extension. To learn how to use MetaMask, view the
+                instructions.{' '}
                 <MMPrompt
                   trigger={
                     <Button size="small" compact>
@@ -250,21 +250,24 @@ class CryptoByteIndex extends Component {
                   visible={false}
                 />
                 <br />
-                Your MetaMask account will be used to log you in to Crypto
-                Byte's webpage.
+                Your MetaMask account will be used to log you in to Crypto Byte
+                Collectible's webpage.
               </p>
+
               <Divider horizontal></Divider>
+
               <p style={{ fontSize: '16px' }}>
-                Once you have your account set up, you can start buying
-                collectible tokens or create your own brand new tokens. To
-                create a new token, go to the{' '}
+                Once you have your account set up, you can start creating
+                collectible tokens. To create a new token, go to the{' '}
                 <Link route={'/create_tokens'}>
                   <a>Create New Tokens</a>
                 </Link>{' '}
-                page. Once there you can create your brand new token for{' '}
+                tab. Once there, you can create your brand new unique token for{' '}
                 {web3.utils.fromWei(mintPrice, 'ether')} ETH.
               </p>
+
               <Divider horizontal></Divider>
+
               <p style={{ fontSize: '16px' }}>
                 To get a full list of tokens you own, go to the{' '}
                 <Link href={`/tokens/${currentAccount}`}>
@@ -276,7 +279,7 @@ class CryptoByteIndex extends Component {
                     My Tokens
                   </a>
                 </Link>{' '}
-                page. There you can put your tokens up for sale or gift them to
+                tab. There you can put your tokens up for sale or gift them to
                 someone.
                 <br />
                 To get a list of all existing tokens, go to the{' '}
@@ -289,7 +292,13 @@ class CryptoByteIndex extends Component {
                     All Tokens
                   </a>
                 </Link>{' '}
-                page. If any tokens are up for sale, you can buy them there.
+                tab. If any tokens are up for sale, you can buy them there.
+              </p>
+
+              <Divider horizontal></Divider>
+
+              <p style={{ fontSize: '16px' }}>
+                You can add your own design on Classic Tokens.
               </p>
             </div>
           </Segment>

@@ -60,7 +60,7 @@ class MMPrompt extends React.Component {
         </Modal.Content>
         <Modal.Actions>
           <Button color="green" inverted onClick={this.handleClose}>
-            OK
+            Close
           </Button>
         </Modal.Actions>
       </Modal>
