@@ -215,11 +215,11 @@ class CryptoByteIndex extends Component {
               <Message.Header>Important Note:</Message.Header>
               <p>
                 In order to interact with the Crypto Byte contract, you'll need
-                to have{' '}
+                to have the{' '}
                 <Link route="https://metamask.io/">
                   <a target="_blank"> MetaMask</a>
                 </Link>{' '}
-                installed in your browser.
+                browser extension.
               </p>
             </Message>
 
@@ -235,7 +235,7 @@ class CryptoByteIndex extends Component {
                 How to use Crypto Byte Collectible?
               </Header>
               <p style={{ fontSize: '16px' }}>
-                To start, all you need is{' '}
+                To start, all you need is the{' '}
                 <Link route="https://metamask.io/">
                   <a target="_blank">MetaMask</a>
                 </Link>{' '}
