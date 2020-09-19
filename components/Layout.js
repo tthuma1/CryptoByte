@@ -45,6 +45,11 @@ class Layout extends React.Component {
             name="keywords"
             content="Crypto, Byte, Collectible, Ethereum, Ether, ETH, ERC721, token, tokens"
           />
+          <title>Crypto Byte Collectible</title>
+          <meta
+            name="description"
+            content="Official website of Crypto Byte Collectible tokens - your unique collectible ERC721 tokens. Interact with a smart contract deployed on the Ethereum blockchain."
+          />
           <meta name="robots" content="index, follow" />
         </Head>
         <style>
