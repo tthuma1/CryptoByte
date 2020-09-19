@@ -95,6 +95,7 @@ class BuyToken721 extends Component {
             name="description"
             content="Create new Crypto Byte Collectible tokens in exchange of Ether (ETH)."
           />
+          <meta name="robots" content="index, follow" />
         </Head>
         <MMPrompt />
 

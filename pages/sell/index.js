@@ -108,8 +108,9 @@ class SellToken extends Component {
           <title>Crypto Byte Collectible - Sell Tokens</title>
           <meta
             name="description"
-            content="Put your Crypto Byte Collectible tokens up for sale in exchange of Ether (ETH)."
+            content="Put your Crypto Byte Collectible tokens up for sale in exchange for Ether (ETH)."
           />
+          <meta name="robots" content="index, follow" />
         </Head>
         <MMPrompt />
 

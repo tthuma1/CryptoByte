@@ -76,6 +76,7 @@ class GiftToken extends Component {
             name="description"
             content="Gift your Crypto Byte Collectible tokens for free."
           />
+          <meta name="robots" content="index, follow" />
         </Head>
         <MMPrompt />
 

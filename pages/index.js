@@ -81,6 +81,7 @@ class CryptoByteIndex extends Component {
             name="description"
             content="Official website of Crypto Byte Collectible tokens - your unique collectible ERC721 tokens. Interact with a smart contract deployed on the Ethereum blockchain."
           />
+          <meta name="robots" content="index, follow" />
         </Head>
 
         <Transition

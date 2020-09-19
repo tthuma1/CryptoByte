@@ -105,6 +105,7 @@ class TokenDetails extends Component {
             name="description"
             content="View details about a Crypto Byte Collectible token."
           />
+          <meta name="robots" content="index, follow" />
         </Head>
         <MMPrompt />
 

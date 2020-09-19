@@ -254,6 +254,7 @@ class TokensOfOwner extends Component {
             name="description"
             content="View and manage all Crypto Byte Collectible tokens that you own."
           />
+          <meta name="robots" content="index, follow" />
         </Head>
         <MMPrompt />
 

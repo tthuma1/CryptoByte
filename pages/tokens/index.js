@@ -244,6 +244,7 @@ class AllTokens extends Component {
             name="description"
             content="View all existing Crypto Byte Collectible tokens and buy the ones that are up for sale."
           />
+          <meta name="robots" content="index, follow" />
         </Head>
         <MMPrompt />
 
