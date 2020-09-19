@@ -15,7 +15,7 @@ class Footer extends Component {
           <Grid.Column textAlign="right">
             <span>Contract address:</span>{' '}
             <a
-              href={`https://etherscan.io/address/${process.env.ADDRESS_721}`}
+              href={`https://etherscan.io/token/${process.env.ADDRESS_721}`}
               target="_blank"
             >
               {process.env.ADDRESS_721}

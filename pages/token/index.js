@@ -155,7 +155,7 @@ class TokenDetails extends Component {
                   ? 'Viking Collection #' + this.props.id
                   : this.props.id <= vikingAmount + specialEdition
                   ? 'Special Edition #' + (this.props.id - vikingAmount)
-                  : 'Classic Token #' + (this.props.id - specialTokens)}
+                  : 'CRBC Token #' + (this.props.id - specialTokens)}
               </Card.Header>
 
               {this.state.tokenInfo['owner'] ? (

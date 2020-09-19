@@ -298,7 +298,7 @@ class CryptoByteIndex extends Component {
               <Divider horizontal></Divider>
 
               <p style={{ fontSize: '16px' }}>
-                You can add your own design on Classic Tokens.
+                You can add your own design on CRBC Tokens.
               </p>
             </div>
           </Segment>

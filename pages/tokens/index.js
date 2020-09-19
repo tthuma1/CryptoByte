@@ -153,7 +153,7 @@ class AllTokens extends Component {
                 ? 'Viking Collection #' + id
                 : id <= vikingAmount + specialEdition
                 ? 'Special Edition #' + (id - vikingAmount)
-                : 'Classic Token #' + (id - specialTokens)}
+                : 'CRBC Token #' + (id - specialTokens)}
             </Card.Header>
 
             {this.state.tokenInfo[id] ? (
