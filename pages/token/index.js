@@ -18,9 +18,11 @@ import MMPrompt from '../../components/MMPrompt';
 import Head from 'next/head';
 
 let currentAccount, headerEl;
-let vikingAmount = Number(process.env.VIKING_AMOUNT);
-let specialEdition = Number(process.env.SPECIAL_EDITION);
-let specialTokens = vikingAmount + specialEdition;
+let viking = process.env.VIKING_AMOUNT.split(',');
+let vikingAmount = viking.length;
+let specialEdition = process.env.SPECIAL_EDITION.split(',');
+let specialEditionAmount = specialEdition.length;
+let specialTokens = vikingAmount + specialEditionAmount;
 
 class TokenDetails extends Component {
   state = {
@@ -152,9 +154,9 @@ class TokenDetails extends Component {
 
             <Card.Content>
               <Card.Header>
-                {this.props.id <= vikingAmount
+                {viking.indexOf(String(this.props.id)) >= 0
                   ? 'Viking Collection #' + this.props.id
-                  : this.props.id <= vikingAmount + specialEdition
+                  : specialEdition.indexOf(String(this.props.id)) >= 0
                   ? 'Special Edition #' + (this.props.id - vikingAmount)
                   : 'CRBC Token #' + (this.props.id - specialTokens)}
               </Card.Header>

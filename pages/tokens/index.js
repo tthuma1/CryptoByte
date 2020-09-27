@@ -20,9 +20,11 @@ import Head from 'next/head';
 
 let headerEl;
 let currentAccount;
-let vikingAmount = Number(process.env.VIKING_AMOUNT);
-let specialEdition = Number(process.env.SPECIAL_EDITION);
-let specialTokens = vikingAmount + specialEdition;
+let viking = process.env.VIKING_AMOUNT.split(',');
+let vikingAmount = viking.length;
+let specialEdition = process.env.SPECIAL_EDITION.split(',');
+let specialEditionAmount = specialEdition.length;
+let specialTokens = vikingAmount + specialEditionAmount;
 
 class AllTokens extends Component {
   state = {
@@ -149,9 +151,9 @@ class AllTokens extends Component {
           )}
           <Card.Content>
             <Card.Header>
-              {id <= vikingAmount
+              {viking.indexOf(String(id)) >= 0
                 ? 'Viking Collection #' + id
-                : id <= vikingAmount + specialEdition
+                : specialEdition.indexOf(String(id)) >= 0
                 ? 'Special Edition #' + (id - vikingAmount)
                 : 'CRBC Token #' + (id - specialTokens)}
             </Card.Header>
