@@ -24,7 +24,8 @@ let viking = process.env.VIKING_AMOUNT.split(',');
 let vikingAmount = viking.length;
 let specialEdition = process.env.SPECIAL_EDITION.split(',');
 let specialEditionAmount = specialEdition.length;
-let specialTokens = vikingAmount + specialEditionAmount;
+let specialTokens = viking.concat(specialEdition);
+let specialTokensAmount = vikingAmount + specialEditionAmount;
 
 class AllTokens extends Component {
   state = {
@@ -117,7 +118,27 @@ class AllTokens extends Component {
 
   renderTokens() {
     let items = [];
+    let classic = [];
     for (let id = 1; id <= this.props.supply; id++) {
+      if (specialTokens.indexOf(String(id)) < 0) {
+        classic.push(id);
+      }
+    }
+
+    items.push(
+      this.makeCards(viking),
+      this.makeCards(specialEdition),
+      this.makeCards(classic)
+    );
+
+    return <Card.Group itemsPerRow={3}>{items}</Card.Group>;
+  }
+
+  makeCards(ids) {
+    let items = [];
+    for (let i = 0; i < ids.length; i++) {
+      let id = ids[i];
+
       items.push(
         <Card key={id}>
           {this.state.tokenInfo[id] ? (
@@ -155,7 +176,7 @@ class AllTokens extends Component {
                 ? 'Viking Collection #' + id
                 : specialEdition.indexOf(String(id)) >= 0
                 ? 'Special Edition #' + (id - vikingAmount)
-                : 'CRBC Token #' + (id - specialTokens)}
+                : 'CRBC Token #' + (id - specialTokensAmount)}
             </Card.Header>
 
             {this.state.tokenInfo[id] ? (
@@ -234,7 +255,7 @@ class AllTokens extends Component {
       );
     }
 
-    return <Card.Group itemsPerRow={3}>{items}</Card.Group>;
+    return items;
   }
 
   render() {

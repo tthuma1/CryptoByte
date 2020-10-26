@@ -25,7 +25,8 @@ let viking = process.env.VIKING_AMOUNT.split(',');
 let vikingAmount = viking.length;
 let specialEdition = process.env.SPECIAL_EDITION.split(',');
 let specialEditionAmount = specialEdition.length;
-let specialTokens = vikingAmount + specialEditionAmount;
+let specialTokens = viking.concat(specialEdition);
+let specialTokensAmount = vikingAmount + specialEditionAmount;
 
 class TokensOfOwner extends Component {
   state = {
@@ -134,8 +135,26 @@ class TokensOfOwner extends Component {
 
   renderTokens() {
     let items = [];
-    for (let i = 0; i < this.props.balance; i++) {
-      let id = Number(this.props.tokens[i]);
+    let classic = [];
+    for (let id = 1; id <= this.props.balance; id++) {
+      if (specialTokens.indexOf(String(id)) < 0) {
+        classic.push(id);
+      }
+    }
+
+    items.push(
+      this.makeCards(viking),
+      this.makeCards(specialEdition),
+      this.makeCards(classic)
+    );
+
+    return <Card.Group itemsPerRow={3}>{items}</Card.Group>;
+  }
+
+  makeCards(ids) {
+    let items = [];
+    for (let i = 0; i < ids.length; i++) {
+      let id = ids[i];
 
       items.push(
         <Card key={id}>
@@ -174,7 +193,7 @@ class TokensOfOwner extends Component {
                 ? 'Viking Collection #' + id
                 : specialEdition.indexOf(String(id)) >= 0
                 ? 'Special Edition #' + (id - vikingAmount)
-                : 'CRBC Token #' + (id - specialTokens)}
+                : 'CRBC Token #' + (id - specialTokensAmount)}
             </Card.Header>
 
             {this.state.tokenInfo[id] ? (
@@ -244,7 +263,7 @@ class TokensOfOwner extends Component {
       );
     }
 
-    return <Card.Group itemsPerRow={2}>{items}</Card.Group>;
+    return items;
   }
 
   render() {
