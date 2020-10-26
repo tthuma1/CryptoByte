@@ -242,6 +242,22 @@ class TokenDetails extends Component {
                       </Button>
                     </a>
                   </Link>
+
+                  {this.state.image && (
+                    <Container
+                      textAlign="right"
+                      style={{ marginTop: '-35.6px' }}
+                    >
+                      <a
+                        href={`/static/images/ERC721/${this.props.id}.jpg`}
+                        download
+                      >
+                        <Button>
+                          <Icon name="download" /> Download image
+                        </Button>
+                      </a>
+                    </Container>
+                  )}
                 </div>
               ) : (
                 ''
