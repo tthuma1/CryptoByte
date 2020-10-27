@@ -71,7 +71,7 @@ class TokenDetails extends Component {
 
     // check if token has image and save it in state
     try {
-      await axios.get(`/static/images/ERC721/${this.props.id}.jpg`);
+      await axios.get(`/static/images/ERC721/${this.props.id}_w.jpg`);
       await this.setState({ image: true });
     } catch (error) {
       await this.setState({ image: false });
@@ -125,7 +125,7 @@ class TokenDetails extends Component {
                   style={{ background: 'rgba(0,0,0,.05)', overflow: 'auto' }}
                 >
                   <Image
-                    src={`/static/images/ERC721/${this.props.id}.jpg`}
+                    src={`/static/images/ERC721/${this.props.id}_w.jpg`}
                     size="big"
                     wrapped
                   />

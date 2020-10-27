@@ -76,7 +76,7 @@ class AllTokens extends Component {
 
       // check if token has image and save it in state
       try {
-        await axios.get(`../static/images/ERC721/${id}.jpg`);
+        await axios.get(`../static/images/ERC721/${id}_w.jpg`);
         images[id] = true;
       } catch (error) {
         images[id] = false;
@@ -145,10 +145,10 @@ class AllTokens extends Component {
             this.state.images[id] ? (
               id == 1 ? (
                 <Visibility onUpdate={this.updateImage}>
-                  <Image src={`/static/images/ERC721/${id}.jpg`} />
+                  <Image src={`/static/images/ERC721/${id}_w.jpg`} />
                 </Visibility>
               ) : (
-                <Image src={`/static/images/ERC721/${id}.jpg`} />
+                <Image src={`/static/images/ERC721/${id}_w.jpg`} />
               )
             ) : (
               <Container

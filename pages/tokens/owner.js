@@ -93,7 +93,7 @@ class TokensOfOwner extends Component {
 
       // check if token has image and save it in state
       try {
-        await axios.get(`../static/images/ERC721/${id}.jpg`);
+        await axios.get(`../static/images/ERC721/${id}_w.jpg`);
         images[id] = true;
       } catch (error) {
         images[id] = false;
@@ -162,10 +162,10 @@ class TokensOfOwner extends Component {
             this.state.images[id] ? (
               id == this.state.images[Object.keys(this.state.images)[0]] ? (
                 <Visibility onUpdate={this.updateImage}>
-                  <Image src={`/static/images/ERC721/${id}.jpg`} wrapped />
+                  <Image src={`/static/images/ERC721/${id}_w.jpg`} wrapped />
                 </Visibility>
               ) : (
-                <Image src={`/static/images/ERC721/${id}.jpg`} wrapped />
+                <Image src={`/static/images/ERC721/${id}_w.jpg`} wrapped />
               )
             ) : (
               <Container
