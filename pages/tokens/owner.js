@@ -156,111 +156,113 @@ class TokensOfOwner extends Component {
     for (let i = 0; i < ids.length; i++) {
       let id = ids[i];
 
-      items.push(
-        <Card key={id}>
-          {this.state.tokenInfo[id] ? (
-            this.state.images[id] ? (
-              id == this.state.images[Object.keys(this.state.images)[0]] ? (
-                <Visibility onUpdate={this.updateImage}>
+      if (this.props.tokens.indexOf(String(id)) >= 0) {
+        items.push(
+          <Card key={id}>
+            {this.state.tokenInfo[id] ? (
+              this.state.images[id] ? (
+                id == this.state.images[Object.keys(this.state.images)[0]] ? (
+                  <Visibility onUpdate={this.updateImage}>
+                    <Image src={`/static/images/ERC721/${id}_w.jpg`} wrapped />
+                  </Visibility>
+                ) : (
                   <Image src={`/static/images/ERC721/${id}_w.jpg`} wrapped />
-                </Visibility>
+                )
               ) : (
-                <Image src={`/static/images/ERC721/${id}_w.jpg`} wrapped />
+                <Container
+                  textAlign="center"
+                  style={{
+                    background: 'rgba(0,0,0,.05)',
+                    overflow: 'auto',
+                    paddingTop: '25px',
+                    paddingBottom: '25px',
+                  }}
+                >
+                  <Jdenticon value={id} size={this.state.jdentHeigth} />
+                </Container>
               )
             ) : (
-              <Container
-                textAlign="center"
-                style={{
-                  background: 'rgba(0,0,0,.05)',
-                  overflow: 'auto',
-                  paddingTop: '25px',
-                  paddingBottom: '25px',
-                }}
-              >
-                <Jdenticon value={id} size={this.state.jdentHeigth} />
-              </Container>
-            )
-          ) : (
-            <Placeholder fluid>
-              <Placeholder.Image
-                style={{ height: this.state.jdentHeigth + 50 }}
-              />
-            </Placeholder>
-          )}
-          <Card.Content>
-            <Card.Header>
-              {viking.indexOf(String(id)) >= 0
-                ? 'Viking Collection #' + id
-                : specialEdition.indexOf(String(id)) >= 0
-                ? 'Special Edition #' + (id - vikingAmount)
-                : 'CRBC Token #' + (id - specialTokensAmount)}
-            </Card.Header>
-
-            {this.state.tokenInfo[id] ? (
-              <div>
-                <Card.Description>
-                  <b>
-                    {Number(this.state.tokenInfo[id]['price'])
-                      ? 'Token price: ' +
-                        web3.utils.fromWei(
-                          this.state.tokenInfo[id]['price'],
-                          'ether'
-                        ) +
-                        ' ETH'
-                      : 'Token not for sale'}
-                  </b>
-                </Card.Description>
-                <Card.Meta style={{ overflow: 'auto' }}>
-                  Owner : {this.props.owner}
-                </Card.Meta>
-              </div>
-            ) : (
-              <Placeholder style={{ marginTop: '10px' }}>
-                <Placeholder.Header>
-                  <Placeholder.Line length="very short" />
-                  <Placeholder.Line length="medium" />
-                </Placeholder.Header>
+              <Placeholder fluid>
+                <Placeholder.Image
+                  style={{ height: this.state.jdentHeigth + 50 }}
+                />
               </Placeholder>
             )}
-          </Card.Content>
+            <Card.Content>
+              <Card.Header>
+                {viking.indexOf(String(id)) >= 0
+                  ? 'Viking Collection #' + id
+                  : specialEdition.indexOf(String(id)) >= 0
+                  ? 'Special Edition #' + (id - vikingAmount)
+                  : 'CRBC Token #' + (id - specialTokensAmount)}
+              </Card.Header>
 
-          <Card.Content extra>
-            <Link route={`/token/${id}`}>
-              <a
-                onClick={() => {
-                  this.setState({ mounted: false });
-                }}
-              >
-                <Button>
-                  View Details
-                  <Icon name="chevron circle right" />
-                </Button>
-              </a>
-            </Link>
+              {this.state.tokenInfo[id] ? (
+                <div>
+                  <Card.Description>
+                    <b>
+                      {Number(this.state.tokenInfo[id]['price'])
+                        ? 'Token price: ' +
+                          web3.utils.fromWei(
+                            this.state.tokenInfo[id]['price'],
+                            'ether'
+                          ) +
+                          ' ETH'
+                        : 'Token not for sale'}
+                    </b>
+                  </Card.Description>
+                  <Card.Meta style={{ overflow: 'auto' }}>
+                    Owner : {this.props.owner}
+                  </Card.Meta>
+                </div>
+              ) : (
+                <Placeholder style={{ marginTop: '10px' }}>
+                  <Placeholder.Header>
+                    <Placeholder.Line length="very short" />
+                    <Placeholder.Line length="medium" />
+                  </Placeholder.Header>
+                </Placeholder>
+              )}
+            </Card.Content>
 
-            {this.state.tokenInfo[id] ? (
-              Number(this.state.tokenInfo[id]['price']) &&
-              this.props.owner != currentAccount ? (
-                <Button
-                  name={id}
-                  primary
-                  onClick={this.buyToken}
-                  loading={this.state.buyLoading[id]}
-                  disabled={this.state.buyLoading[id]}
-                  style={{ marginTop: '5px' }}
+            <Card.Content extra>
+              <Link route={`/token/${id}`}>
+                <a
+                  onClick={() => {
+                    this.setState({ mounted: false });
+                  }}
                 >
-                  Buy token
-                  <Icon name="shopping cart right" />
-                </Button>
+                  <Button>
+                    View Details
+                    <Icon name="chevron circle right" />
+                  </Button>
+                </a>
+              </Link>
+
+              {this.state.tokenInfo[id] ? (
+                Number(this.state.tokenInfo[id]['price']) &&
+                this.props.owner != currentAccount ? (
+                  <Button
+                    name={id}
+                    primary
+                    onClick={this.buyToken}
+                    loading={this.state.buyLoading[id]}
+                    disabled={this.state.buyLoading[id]}
+                    style={{ marginTop: '5px' }}
+                  >
+                    Buy token
+                    <Icon name="shopping cart right" />
+                  </Button>
+                ) : (
+                  ''
+                )
               ) : (
                 ''
-              )
-            ) : (
-              ''
-            )}
-          </Card.Content>
-        </Card>
-      );
+              )}
+            </Card.Content>
+          </Card>
+        );
+      }
     }
 
     return items;
