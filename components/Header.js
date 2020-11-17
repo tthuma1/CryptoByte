@@ -100,6 +100,10 @@ class Header extends React.Component {
               </Link>
             </Dropdown.Menu>
           </Dropdown>
+          <Link href="/media">
+            <a className="item">Media</a>
+          </Link>
+
           <Menu.Menu
             position="right"
             style={{
