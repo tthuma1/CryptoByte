@@ -63,7 +63,10 @@ class GiftToken extends Component {
 
       this.setState({ loading: false, success: true });
     } catch (err) {
-      this.setState({ loading: false, msgErr: err.message });
+      this.setState({
+        loading: false,
+        msgErr: "You aren't logged in your MetaMask account.",
+      });
     }
   };
 

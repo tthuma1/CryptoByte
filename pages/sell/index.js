@@ -67,7 +67,10 @@ class SellToken extends Component {
       this.setState({ saleLoading: false, success: true });
       Router.pushRoute(`/token/${this.props.id}`);
     } catch (err) {
-      this.setState({ saleLoading: false, msgErr: err.message });
+      this.setState({
+        saleLoading: false,
+        msgErr: "You aren't logged in your MetaMask account.",
+      });
     }
 
     this.setState({
@@ -97,7 +100,13 @@ class SellToken extends Component {
       this.setState({ loading: false, success: true });
       Router.pushRoute(`/token/${this.props.id}`);
     } catch (err) {
-      this.setState({ loading: false, msgErr: err.message });
+      this.setState({
+        loading: false,
+        msgErr:
+          err.message == 'Invalid token price.'
+            ? err.message
+            : "You aren't logged in your MetaMask account.",
+      });
     }
   };
 

@@ -92,7 +92,7 @@ class TokenDetails extends Component {
 
       Router.replaceRoute(`/token/${this.props.id}`);
     } catch (err) {
-      this.setState({ msgErr: err.message });
+      this.setState({ msgErr: "You aren't logged in your MetaMask account." });
     }
 
     this.setState({ buyLoading: false });
