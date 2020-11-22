@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Layout from '../components/Layout';
-import { Container, Grid } from 'semantic-ui-react';
+import { Container, Header } from 'semantic-ui-react';
 import Head from 'next/head';
 
 let headerEl;
@@ -37,6 +37,7 @@ class Media extends Component {
           />
           <meta name="robots" content="index, follow" />
         </Head>
+
         <Container
           textAlign="center"
           style={{
@@ -44,9 +45,28 @@ class Media extends Component {
             color: 'rgba(255,255,255,.9)',
           }}
         >
-          <video height="450" controls style={{ marginBottom: '5vh' }}>
+          <Header as="h2" dividing inverted>
+            How Crypto Byte Collectible tokens are made.
+          </Header>
+
+          <video
+            height="450"
+            controls
+            style={{ marginBottom: '4vh', marginTop: '2vh' }}
+          >
             <source src="/static/videos/film_crbc.mp4" type="video/mp4" />
           </video>
+
+          <img
+            src="/static/images/custom-design.jpg"
+            height="400"
+            style={{
+              marginBottom: '4vh',
+            }}
+          />
+
+          <br />
+
           <img src="/static/images/comic.jpg" height="700" />
         </Container>
       </Layout>

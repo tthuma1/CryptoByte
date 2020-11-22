@@ -277,10 +277,6 @@ class AllTokens extends Component {
             marginTop: this.state.headerHeight + 20,
           }}
         >
-          <img
-            src="/static/images/custom-design.jpg"
-            height={this.state.jdentHeigth * 2 - 20}
-          />
           <Header as="h2" dividing inverted>
             There are currently {this.props.supply} existing tokens.
           </Header>

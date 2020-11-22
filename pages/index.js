@@ -236,11 +236,11 @@ class CryptoByteIndex extends Component {
                 How to use Crypto Byte Collectible?
               </Header>
               <p style={{ fontSize: '16px' }}>
-                To start, all you need is the{' '}
+                To start all you need is the{' '}
                 <Link route="https://metamask.io/">
                   <a target="_blank">MetaMask</a>
                 </Link>{' '}
-                browser extension. To learn how to use MetaMask, view the
+                browser extension. To learn how to use MetaMask view the
                 instructions.{' '}
                 <MMPrompt
                   trigger={
@@ -258,19 +258,19 @@ class CryptoByteIndex extends Component {
               <Divider horizontal></Divider>
 
               <p style={{ fontSize: '16px' }}>
-                Once you have your account set up, you can start creating
-                collectible tokens. To create a new token, go to the{' '}
+                Once you have your account set up you can start creating
+                collectible tokens. To create a new token go to the{' '}
                 <Link route={'/create_tokens'}>
                   <a>Create New Tokens</a>
                 </Link>{' '}
-                tab. Once there, you can create your brand new unique token for{' '}
+                tab. Once there you can create your brand new unique token for{' '}
                 {web3.utils.fromWei(mintPrice, 'ether')} ETH.
               </p>
 
               <Divider horizontal></Divider>
 
               <p style={{ fontSize: '16px' }}>
-                To get a full list of tokens you own, go to the{' '}
+                To get a full list of tokens you own go to the{' '}
                 <Link href={`/tokens/${currentAccount}`}>
                   <a
                     onClick={() => {
@@ -283,7 +283,7 @@ class CryptoByteIndex extends Component {
                 tab. There you can put your tokens up for sale or gift them to
                 someone.
                 <br />
-                To get a list of all existing tokens, go to the{' '}
+                To get a list of all existing tokens go to the{' '}
                 <Link href="/tokens">
                   <a
                     onClick={() => {
@@ -293,7 +293,7 @@ class CryptoByteIndex extends Component {
                     All Tokens
                   </a>
                 </Link>{' '}
-                tab. If any tokens are up for sale, you can buy them there.
+                tab. If any tokens are up for sale you can buy them there.
               </p>
 
               <Divider horizontal></Divider>
