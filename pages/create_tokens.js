@@ -18,9 +18,12 @@ import Head from 'next/head';
 
 let headerEl, currentAccount;
 let priceETH = 0;
-let vikingAmount = Number(process.env.VIKING_AMOUNT);
-let specialEdition = Number(process.env.SPECIAL_EDITION);
-let specialTokens = vikingAmount + specialEdition;
+let viking = process.env.VIKING_AMOUNT.split(',');
+let vikingAmount = viking.length;
+let specialEdition = process.env.SPECIAL_EDITION.split(',');
+let specialEditionAmount = specialEdition.length;
+let specialTokens = viking.concat(specialEdition);
+let specialTokensAmount = vikingAmount + specialEditionAmount;
 
 class BuyToken721 extends Component {
   state = {
@@ -125,7 +128,7 @@ class BuyToken721 extends Component {
                 </Segment>
                 <Message>
                   The ID of your newly created token will be{' '}
-                  <b>#{this.state.id - specialTokens}</b>.
+                  <b>#{this.state.id - specialTokensAmount}</b>.
                   <br />
                   The unique image above will be used to identify your token. If
                   you'd like to use a custom image, please contact us at{' '}
