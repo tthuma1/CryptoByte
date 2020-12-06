@@ -16,6 +16,12 @@ class MMPrompt extends React.Component {
     if (isMetaMask || this.props.visible === false) {
       this.handleClose();
     }
+
+    setInterval(() => {
+      if (this.props.visible == true) {
+        this.handleOpen();
+      }
+    }, 100);
   }
 
   handleClose = () => {

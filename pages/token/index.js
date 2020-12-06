@@ -33,6 +33,7 @@ class TokenDetails extends Component {
     msgErr: '',
     tokenInfo: {},
     jdentHeigth: 310,
+    mmprompt: false,
   };
 
   static async getInitialProps({ query }) {
@@ -92,7 +93,14 @@ class TokenDetails extends Component {
 
       Router.replaceRoute(`/token/${this.props.id}`);
     } catch (err) {
-      this.setState({ msgErr: "You aren't logged in your MetaMask account." });
+      this.setState({
+        msgErr: "You aren't logged in your MetaMask account.",
+        mmprompt: true,
+      });
+
+      setTimeout(() => {
+        this.setState({ mmprompt: false });
+      }, 100);
     }
 
     this.setState({ buyLoading: false });
@@ -109,7 +117,7 @@ class TokenDetails extends Component {
           />
           <meta name="robots" content="index, follow" />
         </Head>
-        <MMPrompt />
+        <MMPrompt visible={this.state.mmprompt} />
 
         <Container
           textAlign="center"

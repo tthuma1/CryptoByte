@@ -35,6 +35,7 @@ class AllTokens extends Component {
     buyLoading: {},
     jdentHeigth: 174,
     tokenInfo: {},
+    mmprompt: false,
   };
 
   static async getInitialProps() {
@@ -103,7 +104,13 @@ class AllTokens extends Component {
       });
 
       Router.replaceRoute('/tokens');
-    } catch {}
+    } catch {
+      this.setState({ mmprompt: true });
+
+      setTimeout(() => {
+        this.setState({ mmprompt: false });
+      }, 100);
+    }
 
     this.setState((prevState) => {
       let buyLoading = Object.assign({}, prevState.buyLoading);
@@ -269,7 +276,7 @@ class AllTokens extends Component {
           />
           <meta name="robots" content="index, follow" />
         </Head>
-        <MMPrompt />
+        <MMPrompt visible={this.state.mmprompt} />
 
         <Container
           textAlign="center"

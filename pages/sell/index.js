@@ -27,6 +27,7 @@ class SellToken extends Component {
     success: false,
     currentPrice: 0,
     saleLoading: false,
+    mmprompt: false,
   };
 
   static async getInitialProps({ query }) {
@@ -70,7 +71,12 @@ class SellToken extends Component {
       this.setState({
         saleLoading: false,
         msgErr: "You aren't logged in your MetaMask account.",
+        mmprompt: true,
       });
+
+      setTimeout(() => {
+        this.setState({ mmprompt: false });
+      }, 100);
     }
 
     this.setState({
@@ -100,13 +106,21 @@ class SellToken extends Component {
       this.setState({ loading: false, success: true });
       Router.pushRoute(`/token/${this.props.id}`);
     } catch (err) {
-      this.setState({
+      await this.setState({
         loading: false,
         msgErr:
           err.message == 'Invalid token price.'
             ? err.message
             : "You aren't logged in your MetaMask account.",
       });
+
+      if (this.state.msgErr == "You aren't logged in your MetaMask account.") {
+        this.setState({ mmprompt: true });
+
+        setTimeout(() => {
+          this.setState({ mmprompt: false });
+        }, 100);
+      }
     }
   };
 
@@ -121,7 +135,7 @@ class SellToken extends Component {
           />
           <meta name="robots" content="index, follow" />
         </Head>
-        <MMPrompt />
+        <MMPrompt visible={this.state.mmprompt} />
 
         <Container
           style={{
@@ -145,7 +159,7 @@ class SellToken extends Component {
 
                     if (
                       (isNaN(event.target.value) ||
-                        parseFloat(event.target.value) < 0 ||
+                        parseFloat(event.target.value) <= 0 ||
                         event.target.value.substring(0, 2) === '0x') &&
                       !(event.target.value === '')
                     ) {

@@ -24,6 +24,7 @@ class GiftToken extends Component {
     msgErr: false,
     loading: false,
     success: false,
+    mmprompt: false,
   };
 
   static async getInitialProps({ query }) {
@@ -63,10 +64,21 @@ class GiftToken extends Component {
 
       this.setState({ loading: false, success: true });
     } catch (err) {
-      this.setState({
+      await this.setState({
         loading: false,
-        msgErr: "You aren't logged in your MetaMask account.",
+        msgErr:
+          err.message == 'Invalid receiver address.'
+            ? err.message
+            : "You aren't logged in your MetaMask account.",
       });
+
+      if (this.state.msgErr == "You aren't logged in your MetaMask account.") {
+        this.setState({ mmprompt: true });
+
+        setTimeout(() => {
+          this.setState({ mmprompt: false });
+        }, 100);
+      }
     }
   };
 
@@ -81,7 +93,7 @@ class GiftToken extends Component {
           />
           <meta name="robots" content="index, follow" />
         </Head>
-        <MMPrompt />
+        <MMPrompt visible={this.state.mmprompt} />
 
         <Container
           style={{

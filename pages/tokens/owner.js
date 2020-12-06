@@ -36,6 +36,7 @@ class TokensOfOwner extends Component {
     buyLoading: {},
     jdentHeigth: 220,
     tokenInfo: {},
+    mmprompt: false,
   };
 
   static async getInitialProps({ query }) {
@@ -120,7 +121,13 @@ class TokensOfOwner extends Component {
       });
 
       Router.replaceRoute(`/tokens/${this.props.owner}`);
-    } catch {}
+    } catch {
+      this.setState({ mmprompt: true });
+
+      setTimeout(() => {
+        this.setState({ mmprompt: false });
+      }, 100);
+    }
 
     this.setState((prevState) => {
       let buyLoading = Object.assign({}, prevState.buyLoading);
@@ -279,7 +286,7 @@ class TokensOfOwner extends Component {
           />
           <meta name="robots" content="index, follow" />
         </Head>
-        <MMPrompt />
+        <MMPrompt visible={this.state.mmprompt} />
 
         <Container
           textAlign="center"

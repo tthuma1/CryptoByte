@@ -34,6 +34,7 @@ class BuyToken721 extends Component {
     id: 0,
     initialId: 0,
     loading: false,
+    mmprompt: false,
   };
 
   async componentDidMount() {
@@ -88,7 +89,12 @@ class BuyToken721 extends Component {
       this.setState({
         loading: false,
         msgErr: "You aren't logged in your MetaMask account.",
+        mmprompt: true,
       });
+
+      setTimeout(() => {
+        this.setState({ mmprompt: false });
+      }, 100);
     }
   };
 
@@ -103,7 +109,7 @@ class BuyToken721 extends Component {
           />
           <meta name="robots" content="index, follow" />
         </Head>
-        <MMPrompt />
+        <MMPrompt visible={this.state.mmprompt} />
 
         <Container
           style={{
