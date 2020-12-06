@@ -103,6 +103,9 @@ class Header extends React.Component {
           <Link href="/media">
             <a className="item">Media</a>
           </Link>
+          <Link href="/faq">
+            <a className="item">FAQ</a>
+          </Link>
 
           <Menu.Menu
             position="right"

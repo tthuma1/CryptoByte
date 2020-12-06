@@ -30,7 +30,7 @@ class Media extends Component {
     return (
       <Layout mounted={this.state.mounted}>
         <Head>
-          <title>Crypto Byte Collectible - Sell Tokens</title>
+          <title>Crypto Byte Collectible - Media</title>
           <meta
             name="description"
             content="Media related to Crypto Byte Collectible tokens."
