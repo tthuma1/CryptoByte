@@ -248,13 +248,7 @@ class FAQ extends Component {
             Frequently asked questions about Crypto Byte Collectible tokens.
           </Header>
 
-          <Accordion
-            defaultActiveIndex={[0]}
-            panels={panels}
-            styled
-            fluid
-            exclusive={false}
-          />
+          <Accordion panels={panels} styled fluid exclusive={false} />
         </Container>
       </Layout>
     );

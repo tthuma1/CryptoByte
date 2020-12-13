@@ -34,6 +34,7 @@ class AllTokens extends Component {
     images: {},
     buyLoading: {},
     jdentHeigth: 174,
+    jdentWidth: 357,
     tokenInfo: {},
     mmprompt: false,
   };
@@ -120,7 +121,10 @@ class AllTokens extends Component {
   };
 
   updateImage = async (e, { calculations }) => {
-    this.setState({ jdentHeigth: calculations.height - 40 });
+    this.setState({
+      jdentHeigth: calculations.height - 40,
+      jdentWidth: calculations.width,
+    });
   };
 
   renderTokens() {
@@ -138,7 +142,7 @@ class AllTokens extends Component {
       this.makeCards(classic)
     );
 
-    return <Card.Group itemsPerRow={3}>{items}</Card.Group>;
+    return <Card.Group itemsPerRow={2}>{items}</Card.Group>;
   }
 
   makeCards(ids) {

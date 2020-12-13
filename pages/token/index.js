@@ -8,6 +8,7 @@ import {
   Button,
   Message,
   Placeholder,
+  Grid,
 } from 'semantic-ui-react';
 import Jdenticon from '../../components/Jdenticon';
 import cryptoByte721 from '../../ethereum/cryptoByte721';
@@ -33,6 +34,7 @@ class TokenDetails extends Component {
     msgErr: '',
     tokenInfo: {},
     jdentHeigth: 310,
+    jdentWidth: 563,
     mmprompt: false,
   };
 
@@ -128,16 +130,22 @@ class TokenDetails extends Component {
           <Card fluid>
             {this.state.tokenInfo['owner'] ? (
               this.state.image ? (
-                <Container
-                  textAlign="center"
-                  style={{ background: 'rgba(0,0,0,.05)', overflow: 'auto' }}
-                >
-                  <Image
-                    src={`/static/images/ERC721/${this.props.id}_w.jpg`}
-                    size="big"
-                    wrapped
-                  />
-                </Container>
+                <Grid columns="2" style={{ height: '344px' }}>
+                  <Grid.Column style={{ paddingRight: '0' }}>
+                    <img
+                      src={`/static/images/ERC721/${this.props.id}_w.jpg`}
+                      width={this.state.jdentWidth}
+                    />
+                  </Grid.Column>
+                  <Grid.Column style={{ paddingLeft: '0' }}>
+                    <video width={this.state.jdentWidth} autoPlay loop>
+                      <source
+                        src={`/static/videos/ERC721/${this.props.id}.mp4`}
+                        type="video/mp4"
+                      />
+                    </video>
+                  </Grid.Column>
+                </Grid>
               ) : (
                 <Container
                   textAlign="center"
@@ -256,14 +264,26 @@ class TokenDetails extends Component {
                       textAlign="right"
                       style={{ marginTop: '-35.6px' }}
                     >
-                      <a
-                        href={`/static/images/ERC721/${this.props.id}.jpg`}
-                        download
-                      >
-                        <Button>
-                          <Icon name="download" /> Download image
-                        </Button>
-                      </a>
+                      <p>
+                        <a
+                          href={`/static/images/ERC721/${this.props.id}.jpg`}
+                          download
+                        >
+                          <Button>
+                            <Icon name="download" /> Download image
+                          </Button>
+                        </a>
+                      </p>
+                      <p>
+                        <a
+                          href={`/static/images/ERC721/${this.props.id}.gif`}
+                          download
+                        >
+                          <Button>
+                            <Icon name="download" /> Download GIF
+                          </Button>
+                        </a>
+                      </p>
                     </Container>
                   )}
                 </div>

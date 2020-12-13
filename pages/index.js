@@ -1,5 +1,4 @@
 import { Component } from 'react';
-import MMPrompt from '../components/MMPrompt';
 import Layout from '../components/Layout';
 import {
   Transition,
@@ -10,14 +9,14 @@ import {
   Divider,
   Grid,
   Message,
-  Button,
+  Image,
 } from 'semantic-ui-react';
 import cryptoByte721 from '../ethereum/cryptoByte721';
 import { Link } from '../routes';
 import web3 from '../ethereum/web3';
 import Head from 'next/head';
 
-let headerEl, name, symbol, currentAccount;
+let headerEl, name, symbol;
 let mintPrice = '0';
 let totalSupply = '0';
 
@@ -53,7 +52,6 @@ class CryptoByteIndex extends Component {
     symbol = await cryptoByte721.methods.symbol().call();
     mintPrice = await cryptoByte721.methods.getMintPrice().call();
     totalSupply = await cryptoByte721.methods.totalSupply().call();
-    currentAccount = (await web3.eth.getAccounts())[0];
   };
 
   pulse = () => {
@@ -222,86 +220,14 @@ class CryptoByteIndex extends Component {
                 </Link>{' '}
                 browser extension.
               </p>
+              <Image
+                src="/static/images/metamask-logo.jpg"
+                as="a"
+                size="small"
+                href="https://metamask.io/"
+                target="_blank"
+              />
             </Message>
-
-            <div>
-              <Header
-                as="h2"
-                inverted
-                style={{
-                  marginTop: '11vh',
-                }}
-              >
-                <Divider />
-                How to use Crypto Byte Collectible?
-              </Header>
-              <p style={{ fontSize: '16px' }}>
-                To start all you need is the{' '}
-                <Link route="https://metamask.io/">
-                  <a target="_blank">MetaMask</a>
-                </Link>{' '}
-                browser extension. To learn how to use MetaMask view the
-                instructions.{' '}
-                <MMPrompt
-                  trigger={
-                    <Button size="small" compact>
-                      View Instructions
-                    </Button>
-                  }
-                  visible={false}
-                />
-                <br />
-                Your MetaMask account will be used to log you in to Crypto Byte
-                Collectible's webpage.
-              </p>
-
-              <Divider horizontal></Divider>
-
-              <p style={{ fontSize: '16px' }}>
-                Once you have your account set up you can start creating
-                collectible tokens. To create a new token go to the{' '}
-                <Link route={'/create_tokens'}>
-                  <a>Create New Tokens</a>
-                </Link>{' '}
-                tab. Once there you can create your brand new unique token for{' '}
-                {web3.utils.fromWei(mintPrice, 'ether')} ETH.
-              </p>
-
-              <Divider horizontal></Divider>
-
-              <p style={{ fontSize: '16px' }}>
-                To get a full list of tokens you own go to the{' '}
-                <Link href={`/tokens/${currentAccount}`}>
-                  <a
-                    onClick={() => {
-                      this.setState({ mounted: false });
-                    }}
-                  >
-                    My Tokens
-                  </a>
-                </Link>{' '}
-                tab. There you can put your tokens up for sale or gift them to
-                someone.
-                <br />
-                To get a list of all existing tokens go to the{' '}
-                <Link href="/tokens">
-                  <a
-                    onClick={() => {
-                      this.setState({ mounted: false });
-                    }}
-                  >
-                    All Tokens
-                  </a>
-                </Link>{' '}
-                tab. If any tokens are up for sale you can buy them there.
-              </p>
-
-              <Divider horizontal></Divider>
-
-              <p style={{ fontSize: '16px' }}>
-                You can add your own design on CRBC Tokens.
-              </p>
-            </div>
           </Segment>
         </Container>
       </Layout>
