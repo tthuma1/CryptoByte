@@ -138,7 +138,7 @@ class TokenDetails extends Component {
                     />
                   </Grid.Column>
                   <Grid.Column style={{ paddingLeft: '0' }}>
-                    <video width={this.state.jdentWidth} autoPlay loop>
+                    <video width={this.state.jdentWidth} autoPlay loop muted>
                       <source
                         src={`/static/videos/ERC721/${this.props.id}.mp4`}
                         type="video/mp4"

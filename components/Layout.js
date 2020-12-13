@@ -10,9 +10,9 @@ class Layout extends React.Component {
     this.state = { allMounted: false };
     try {
       ethereum.on('accountsChanged', (_accounts) => {
-        location.reload();
+        window.location.reload();
         ethereum.on('chainChanged', (chainId) => {
-          location.reload();
+          window.location.reload();
         });
       });
     } catch {}
