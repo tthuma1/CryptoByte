@@ -184,10 +184,10 @@ class AllTokens extends Component {
           <Card.Content>
             <Card.Header>
               {viking.indexOf(String(id)) >= 0
-                ? 'Viking Collection #' + id
+                ? 'Viking Collection #' + (i + 1)
                 : specialEdition.indexOf(String(id)) >= 0
-                ? 'Special Edition #' + (id - vikingAmount)
-                : 'CRBC Token #' + (id - specialTokensAmount)}
+                ? 'Special Edition #' + (i + 1)
+                : 'CRBC Token #' + (i + 1)}
             </Card.Header>
 
             {this.state.tokenInfo[id] ? (
