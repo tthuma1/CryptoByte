@@ -135,7 +135,7 @@ class CryptoByteIndex extends Component {
                 border: '0',
               }}
             >
-              Learn how to get started!
+              General token info
               <Transition
                 visible={this.state.pulseOn}
                 animation="pulse"
