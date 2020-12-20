@@ -45,10 +45,6 @@ class Media extends Component {
             color: 'rgba(255,255,255,.9)',
           }}
         >
-          <Header as="h2" dividing inverted>
-            How Crypto Byte Collectible tokens are made.
-          </Header>
-
           <img
             src="/static/images/custom-design.jpg"
             height="400"
@@ -57,6 +53,10 @@ class Media extends Component {
               marginTop: '2vh',
             }}
           />
+
+          <Header as="h2" inverted>
+            How Crypto Byte Collectible tokens are made.
+          </Header>
 
           <video height="450" controls style={{ marginBottom: '4vh' }}>
             <source src="/static/videos/film_crbc.mp4" type="video/mp4" />
