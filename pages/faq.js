@@ -65,7 +65,12 @@ currentAccount.then((value) => {
               </Link>{' '}
               desktop browser extension.
             </p>
-            <p>No other personal information is required.</p>
+            <p>
+              No other personal information is required. Install the browser
+              extension only from MetaMask's original web page. Never share your
+              MetaMask recovery phrase with anyone. The Crypto Byte team will{' '}
+              <b>never</b> ask for it.
+            </p>
           </div>
         ),
       },

@@ -49,23 +49,25 @@ class Media extends Component {
             How Crypto Byte Collectible tokens are made.
           </Header>
 
-          <video
-            height="450"
-            controls
-            style={{ marginBottom: '4vh', marginTop: '2vh' }}
-          >
-            <source src="/static/videos/film_crbc.mp4" type="video/mp4" />
-          </video>
-
           <img
             src="/static/images/custom-design.jpg"
             height="400"
             style={{
               marginBottom: '4vh',
+              marginTop: '2vh',
             }}
           />
 
-          <br />
+          <video height="450" controls style={{ marginBottom: '4vh' }}>
+            <source src="/static/videos/film_crbc.mp4" type="video/mp4" />
+          </video>
+
+          <video height="450" controls style={{ marginBottom: '4vh' }}>
+            <source
+              src="/static/videos/GIF_viking_final.mp4"
+              type="video/mp4"
+            />
+          </video>
 
           <img src="/static/images/comic.jpg" height="700" />
         </Container>
