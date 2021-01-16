@@ -82,7 +82,7 @@ currentAccount.then((value) => {
       content: {
         content: (
           <div>
-            <p>Chrome, Firefox and Brave browser.</p>
+            <p>Chrome, Firefox, Brave and Edge browser.</p>
             <p>
               Note: for security reasons always install browser extensions from
               verified sources.
