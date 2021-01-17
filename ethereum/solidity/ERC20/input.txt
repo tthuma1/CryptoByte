@@ -1,5 +1,0 @@
-"Crypto Byte Token", "CBTN", 1000000000000000000000000000
-
-buy tokens for 0.01$
-change token price
-buying tokens from contract can be paused
