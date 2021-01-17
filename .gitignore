@@ -8,3 +8,4 @@ node_modules
 
 # other files
 deploy_input.txt
+ethereum/solidity/ERC20/input.txt
