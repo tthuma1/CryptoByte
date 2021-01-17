@@ -6,6 +6,7 @@ import "./Context.sol";
 import "./IERC20.sol";
 import "./SafeMath.sol";
 import "./AccessControl.sol";
+import "./Pausable.sol";
 
 /**
  * @dev Implementation of the {IERC20} interface.
@@ -31,7 +32,7 @@ import "./AccessControl.sol";
  * functions have been added to mitigate the well-known issues around setting
  * allowances. See {IERC20-approve}.
  */
-contract CryptoByte20 is Context, AccessControl, IERC20 {
+contract CryptoByte20 is IERC20, Context, AccessControl, Pausable {
     using SafeMath for uint256;
 
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
@@ -46,6 +47,20 @@ contract CryptoByte20 is Context, AccessControl, IERC20 {
     string private _symbol;
     uint8 private _decimals;
     uint256 private _cap;
+
+    uint256 private _buyPrice = 0.00001 ether;
+
+    /**
+     * @dev Checks if function caller is either a minter or has paid the price for buying a token.
+     */
+    modifier paidBuyPrice() {
+        require(
+            (msg.value == _buyPrice && !paused()) ||
+                hasRole(MINTER_ROLE, _msgSender()),
+            "ERC20: caller is not minter nor has paid the buying price or token buying is paused"
+        );
+        _;
+    }
 
     /**
      * @dev Sets the values for {name} and {symbol}, initializes {decimals} with
@@ -304,12 +319,65 @@ contract CryptoByte20 is Context, AccessControl, IERC20 {
      *
      * - the caller must have the `MINTER_ROLE`.
      */
-    function mint(address to, uint256 amount) public virtual {
+    function mint(address to, uint256 amount)
+        public
+        payable
+        virtual
+        paidBuyPrice
+    {
+        _mint(to, amount);
+    }
+
+    /**
+     * @dev Pauses the ability to buy token.
+     *
+     * See {ERC20Pausable} and {Pausable-_pause}.
+     *
+     * Requirements:
+     *
+     * - the caller must have the `MINTER_ROLE`.
+     */
+    function pause() public virtual {
         require(
             hasRole(MINTER_ROLE, _msgSender()),
-            "ERC20PresetMinterPauser: must have minter role to mint"
+            "ERC20PresetMinterPauser: must have minter role to pause"
         );
-        _mint(to, amount);
+        _pause();
+    }
+
+    /**
+     * @dev Unpauses the ability to buy token.
+     *
+     * See {ERC20Pausable} and {Pausable-_unpause}.
+     *
+     * Requirements:
+     *
+     * - the caller must have the `MINTER_ROLE`.
+     */
+    function unpause() public virtual {
+        require(
+            hasRole(MINTER_ROLE, _msgSender()),
+            "ERC20PresetMinterPauser: must have minter role to unpause"
+        );
+        _unpause();
+    }
+
+    /**
+     * @dev Returns the price needed for buying a token.
+     */
+    function getBuyPrice() public view returns (uint256) {
+        return _buyPrice;
+    }
+
+    /**
+     * @dev Minters can change the price for buying a token.
+     */
+    function setBuyPrice(uint256 newBuyPrice) public {
+        require(
+            hasRole(MINTER_ROLE, _msgSender()),
+            "ERC20PresetMinterPauser: must have minter role to change buy price"
+        );
+        _buyPrice = newBuyPrice;
     }
 
     /**
