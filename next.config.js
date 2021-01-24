@@ -12,5 +12,6 @@ module.exports = {
     INFURA_ENDPOINT: process.env.INFURA_ENDPOINT,
     VIKING_AMOUNT: process.env.VIKING_AMOUNT,
     SPECIAL_EDITION: process.env.SPECIAL_EDITION,
+    RINKEBY_ADDRESS_20: process.env.RINKEBY_ADDRESS_20,
   },
 };

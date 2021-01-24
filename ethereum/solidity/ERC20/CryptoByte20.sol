@@ -47,7 +47,7 @@ contract CryptoByte20 is IERC20, Context, AccessControl, Pausable {
     string private _symbol;
     uint8 private _decimals;
     uint256 private _cap;
-
+    
     uint256 private _buyPrice = 0.00001 ether;
 
     /**
@@ -55,9 +55,8 @@ contract CryptoByte20 is IERC20, Context, AccessControl, Pausable {
      */
     modifier paidBuyPrice() {
         require(
-            (msg.value == _buyPrice && !paused()) ||
-                hasRole(MINTER_ROLE, _msgSender()),
-            "ERC20: caller is not minter nor has paid the buying price or token buying is paused"
+            (msg.value > 0 && !paused()),
+            "ERC20: caller has not paid the buying price or token buying is paused"
         );
         _;
     }
@@ -319,13 +318,17 @@ contract CryptoByte20 is IERC20, Context, AccessControl, Pausable {
      *
      * - the caller must have the `MINTER_ROLE`.
      */
-    function mint(address to, uint256 amount)
-        public
-        payable
-        virtual
-        paidBuyPrice
-    {
+    function mint(address to, uint256 amount) public virtual {
+        require(hasRole(MINTER_ROLE, _msgSender()), "ERC20PresetMinterPauser: must have minter role to mint");
         _mint(to, amount);
+    }
+
+    /**
+     * @dev Gives tokens to the buyer, depending on the price, they sent to the contract.
+     */
+    function buyTokens() public payable paidBuyPrice {
+        uint256 amount = (msg.value * 10**_decimals) / _buyPrice;
+        _mint(_msgSender(), amount);
     }
 
     /**
@@ -338,10 +341,7 @@ contract CryptoByte20 is IERC20, Context, AccessControl, Pausable {
      * - the caller must have the `MINTER_ROLE`.
      */
     function pause() public virtual {
-        require(
-            hasRole(MINTER_ROLE, _msgSender()),
-            "ERC20PresetMinterPauser: must have minter role to pause"
-        );
+        require(hasRole(MINTER_ROLE, _msgSender()), "ERC20PresetMinterPauser: must have minter role to pause");
         _pause();
     }
 
@@ -355,10 +355,7 @@ contract CryptoByte20 is IERC20, Context, AccessControl, Pausable {
      * - the caller must have the `MINTER_ROLE`.
      */
     function unpause() public virtual {
-        require(
-            hasRole(MINTER_ROLE, _msgSender()),
-            "ERC20PresetMinterPauser: must have minter role to unpause"
-        );
+        require(hasRole(MINTER_ROLE, _msgSender()), "ERC20PresetMinterPauser: must have minter role to unpause");
         _unpause();
     }
 
