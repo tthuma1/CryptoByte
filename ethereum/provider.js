@@ -1,20 +1,15 @@
 import { ethers } from 'ethers';
 
 let provider;
+let a;
 
-if (
-  typeof window !== 'undefined' &&
-  typeof window.ethereum !== 'undefined' &&
-  window.ethereum.chainId === process.env.NETWORK_VERSION
-) {
-  (async () => {
-    try {
-      // Request account access if needed
-      ethereum.request({ method: 'eth_requestAccounts' });
-    } catch (error) {
-      console.log(error);
-    }
-  })();
+if (typeof window !== 'undefined' && typeof window.ethereum !== 'undefined') {
+  try {
+    // Request account access if needed
+    window.ethereum.request({ method: 'eth_requestAccounts' });
+  } catch (error) {
+    console.log(error);
+  }
 
   provider = new ethers.providers.Web3Provider(window.ethereum);
 } else {
