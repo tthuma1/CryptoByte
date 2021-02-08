@@ -13,7 +13,7 @@ import {
 } from 'semantic-ui-react';
 import cryptoByte721 from '../ethereum/cryptoByte721';
 import { Link } from '../routes';
-import web3 from '../ethereum/web3';
+import { ethers } from 'ethers';
 import Head from 'next/head';
 
 let headerEl, name, symbol;
@@ -48,10 +48,10 @@ class CryptoByteIndex extends Component {
   }
 
   getCryptoByteInfo = async () => {
-    name = await cryptoByte721.methods.name().call();
-    symbol = await cryptoByte721.methods.symbol().call();
-    mintPrice = await cryptoByte721.methods.getMintPrice().call();
-    totalSupply = await cryptoByte721.methods.totalSupply().call();
+    name = await cryptoByte721.name();
+    symbol = await cryptoByte721.symbol();
+    mintPrice = await cryptoByte721.getMintPrice();
+    totalSupply = await cryptoByte721.totalSupply();
   };
 
   pulse = () => {
@@ -198,7 +198,7 @@ class CryptoByteIndex extends Component {
                 <Grid.Column>
                   <p>
                     Price to create a new token:{' '}
-                    <b>{web3.utils.fromWei(mintPrice, 'ether')} ETH</b>
+                    <b>{ethers.utils.formatEther(mintPrice)} ETH</b>
                   </p>
                 </Grid.Column>
                 <Grid.Column>

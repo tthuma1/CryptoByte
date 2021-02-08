@@ -11,9 +11,9 @@ class Layout extends React.Component {
     try {
       ethereum.on('accountsChanged', (_accounts) => {
         //window.location.reload();
-        ethereum.on('chainChanged', (chainId) => {
-          //window.location.reload();
-        });
+      });
+      ethereum.on('chainChanged', (chainId) => {
+        window.location.reload();
       });
     } catch {}
   }

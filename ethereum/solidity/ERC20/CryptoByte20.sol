@@ -47,7 +47,7 @@ contract CryptoByte20 is IERC20, Context, AccessControl, Pausable {
     string private _symbol;
     uint8 private _decimals;
     uint256 private _cap;
-    
+
     uint256 private _buyPrice = 0.00001 ether;
 
     /**
@@ -319,7 +319,10 @@ contract CryptoByte20 is IERC20, Context, AccessControl, Pausable {
      * - the caller must have the `MINTER_ROLE`.
      */
     function mint(address to, uint256 amount) public virtual {
-        require(hasRole(MINTER_ROLE, _msgSender()), "ERC20PresetMinterPauser: must have minter role to mint");
+        require(
+            hasRole(MINTER_ROLE, _msgSender()),
+            "ERC20PresetMinterPauser: must have minter role to mint"
+        );
         _mint(to, amount);
     }
 
@@ -341,7 +344,10 @@ contract CryptoByte20 is IERC20, Context, AccessControl, Pausable {
      * - the caller must have the `MINTER_ROLE`.
      */
     function pause() public virtual {
-        require(hasRole(MINTER_ROLE, _msgSender()), "ERC20PresetMinterPauser: must have minter role to pause");
+        require(
+            hasRole(MINTER_ROLE, _msgSender()),
+            "ERC20PresetMinterPauser: must have minter role to pause"
+        );
         _pause();
     }
 
@@ -355,7 +361,10 @@ contract CryptoByte20 is IERC20, Context, AccessControl, Pausable {
      * - the caller must have the `MINTER_ROLE`.
      */
     function unpause() public virtual {
-        require(hasRole(MINTER_ROLE, _msgSender()), "ERC20PresetMinterPauser: must have minter role to unpause");
+        require(
+            hasRole(MINTER_ROLE, _msgSender()),
+            "ERC20PresetMinterPauser: must have minter role to unpause"
+        );
         _unpause();
     }
 

@@ -1,7 +1,8 @@
 import React from 'react';
 import { Menu, Dropdown } from 'semantic-ui-react';
 import { Link } from '../routes';
-import web3 from '../ethereum/web3';
+//import web3 from '../ethereum/web3';
+import { ethers } from 'ethers';
 import cryptoByte721 from '../ethereum/cryptoByte721';
 
 let currentAccount;
@@ -15,20 +16,23 @@ class Header extends React.Component {
   };
 
   async componentDidMount() {
-    currentAccount = (await web3.eth.getAccounts())[0];
+    try {
+      currentAccount = ethers.utils.getAddress(
+        (await ethereum.request({ method: 'eth_accounts' }))[0]
+      );
 
-    if (
-      (await web3.eth.net.getNetworkType()) === process.env.NETWORK_TYPE &&
-      typeof currentAccount !== 'undefined'
-    ) {
-      const isMinter = await cryptoByte721.methods
-        .isMinter(currentAccount)
-        .call();
+      if (
+        (await ethereum.request({ method: 'eth_chainId' })) ===
+          process.env.NETWORK_VERSION &&
+        typeof currentAccount !== 'undefined'
+      ) {
+        const isMinter = await cryptoByte721.isMinter(currentAccount);
 
-      if (isMinter) {
-        this.setState({ isAdmin: 'flex' });
+        if (isMinter) {
+          this.setState({ isAdmin: 'flex' });
+        }
       }
-    }
+    } catch {}
 
     const interval = setInterval(() => {
       if (!this.state.hasMounted && this.props.mounted == true) {
@@ -43,10 +47,10 @@ class Header extends React.Component {
     }, 500);
   }
 
-  hideAll() {
+  /*hideAll() {
     this.setState({ visibleFull: 'hidden' });
     this.props.updateState(false);
-  }
+  }*/
 
   render() {
     return (
@@ -73,14 +77,14 @@ class Header extends React.Component {
               <Link href="/tokens">
                 <a
                   className="item"
-                  onClick={() => {
+                  /*onClick={() => {
                     if (!(location.pathname == '/tokens')) {
                       this.hideAll();
                     } else {
                       this.hideAll();
                       location.reload();
                     }
-                  }}
+                  }}*/
                 >
                   All Tokens
                 </a>
@@ -88,9 +92,9 @@ class Header extends React.Component {
               <Link href={`/tokens/${currentAccount}`}>
                 <a
                   className="item"
-                  onClick={() => {
+                  /*onClick={() => {
                     this.hideAll();
-                  }}
+                  }}*/
                 >
                   My Tokens
                 </a>
@@ -106,6 +110,22 @@ class Header extends React.Component {
           <Link href="/faq">
             <a className="item">FAQ</a>
           </Link>
+
+          {/*
+          <Dropdown item text="ERC20 Token">
+            <Dropdown.Menu>
+              <Link href="/ERC20">
+                <a className="item">General Info</a>
+              </Link>
+              <Link href="/ERC20/buy">
+                <a className="item">Buy Tokens</a>
+              </Link>
+              <Link href="/ERC20/transfer">
+                <a className="item">Transfer Tokens</a>
+              </Link>
+            </Dropdown.Menu>
+          </Dropdown>
+          */}
 
           <Menu.Menu
             position="right"

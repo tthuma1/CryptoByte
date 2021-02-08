@@ -12,7 +12,7 @@ import {
 } from 'semantic-ui-react';
 import Jdenticon from '../../components/Jdenticon';
 import cryptoByte721 from '../../ethereum/cryptoByte721';
-import web3 from '../../ethereum/web3';
+import { ethers } from 'ethers';
 import { Link, Router } from '../../routes';
 import axios from 'axios';
 import MMPrompt from '../../components/MMPrompt';
@@ -43,7 +43,11 @@ class TokenDetails extends Component {
   }
 
   async componentDidMount() {
-    currentAccount = (await web3.eth.getAccounts())[0];
+    try {
+      currentAccount = ethers.utils.getAddress(
+        (await ethereum.request({ method: 'eth_accounts' }))[0]
+      );
+    } catch {}
 
     headerEl = document.getElementById('header');
 
@@ -65,12 +69,8 @@ class TokenDetails extends Component {
   getTokenInfo = async () => {
     let tokenInfo = {};
 
-    tokenInfo['owner'] = await cryptoByte721.methods
-      .ownerOf(this.props.id)
-      .call();
-    tokenInfo['price'] = await cryptoByte721.methods
-      .getTokenPrice(this.props.id)
-      .call();
+    tokenInfo['owner'] = await cryptoByte721.ownerOf(this.props.id);
+    tokenInfo['price'] = await cryptoByte721.getTokenPrice(this.props.id);
 
     // check if token has image and save it in state
     try {
@@ -88,12 +88,13 @@ class TokenDetails extends Component {
 
     this.setState({ buyLoading: true, msgErr: '' });
     try {
-      await cryptoByte721.methods.buyToken(this.props.id).send({
-        from: currentAccount,
-        value: this.state.tokenInfo['price'],
-      });
+      await (
+        await cryptoByte721.buyToken(this.props.id, {
+          value: this.state.tokenInfo['price'],
+        })
+      ).wait();
 
-      Router.replaceRoute(`/token/${this.props.id}`);
+      Router.push(`/token/${this.props.id}`);
     } catch (err) {
       this.setState({
         msgErr: "You aren't logged in your MetaMask account.",
@@ -183,9 +184,8 @@ class TokenDetails extends Component {
                     <b>
                       {Number(this.state.tokenInfo['price'])
                         ? 'Token price: ' +
-                          web3.utils.fromWei(
-                            this.state.tokenInfo['price'],
-                            'ether'
+                          ethers.utils.formatEther(
+                            this.state.tokenInfo['price']
                           ) +
                           ' ETH'
                         : 'Token not for sale'}

@@ -12,7 +12,8 @@ import {
 } from 'semantic-ui-react';
 import cryptoByte721 from '../../ethereum/cryptoByte721';
 import { Link, Router } from '../../routes';
-import web3 from '../../ethereum/web3';
+//import web3 from '../../ethereum/web3';
+import { ethers } from 'ethers';
 import Jdenticon from '../../components/Jdenticon';
 import axios from 'axios';
 import MMPrompt from '../../components/MMPrompt';
@@ -31,6 +32,7 @@ class AllTokens extends Component {
   state = {
     mounted: false,
     headerHeight: 0,
+    supply: 0,
     images: {},
     buyLoading: {},
     jdentHeigth: 174,
@@ -39,13 +41,12 @@ class AllTokens extends Component {
     mmprompt: false,
   };
 
-  static async getInitialProps() {
-    const supply = await cryptoByte721.methods.totalSupply().call();
-    return { supply };
-  }
-
   async componentDidMount() {
-    currentAccount = (await web3.eth.getAccounts())[0];
+    try {
+      currentAccount = ethers.utils.getAddress(
+        (await ethereum.request({ method: 'eth_accounts' }))[0]
+      );
+    } catch {}
 
     headerEl = document.getElementById('header');
 
@@ -65,16 +66,17 @@ class AllTokens extends Component {
   }
 
   getTokenInfo = async () => {
+    const supply = (await cryptoByte721.totalSupply()).toString();
+    this.setState({ supply });
+
     let tokenInfo = {};
     let images = {};
-    for (let id = 1; id <= this.props.supply; id++) {
+    for (let id = 1; id <= this.state.supply; id++) {
       tokenInfo[id] = {};
 
-      tokenInfo[id]['owner'] = await cryptoByte721.methods.ownerOf(id).call();
+      tokenInfo[id]['owner'] = await cryptoByte721.ownerOf(id);
 
-      tokenInfo[id]['price'] = await cryptoByte721.methods
-        .getTokenPrice(id)
-        .call();
+      tokenInfo[id]['price'] = await cryptoByte721.getTokenPrice(id);
 
       // check if token has image and save it in state
       try {
@@ -99,12 +101,13 @@ class AllTokens extends Component {
     });
 
     try {
-      await cryptoByte721.methods.buyToken(id).send({
-        from: currentAccount,
-        value: this.state.tokenInfo[id]['price'],
-      });
+      await (
+        await cryptoByte721.buyToken(id, {
+          value: this.state.tokenInfo[id]['price'],
+        })
+      ).wait();
 
-      Router.replaceRoute('/tokens');
+      window.location.reload();
     } catch {
       this.setState({ mmprompt: true });
 
@@ -130,7 +133,7 @@ class AllTokens extends Component {
   renderTokens() {
     let items = [];
     let classic = [];
-    for (let id = 1; id <= this.props.supply; id++) {
+    for (let id = 1; id <= this.state.supply; id++) {
       if (specialTokens.indexOf(String(id)) < 0) {
         classic.push(id);
       }
@@ -196,10 +199,9 @@ class AllTokens extends Component {
                   <b>
                     {Number(this.state.tokenInfo[id]['price'])
                       ? 'Token price: ' +
-                        web3.utils.fromWei(
-                          this.state.tokenInfo[id]['price'],
-                          'ether'
-                        ) +
+                        ethers.utils
+                          .formatEther(this.state.tokenInfo[id]['price'])
+                          .toString() +
                         ' ETH'
                       : 'Token not for sale'}
                   </b>
@@ -289,7 +291,7 @@ class AllTokens extends Component {
           }}
         >
           <Header as="h2" dividing inverted>
-            There are currently {this.props.supply} existing tokens.
+            There are currently {this.state.supply} existing tokens.
           </Header>
           {this.renderTokens()}
         </Container>

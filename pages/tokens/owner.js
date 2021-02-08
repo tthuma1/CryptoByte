@@ -15,7 +15,7 @@ import {
 import MMPrompt from '../../components/MMPrompt';
 import cryptoByte721 from '../../ethereum/cryptoByte721';
 import { Link, Router } from '../../routes';
-import web3 from '../../ethereum/web3';
+import { ethers } from 'ethers';
 import Jdenticon from '../../components/Jdenticon';
 import axios from 'axios';
 import Head from 'next/head';
@@ -37,32 +37,37 @@ class TokensOfOwner extends Component {
     jdentHeigth: 220,
     tokenInfo: {},
     mmprompt: false,
+    tokens: [],
+    balance: 0,
   };
 
   static async getInitialProps({ query }) {
     try {
-      let owner = web3.utils.toChecksumAddress(query.owner);
-      const balance = await cryptoByte721.methods.balanceOf(owner).call();
+      let owner = ethers.utils.getAddress(query.owner);
+
+      const balance = (await cryptoByte721.balanceOf(owner)).toString();
 
       let tokens = [];
       for (let i = 0; i < balance; i++) {
-        let token = await cryptoByte721.methods
-          .tokenOfOwnerByIndex(owner, i)
-          .call();
-        tokens.push(token);
+        let token = await cryptoByte721.tokenOfOwnerByIndex(owner, i);
+        tokens.push(token.toString());
       }
       tokens.sort(function (a, b) {
         return a - b;
       });
 
-      return { tokens, owner, balance, isValidAccount: true };
-    } catch {
+      return { tokens, balance, owner, isValidAccount: true };
+    } catch (err) {
       return { isValidAccount: false };
     }
   }
 
   async componentDidMount() {
-    currentAccount = (await web3.eth.getAccounts())[0];
+    try {
+      currentAccount = ethers.utils.getAddress(
+        (await ethereum.request({ method: 'eth_accounts' }))[0]
+      );
+    } catch {}
 
     headerEl = document.getElementById('header');
 
@@ -88,9 +93,7 @@ class TokensOfOwner extends Component {
       let id = Number(this.props.tokens[i]);
       tokenInfo[id] = {};
 
-      tokenInfo[id]['price'] = await cryptoByte721.methods
-        .getTokenPrice(id)
-        .call();
+      tokenInfo[id]['price'] = await cryptoByte721.getTokenPrice(id);
 
       // check if token has image and save it in state
       try {
@@ -115,10 +118,11 @@ class TokensOfOwner extends Component {
     });
 
     try {
-      await cryptoByte721.methods.buyToken(id).send({
-        from: currentAccount,
-        value: this.state.tokenInfo[id]['price'],
-      });
+      await (
+        await cryptoByte721.buyToken(id, {
+          value: this.state.tokenInfo[id]['price'],
+        })
+      ).wait();
 
       Router.replaceRoute(`/tokens/${this.props.owner}`);
     } catch {
@@ -143,9 +147,9 @@ class TokensOfOwner extends Component {
   renderTokens() {
     let items = [];
     let classic = [];
-    for (let id = 1; id <= this.props.balance; id++) {
-      if (specialTokens.indexOf(String(id)) < 0) {
-        classic.push(id);
+    for (let i = 0; i <= this.props.balance; i++) {
+      if (specialTokens.indexOf(String(this.props.tokens[i])) < 0) {
+        classic.push(this.props.tokens[i]);
       }
     }
 
@@ -168,7 +172,7 @@ class TokensOfOwner extends Component {
           <Card key={id}>
             {this.state.tokenInfo[id] ? (
               this.state.images[id] ? (
-                id == this.state.images[Object.keys(this.state.images)[0]] ? (
+                id == Object.keys(this.state.images)[0] ? (
                   <Visibility onUpdate={this.updateImage}>
                     <Image src={`/static/images/ERC721/${id}_w.jpg`} wrapped />
                   </Visibility>
@@ -210,9 +214,8 @@ class TokensOfOwner extends Component {
                     <b>
                       {Number(this.state.tokenInfo[id]['price'])
                         ? 'Token price: ' +
-                          web3.utils.fromWei(
-                            this.state.tokenInfo[id]['price'],
-                            'ether'
+                          ethers.utils.formatEther(
+                            this.state.tokenInfo[id]['price']
                           ) +
                           ' ETH'
                         : 'Token not for sale'}

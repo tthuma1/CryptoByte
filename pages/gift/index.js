@@ -10,7 +10,7 @@ import {
 } from 'semantic-ui-react';
 import cryptoByte721 from '../../ethereum/cryptoByte721';
 import MMPrompt from '../../components/MMPrompt';
-import web3 from '../../ethereum/web3';
+import { ethers } from 'ethers';
 import Head from 'next/head';
 
 let currentAccount, headerEl;
@@ -32,7 +32,11 @@ class GiftToken extends Component {
   }
 
   async componentDidMount() {
-    currentAccount = (await web3.eth.getAccounts())[0];
+    try {
+      currentAccount = ethers.utils.getAddress(
+        (await ethereum.request({ method: 'eth_accounts' }))[0]
+      );
+    } catch {}
 
     headerEl = document.getElementById('header');
 
@@ -56,11 +60,13 @@ class GiftToken extends Component {
         throw { message: 'Invalid receiver address.' };
       }
 
-      await cryptoByte721.methods
-        .safeTransferFrom(currentAccount, this.state.recAddr, this.props.id)
-        .send({
-          from: currentAccount,
-        });
+      await (
+        await cryptoByte721['safeTransferFrom(address,address,uint256)'](
+          currentAccount,
+          this.state.recAddr,
+          this.props.id
+        )
+      ).wait();
 
       this.setState({ loading: false, success: true });
     } catch (err) {

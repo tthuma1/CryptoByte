@@ -55,7 +55,7 @@ class Footer extends Component {
         <Grid.Row>
           <Grid.Column textAlign="center">
             <p style={{ color: '#ccc' }}>
-              This website does not collect any cookies.
+              This website does not use any cookies.
             </p>
           </Grid.Column>
         </Grid.Row>

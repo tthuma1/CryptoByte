@@ -9,7 +9,7 @@ import {
   Button,
   Segment,
 } from 'semantic-ui-react';
-import web3 from '../ethereum/web3';
+import { ethers } from 'ethers';
 import cryptoByte721 from '../ethereum/cryptoByte721';
 import BigNumber from 'bignumber.js';
 import Jdenticon from '../components/Jdenticon';
@@ -17,7 +17,6 @@ import { Router } from '../routes';
 import Head from 'next/head';
 
 let headerEl, currentAccount;
-let priceETH = 0;
 let viking = process.env.VIKING_AMOUNT.split(',');
 let vikingAmount = viking.length;
 let specialEdition = process.env.SPECIAL_EDITION.split(',');
@@ -35,10 +34,15 @@ class BuyToken721 extends Component {
     initialId: 0,
     loading: false,
     mmprompt: false,
+    priceETH: 0,
   };
 
   async componentDidMount() {
-    currentAccount = (await web3.eth.getAccounts())[0];
+    try {
+      currentAccount = ethers.utils.getAddress(
+        (await ethereum.request({ method: 'eth_accounts' }))[0]
+      );
+    } catch {}
 
     headerEl = document.getElementById('header');
 
@@ -51,17 +55,21 @@ class BuyToken721 extends Component {
       }
     }, 100);
 
-    priceETH = await cryptoByte721.methods.getMintPrice().call();
-    priceETH = BigNumber(priceETH).div('1e+18');
+    let priceETH = new BigNumber(
+      (await cryptoByte721.getMintPrice()).toString()
+    );
+    priceETH = priceETH.div(ethers.constants.WeiPerEther.toString());
+
+    this.setState({ priceETH });
 
     this.setState({
-      initialId: Number(await cryptoByte721.methods.totalSupply().call()) + 1,
-      id: Number(await cryptoByte721.methods.totalSupply().call()) + 1,
+      initialId: Number(await cryptoByte721.totalSupply()) + 1,
+      id: Number(await cryptoByte721.totalSupply()) + 1,
     });
 
     setInterval(async () => {
       this.setState({
-        id: Number(await cryptoByte721.methods.totalSupply().call()) + 1,
+        id: Number(await cryptoByte721.totalSupply()) + 1,
       });
 
       if (this.state.id != this.state.initialId) {
@@ -78,10 +86,13 @@ class BuyToken721 extends Component {
     this.setState({ loading: true, msgErr: '', success: false });
 
     try {
-      await cryptoByte721.methods.safeMint(currentAccount).send({
-        from: currentAccount,
-        value: web3.utils.toWei(priceETH.toFixed(), 'ether'),
-      });
+      await (
+        await cryptoByte721['safeMint(address)'](currentAccount, {
+          value: this.state.priceETH
+            .times(ethers.constants.WeiPerEther.toString())
+            .toString(),
+        })
+      ).wait();
 
       this.setState({ loading: false, success: true });
       Router.pushRoute(`/token/${this.state.id}`);
@@ -150,7 +161,7 @@ class BuyToken721 extends Component {
                 <label />
                 <Message>
                   The creation of a new token is going to cost you{' '}
-                  <b>{priceETH.toFixed()} ETH</b>.
+                  <b>{this.state.priceETH.toString()} ETH</b>.
                   <br />
                   Gas isn't included in the price above.
                 </Message>

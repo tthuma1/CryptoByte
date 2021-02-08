@@ -1,9 +1,9 @@
 import React from 'react';
 import { Modal, Button, Header, Image } from 'semantic-ui-react';
 import { Link } from '../routes';
-import web3 from '../ethereum/web3';
+//import web3 from '../ethereum/web3';
 
-let isMetaMask;
+let isMetaMask = false;
 
 class MMPrompt extends React.Component {
   state = {
@@ -12,7 +12,10 @@ class MMPrompt extends React.Component {
   };
 
   async componentDidMount() {
-    isMetaMask = await web3.currentProvider.isMetaMask;
+    try {
+      isMetaMask = await ethereum.isMetaMask;
+    } catch {}
+
     if (isMetaMask || this.props.visible === false) {
       this.handleClose();
     }
