@@ -64,10 +64,6 @@ class MMPrompt extends React.Component {
               browser extension.
               <br />
               Make sure you're connected to the Ethereum Mainnet.
-              <br />
-              If you still can't send transaction, try connecting your MetaMask
-              account with this website through the button at the bottom of this
-              page.
             </p>
           </Modal.Description>
         </Modal.Content>
