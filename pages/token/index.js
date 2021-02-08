@@ -12,6 +12,7 @@ import {
 } from 'semantic-ui-react';
 import Jdenticon from '../../components/Jdenticon';
 import cryptoByte721 from '../../ethereum/cryptoByte721';
+import cryptoByte721Signer from '../../ethereum/cryptoByte721Signer';
 import { ethers } from 'ethers';
 import { Link, Router } from '../../routes';
 import axios from 'axios';
@@ -89,7 +90,7 @@ class TokenDetails extends Component {
     this.setState({ buyLoading: true, msgErr: '' });
     try {
       await (
-        await cryptoByte721.buyToken(this.props.id, {
+        await cryptoByte721Signer.buyToken(this.props.id, {
           value: this.state.tokenInfo['price'],
         })
       ).wait();

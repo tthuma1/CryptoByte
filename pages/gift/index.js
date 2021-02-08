@@ -9,6 +9,7 @@ import {
   Message,
 } from 'semantic-ui-react';
 import cryptoByte721 from '../../ethereum/cryptoByte721';
+import cryptoByte721Signer from '../../ethereum/cryptoByte721Signer';
 import MMPrompt from '../../components/MMPrompt';
 import { ethers } from 'ethers';
 import Head from 'next/head';
@@ -61,7 +62,7 @@ class GiftToken extends Component {
       }
 
       await (
-        await cryptoByte721['safeTransferFrom(address,address,uint256)'](
+        await cryptoByte721Signer['safeTransferFrom(address,address,uint256)'](
           currentAccount,
           this.state.recAddr,
           this.props.id

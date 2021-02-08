@@ -14,6 +14,7 @@ import {
 } from 'semantic-ui-react';
 import MMPrompt from '../../components/MMPrompt';
 import cryptoByte721 from '../../ethereum/cryptoByte721';
+import cryptoByte721Signer from '../../ethereum/cryptoByte721Signer';
 import { Link, Router } from '../../routes';
 import { ethers } from 'ethers';
 import Jdenticon from '../../components/Jdenticon';
@@ -119,7 +120,7 @@ class TokensOfOwner extends Component {
 
     try {
       await (
-        await cryptoByte721.buyToken(id, {
+        await cryptoByte721Signer.buyToken(id, {
           value: this.state.tokenInfo[id]['price'],
         })
       ).wait();

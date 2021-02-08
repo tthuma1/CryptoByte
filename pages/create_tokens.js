@@ -11,6 +11,7 @@ import {
 } from 'semantic-ui-react';
 import { ethers } from 'ethers';
 import cryptoByte721 from '../ethereum/cryptoByte721';
+import cryptoByte721Signer from '../ethereum/cryptoByte721Signer';
 import BigNumber from 'bignumber.js';
 import Jdenticon from '../components/Jdenticon';
 import { Router } from '../routes';
@@ -87,7 +88,7 @@ class BuyToken721 extends Component {
 
     try {
       await (
-        await cryptoByte721['safeMint(address)'](currentAccount, {
+        await cryptoByte721Signer['safeMint(address)'](currentAccount, {
           value: this.state.priceETH
             .times(ethers.constants.WeiPerEther.toString())
             .toString(),

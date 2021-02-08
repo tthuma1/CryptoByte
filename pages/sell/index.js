@@ -9,6 +9,7 @@ import {
   Message,
 } from 'semantic-ui-react';
 import cryptoByte721 from '../../ethereum/cryptoByte721';
+import cryptoByte721Signer from '../../ethereum/cryptoByte721Signer';
 import MMPrompt from '../../components/MMPrompt';
 import { ethers } from 'ethers';
 import { Router } from '../../routes';
@@ -64,7 +65,7 @@ class SellToken extends Component {
     event.preventDefault();
     this.setState({ saleLoading: true, msgErr: '' });
     try {
-      await (await cryptoByte721.setTokenPrice(this.props.id, 0)).wait();
+      await (await cryptoByte721Signer.setTokenPrice(this.props.id, 0)).wait();
 
       this.setState({ saleLoading: false, success: true });
       Router.pushRoute(`/token/${this.props.id}`);
@@ -94,7 +95,7 @@ class SellToken extends Component {
       }
 
       await (
-        await cryptoByte721.setTokenPrice(
+        await cryptoByte721Signer.setTokenPrice(
           this.props.id,
           BigNumber(this.state.newPrice)
             .times(ethers.constants.WeiPerEther.toString())
