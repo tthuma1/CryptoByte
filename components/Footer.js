@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Icon, Grid } from 'semantic-ui-react';
+import { Icon, Grid, Button } from 'semantic-ui-react';
 
 class Footer extends Component {
   render() {
@@ -56,6 +56,29 @@ class Footer extends Component {
           <Grid.Column textAlign="center">
             <p style={{ color: '#ccc' }}>
               This website does not use any cookies.
+            </p>
+          </Grid.Column>
+        </Grid.Row>
+
+        <Grid.Row>
+          <Grid.Column textAlign="center">
+            <p style={{ color: '#ccc' }}>
+              To connect your MetaMask account with this website, click this
+              button:{' '}
+              <Button
+                size="small"
+                compact
+                onClick={() => {
+                  try {
+                    // Request account access if needed
+                    window.ethereum.request({ method: 'eth_requestAccounts' });
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }}
+              >
+                Connect to MetaMask
+              </Button>
             </p>
           </Grid.Column>
         </Grid.Row>
