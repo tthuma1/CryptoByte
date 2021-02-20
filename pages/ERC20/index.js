@@ -10,7 +10,7 @@ import {
 } from 'semantic-ui-react';
 import cryptoByte20 from '../../ethereum/solidity/ERC20/cryptoByte20';
 import MMPrompt from '../../components/MMPrompt';
-import { ethers } from 'ethers';
+import web3 from '../ethereum/web3';
 import Head from 'next/head';
 import BigNumber from 'bignumber.js';
 
@@ -27,11 +27,7 @@ class SellToken extends Component {
   };
 
   async componentDidMount() {
-    try {
-      currentAccount = ethers.utils.getAddress(
-        (await ethereum.request({ method: 'eth_accounts' }))[0]
-      );
-    } catch {}
+    currentAccount = (await web3.eth.getAccounts())[0];
 
     headerEl = document.getElementById('header');
 
@@ -107,7 +103,7 @@ class SellToken extends Component {
                 <Grid.Column>
                   <p>
                     Price to buy one token:{' '}
-                    <b>{ethers.utils.formatEther(buyPrice)} ETH</b>
+                    <b>{web3.utils.fromWei(buyPrice, 'ether')} ETH</b>
                   </p>
                 </Grid.Column>
                 <Grid.Column>
