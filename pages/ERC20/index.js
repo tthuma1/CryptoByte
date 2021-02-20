@@ -8,9 +8,9 @@ import {
   Segment,
   Divider,
 } from 'semantic-ui-react';
-import cryptoByte20 from '../../ethereum/solidity/ERC20/cryptoByte20';
+//import cryptoByte20 from '../../ethereum/solidity/ERC20/cryptoByte20';
 import MMPrompt from '../../components/MMPrompt';
-import web3 from '../ethereum/web3';
+import web3 from '../../ethereum/web3';
 import Head from 'next/head';
 import BigNumber from 'bignumber.js';
 
@@ -46,11 +46,12 @@ class SellToken extends Component {
   }
 
   getCryptoByteInfo = async () => {
-    name = await cryptoByte20.name();
+    /*name = await cryptoByte20.name();
     symbol = await cryptoByte20.symbol();
     buyPrice = await cryptoByte20.getBuyPrice();
     totalSupply = await cryptoByte20.totalSupply();
     balance = currentAccount ? await cryptoByte20.balanceOf(currentAccount) : 0;
+    */
   };
 
   render() {
