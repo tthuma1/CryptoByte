@@ -11,7 +11,7 @@ if (
   (async () => {
     try {
       // Request account access if needed
-      await ethereum.enable();
+      ethereum.request({ method: 'eth_requestAccounts' });
     } catch (error) {
       console.log(error);
     }
