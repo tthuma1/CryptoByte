@@ -60,7 +60,7 @@ class MMPrompt extends React.Component {
               </Link>{' '}
               browser extension.
               <br />
-              Make sure you're connected to the Main Ethereum Network.
+              Make sure you're connected to the Ethereum Mainnet.
             </p>
           </Modal.Description>
         </Modal.Content>
