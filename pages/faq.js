@@ -33,9 +33,9 @@ currentAccount.then((value) => {
     },
     {
       key: '2',
-      title: 'What is ERC721?',
+      title: 'What is ERC721 (NFT)?',
       content:
-        'ERC721 is a free open standard which describes how to build non-fungible or unique tokens on the Ethereum blockchain.',
+        'ERC721 is a free open standard which describes how to build non-fungible or unique tokens (NFT) on the Ethereum blockchain.',
     },
     {
       key: '3',

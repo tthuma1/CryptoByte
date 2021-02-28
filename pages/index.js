@@ -77,7 +77,7 @@ class CryptoByteIndex extends Component {
           <title>Crypto Byte Collectible - Home</title>
           <meta
             name="description"
-            content="Official website of Crypto Byte Collectible tokens - your unique collectible ERC721 tokens. Interact with a smart contract deployed on the Ethereum blockchain."
+            content="Official website of Crypto Byte Collectible tokens - your unique collectible ERC721 (NFT) tokens. Interact with a smart contract deployed on the Ethereum blockchain."
           />
           <meta name="robots" content="index, follow" />
         </Head>
@@ -117,7 +117,7 @@ class CryptoByteIndex extends Component {
               <Header.Subheader
                 style={{ textShadow: '0px 0px 0', fontSize: '1.25rem' }}
               >
-                Your unique ERC721 token.
+                Your unique NFT token.
               </Header.Subheader>
             </Header>
 
