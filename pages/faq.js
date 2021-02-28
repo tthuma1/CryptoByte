@@ -44,8 +44,8 @@ currentAccount.then((value) => {
         content: (
           <div>
             <p>
-              As any other physical collectibles (stamps, coins, etc.) you can
-              collect CRBC tokens in digital form.
+              As any other physical collectibles (art, stamps, coins, etc.) you
+              can collect CRBC tokens in digital form.
             </p>
             <p>You can collect, sell or gift CRBC tokens.</p>
           </div>
