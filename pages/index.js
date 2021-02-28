@@ -166,9 +166,10 @@ class CryptoByteIndex extends Component {
             </video>
             <Header as="h2">What is Crypto Byte Collectible?</Header>
             <p style={{ fontSize: '16px' }}>
-              It's an ERC721 token smart contract, stored on the Ethereum
-              blockchain. With it you can generate tokens that are guaranteed to
-              be unique and forever yours - stored on the blockchain.
+              It's an ERC721 token smart contract stored on the Ethereum
+              blockchain. With it you can generate NFT tokens that are
+              guaranteed to be unique and forever yours - stored on the
+              blockchain.
               <br />
               You can see some general information about Crypto Byte Collectible
               bellow.

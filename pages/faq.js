@@ -23,7 +23,7 @@ currentAccount.then((value) => {
         content: (
           <div>
             <p>
-              It is a unique ERC721 compliant token created and stored on the
+              It is a unique NFT token (ERC721) created and stored on the
               Ethereum blockchain.
             </p>
             <p>Token symbol: CRBC</p>
@@ -93,7 +93,7 @@ currentAccount.then((value) => {
     },
     {
       key: '6',
-      title: 'Can I create my own CRBC token?',
+      title: 'Can I create my own NFT token?',
       content: {
         content: (
           <div>
