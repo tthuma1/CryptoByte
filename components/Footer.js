@@ -57,7 +57,18 @@ class Footer extends Component {
                 </a>
 
                 <a href="https://t.me/Crypto_ByteERC721" target="_blank">
-                  <Icon name="telegram" size="big" style={{ color: '#ccc' }} />
+                  <Icon
+                    name="telegram"
+                    size="big"
+                    style={{ color: '#ccc', marginRight: '30px' }}
+                  />
+                </a>
+
+                <a
+                  href="https://github.com/CryptoByteCollectible/CryptoByte"
+                  target="_blank"
+                >
+                  <Icon name="github" size="big" style={{ color: '#ccc' }} />
                 </a>
               </Grid.Column>
             </Grid.Row>
@@ -127,7 +138,18 @@ class MobileFooter extends Component {
             </a>
 
             <a href="https://t.me/Crypto_ByteERC721" target="_blank">
-              <Icon name="telegram" size="big" style={{ color: '#ccc' }} />
+              <Icon
+                name="telegram"
+                size="big"
+                style={{ color: '#ccc', marginRight: '30px' }}
+              />
+            </a>
+
+            <a
+              href="https://github.com/CryptoByteCollectible/CryptoByte"
+              target="_blank"
+            >
+              <Icon name="github" size="big" style={{ color: '#ccc' }} />
             </a>
           </Grid.Column>
         </Grid.Row>

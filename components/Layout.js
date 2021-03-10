@@ -87,9 +87,8 @@ html, body {
             <div style={{ flex: 1 }}>
               {this.state.allMounted && this.props.children}
             </div>
+            {this.state.allMounted && <Footer />}
           </Header>
-
-          {this.state.allMounted && <Footer />}
         </div>
       </div>
     );

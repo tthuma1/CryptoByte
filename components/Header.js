@@ -167,70 +167,65 @@ class MobileHeader extends Component {
 
   render() {
     return (
-      <Sidebar.Pushable
-        style={{
-          visibility: this.props.visibleFull,
-        }}
-      >
-        <Menu fixed="top" style={{ marginBottom: '0px' }}>
-          <Sidebar
-            as={Menu}
-            animation="overlay"
-            inverted
-            onHide={this.handleHide}
-            vertical
-            width="thin"
-            visible={this.state.open}
-            style={{ overflow: 'visible !important' }}
-          >
-            <Link href="/">
-              <a className="item">
-                <img src="/static/favicon2.png" width="40px" height="40px" />
-              </a>
-            </Link>
-            <Link href="/">
-              <a className="item">Home</a>
-            </Link>
-            <Dropdown item text="Collectible Tokens" pointing="right">
-              <Dropdown.Menu>
-                <Link href="/tokens">
-                  <a
-                    className="item"
-                    onClick={() => {
-                      if (!(location.pathname == '/tokens')) {
-                        this.hideAll();
-                      } else {
-                        this.hideAll();
-                        location.reload();
-                      }
-                    }}
-                  >
-                    All Tokens
-                  </a>
-                </Link>
-                <Link href={`/tokens/${currentAccount}`}>
-                  <a
-                    className="item"
-                    onClick={() => {
+      <div>
+        <Sidebar
+          as={Menu}
+          animation="overlay"
+          fixed="left"
+          inverted
+          onHide={this.handleHide}
+          vertical
+          compact
+          visible={this.state.open}
+          style={{ overflow: 'visible !important' }}
+        >
+          <Link href="/">
+            <a className="item">
+              <img src="/static/favicon2.png" width="40px" height="40px" />
+            </a>
+          </Link>
+          <Link href="/">
+            <a className="item">Home</a>
+          </Link>
+          <Dropdown item text="Collectible Tokens" pointing="left">
+            <Dropdown.Menu>
+              <Link href="/tokens">
+                <a
+                  className="item"
+                  onClick={() => {
+                    if (!(location.pathname == '/tokens')) {
                       this.hideAll();
-                    }}
-                  >
-                    My Tokens
-                  </a>
-                </Link>
-                <Link href="/create_tokens">
-                  <a className="item">Create New Tokens</a>
-                </Link>
-              </Dropdown.Menu>
-            </Dropdown>
-            <Link href="/media">
-              <a className="item">Media</a>
-            </Link>
-            <Link href="/faq">
-              <a className="item">FAQ</a>
-            </Link>
-          </Sidebar>
-        </Menu>
+                    } else {
+                      this.hideAll();
+                      location.reload();
+                    }
+                  }}
+                >
+                  All Tokens
+                </a>
+              </Link>
+              <Link href={`/tokens/${currentAccount}`}>
+                <a
+                  className="item"
+                  onClick={() => {
+                    this.hideAll();
+                  }}
+                >
+                  My Tokens
+                </a>
+              </Link>
+              <Link href="/create_tokens">
+                <a className="item">Create New Tokens</a>
+              </Link>
+            </Dropdown.Menu>
+          </Dropdown>
+          <Link href="/media">
+            <a className="item">Media</a>
+          </Link>
+          <Link href="/faq">
+            <a className="item">FAQ</a>
+          </Link>
+        </Sidebar>
 
         <Menu
           inverted
@@ -244,10 +239,17 @@ class MobileHeader extends Component {
             <Icon name="sidebar" size="large" />
           </Menu.Item>
         </Menu>
-        <Sidebar.Pusher dimmed={this.state.open}>
-          {this.props.children}
-        </Sidebar.Pusher>
-      </Sidebar.Pushable>
+
+        <Sidebar.Pushable
+          style={{
+            visibility: this.props.visibleFull,
+          }}
+        >
+          <Sidebar.Pusher dimmed={this.state.open}>
+            {this.props.children}
+          </Sidebar.Pusher>
+        </Sidebar.Pushable>
+      </div>
     );
   }
 }
