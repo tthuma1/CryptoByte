@@ -1,8 +1,16 @@
-import React from 'react';
-import { Menu, Dropdown } from 'semantic-ui-react';
+import React, { Component } from 'react';
+import { Menu, Dropdown, Sidebar, Icon } from 'semantic-ui-react';
 import { Link } from '../routes';
 import web3 from '../ethereum/web3';
 import cryptoByte721 from '../ethereum/cryptoByte721';
+import { createMedia } from '@artsy/fresnel';
+
+const { MediaContextProvider, Media } = createMedia({
+  breakpoints: {
+    mobile: 0,
+    computer: 768,
+  },
+});
 
 let currentAccount;
 
@@ -50,6 +58,32 @@ class Header extends React.Component {
 
   render() {
     return (
+      <MediaContextProvider>
+        <Media greaterThan="mobile">
+          <DesktopHeader
+            visibleFull={this.state.visibleFull}
+            isAdmin={this.state.isAdmin}
+          >
+            {this.props.children}
+          </DesktopHeader>
+        </Media>
+
+        <Media as={Sidebar.Pushable} at="mobile">
+          <MobileHeader
+            visibleFull={this.state.visibleFull}
+            isAdmin={this.state.isAdmin}
+          >
+            {this.props.children}
+          </MobileHeader>
+        </Media>
+      </MediaContextProvider>
+    );
+  }
+}
+
+class DesktopHeader extends Component {
+  render() {
+    return (
       <div>
         <Menu
           stackable
@@ -57,7 +91,7 @@ class Header extends React.Component {
           fixed="top"
           id="header"
           style={{
-            visibility: this.state.visibleFull,
+            visibility: this.props.visibleFull,
           }}
         >
           <Link href="/">
@@ -111,7 +145,7 @@ class Header extends React.Component {
             position="right"
             style={{
               backgroundColor: '#444444',
-              display: this.state.isAdmin,
+              display: this.props.isAdmin,
             }}
           >
             <Link route="/">
@@ -119,7 +153,101 @@ class Header extends React.Component {
             </Link>
           </Menu.Menu>
         </Menu>
+        {this.props.children}
       </div>
+    );
+  }
+}
+
+class MobileHeader extends Component {
+  state = { open: false };
+
+  handleHide = () => this.setState({ open: false });
+  handleOpen = () => this.setState({ open: true });
+
+  render() {
+    return (
+      <Sidebar.Pushable
+        style={{
+          visibility: this.props.visibleFull,
+        }}
+      >
+        <Menu fixed="top" style={{ marginBottom: '0px' }}>
+          <Sidebar
+            as={Menu}
+            animation="overlay"
+            inverted
+            onHide={this.handleHide}
+            vertical
+            width="thin"
+            visible={this.state.open}
+            style={{ overflow: 'visible !important' }}
+          >
+            <Link href="/">
+              <a className="item">
+                <img src="/static/favicon2.png" width="40px" height="40px" />
+              </a>
+            </Link>
+            <Link href="/">
+              <a className="item">Home</a>
+            </Link>
+            <Dropdown item text="Collectible Tokens" pointing="right">
+              <Dropdown.Menu>
+                <Link href="/tokens">
+                  <a
+                    className="item"
+                    onClick={() => {
+                      if (!(location.pathname == '/tokens')) {
+                        this.hideAll();
+                      } else {
+                        this.hideAll();
+                        location.reload();
+                      }
+                    }}
+                  >
+                    All Tokens
+                  </a>
+                </Link>
+                <Link href={`/tokens/${currentAccount}`}>
+                  <a
+                    className="item"
+                    onClick={() => {
+                      this.hideAll();
+                    }}
+                  >
+                    My Tokens
+                  </a>
+                </Link>
+                <Link href="/create_tokens">
+                  <a className="item">Create New Tokens</a>
+                </Link>
+              </Dropdown.Menu>
+            </Dropdown>
+            <Link href="/media">
+              <a className="item">Media</a>
+            </Link>
+            <Link href="/faq">
+              <a className="item">FAQ</a>
+            </Link>
+          </Sidebar>
+        </Menu>
+
+        <Menu
+          inverted
+          fixed="top"
+          id="header"
+          style={{
+            visibility: this.props.visibleFull,
+          }}
+        >
+          <Menu.Item onClick={this.handleOpen}>
+            <Icon name="sidebar" size="large" />
+          </Menu.Item>
+        </Menu>
+        <Sidebar.Pusher dimmed={this.state.open}>
+          {this.props.children}
+        </Sidebar.Pusher>
+      </Sidebar.Pushable>
     );
   }
 }

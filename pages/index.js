@@ -10,6 +10,7 @@ import {
   Grid,
   Message,
   Image,
+  Embed,
 } from 'semantic-ui-react';
 import cryptoByte721 from '../ethereum/cryptoByte721';
 import { Link } from '../routes';
@@ -120,7 +121,6 @@ class CryptoByteIndex extends Component {
                 Your unique NFT token.
               </Header.Subheader>
             </Header>
-
             <Header
               as="h2"
               inverted
@@ -174,14 +174,12 @@ class CryptoByteIndex extends Component {
               You can see some general information about Crypto Byte Collectible
               bellow.
             </p>
-
             <Divider horizontal>
               <Header as="h1">
                 <Icon name="ethereum" color="grey" style={{ margin: '0' }} />
               </Header>
             </Divider>
-
-            <Grid columns={2} celled="internally">
+            <Grid columns={2} celled="internally" stackable>
               <Grid.Row>
                 <Grid.Column>
                   <p>
@@ -210,7 +208,6 @@ class CryptoByteIndex extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-
             <Message compact floating style={{ marginTop: '5vh' }}>
               <Message.Header>Important Note:</Message.Header>
               <p>
