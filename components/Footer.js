@@ -156,7 +156,7 @@ class MobileFooter extends Component {
 
         <Grid.Row>
           <Grid.Column textAlign="center">
-            <p style={{ color: '#ccc' }}>
+            <p style={{ color: '#ccc', marginBottom: '10px' }}>
               This website does not collect any cookies.
             </p>
           </Grid.Column>
