@@ -3,14 +3,7 @@ import { Menu, Dropdown, Sidebar, Icon } from 'semantic-ui-react';
 import { Link } from '../routes';
 import web3 from '../ethereum/web3';
 import cryptoByte721 from '../ethereum/cryptoByte721';
-import { createMedia } from '@artsy/fresnel';
-
-const { MediaContextProvider, Media } = createMedia({
-  breakpoints: {
-    mobile: 0,
-    computer: 768,
-  },
-});
+import { Media, MediaContextProvider } from './Media';
 
 let currentAccount;
 
@@ -51,15 +44,17 @@ class Header extends React.Component {
     }, 500);
   }
 
+  /*
   hideAll() {
     this.setState({ visibleFull: 'hidden' });
     this.props.updateState(false);
   }
+  */
 
   render() {
     return (
       <MediaContextProvider>
-        <Media greaterThan="mobile">
+        <Media greaterThan="tablet">
           <DesktopHeader
             visibleFull={this.state.visibleFull}
             isAdmin={this.state.isAdmin}
@@ -68,13 +63,13 @@ class Header extends React.Component {
           </DesktopHeader>
         </Media>
 
-        <Media as={Sidebar.Pushable} at="mobile">
-          <DesktopHeader
+        <Media as={true} lessThan="computer">
+          <MobileHeader
             visibleFull={this.state.visibleFull}
             isAdmin={this.state.isAdmin}
           >
             {this.props.children}
-          </DesktopHeader>
+          </MobileHeader>
         </Media>
       </MediaContextProvider>
     );
@@ -108,10 +103,7 @@ class DesktopHeader extends Component {
                 <a
                   className="item"
                   onClick={() => {
-                    if (!(location.pathname == '/tokens')) {
-                      this.hideAll();
-                    } else {
-                      this.hideAll();
+                    if (location.pathname == '/tokens') {
                       location.reload();
                     }
                   }}
@@ -120,14 +112,7 @@ class DesktopHeader extends Component {
                 </a>
               </Link>
               <Link href={`/tokens/${currentAccount}`}>
-                <a
-                  className="item"
-                  onClick={() => {
-                    this.hideAll();
-                  }}
-                >
-                  My Tokens
-                </a>
+                <a className="item">My Tokens</a>
               </Link>
               <Link href="/create_tokens">
                 <a className="item">Create New Tokens</a>
@@ -163,6 +148,7 @@ class MobileHeader extends Component {
   state = { open: false };
 
   handleHide = () => this.setState({ open: false });
+
   handleOpen = () => this.setState({ open: true });
 
   render() {
@@ -171,11 +157,10 @@ class MobileHeader extends Component {
         <Sidebar
           as={Menu}
           animation="overlay"
-          fixed="left"
           inverted
           onHide={this.handleHide}
           vertical
-          compact
+          width="thin"
           visible={this.state.open}
           style={{ overflow: 'visible !important' }}
         >
@@ -187,16 +172,17 @@ class MobileHeader extends Component {
           <Link href="/">
             <a className="item">Home</a>
           </Link>
-          <Dropdown item text="Collectible Tokens" pointing="left">
-            <Dropdown.Menu>
+
+          {/*<Dropdown item text="Collectible Tokens" pointing="left">
+            <Dropdown.Menu>*/}
+          <Menu.Item>
+            Collectible Tokens
+            <Menu.Menu>
               <Link href="/tokens">
                 <a
                   className="item"
                   onClick={() => {
-                    if (!(location.pathname == '/tokens')) {
-                      this.hideAll();
-                    } else {
-                      this.hideAll();
+                    if (location.pathname == '/tokens') {
                       location.reload();
                     }
                   }}
@@ -205,20 +191,16 @@ class MobileHeader extends Component {
                 </a>
               </Link>
               <Link href={`/tokens/${currentAccount}`}>
-                <a
-                  className="item"
-                  onClick={() => {
-                    this.hideAll();
-                  }}
-                >
-                  My Tokens
-                </a>
+                <a className="item">My Tokens</a>
               </Link>
               <Link href="/create_tokens">
                 <a className="item">Create New Tokens</a>
               </Link>
-            </Dropdown.Menu>
-          </Dropdown>
+            </Menu.Menu>
+          </Menu.Item>
+          {/*</Dropdown.Menu>
+          </Dropdown>*/}
+
           <Link href="/media">
             <a className="item">Media</a>
           </Link>
@@ -236,7 +218,7 @@ class MobileHeader extends Component {
           }}
         >
           <Menu.Item onClick={this.handleOpen}>
-            <Icon name="sidebar" size="large" />
+            <Icon name="sidebar" size="large" id="sidebar-toggle" />
           </Menu.Item>
         </Menu>
 

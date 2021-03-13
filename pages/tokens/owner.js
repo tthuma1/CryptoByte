@@ -155,7 +155,11 @@ class TokensOfOwner extends Component {
       this.makeCards(classic)
     );
 
-    return <Card.Group itemsPerRow={3}>{items}</Card.Group>;
+    return (
+      <Card.Group itemsPerRow={3} stackable>
+        {items}
+      </Card.Group>
+    );
   }
 
   makeCards(ids) {

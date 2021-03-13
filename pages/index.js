@@ -16,6 +16,7 @@ import cryptoByte721 from '../ethereum/cryptoByte721';
 import { Link } from '../routes';
 import web3 from '../ethereum/web3';
 import Head from 'next/head';
+import { Media, MediaContextProvider } from '../components/Media';
 
 let headerEl, name, symbol;
 let mintPrice = '0';
@@ -101,58 +102,126 @@ class CryptoByteIndex extends Component {
               backgroundSize: 'contain',
             }}
           >
-            <Header
-              as="h1"
-              inverted
-              textAlign="center"
-              style={{
-                paddingTop: this.state.headerHeight + 50,
-                textShadow:
-                  '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
-                marginLeft: '5px',
-                marginRight: '5px',
-                fontSize: '2.2rem',
-              }}
-            >
-              Welcome to Crypto Byte Collectible!
-              <Header.Subheader
-                style={{ textShadow: '0px 0px 0', fontSize: '1.25rem' }}
-              >
-                Your unique NFT token.
-              </Header.Subheader>
-            </Header>
-            <Header
-              as="h2"
-              inverted
-              icon
-              block
-              textAlign="center"
-              style={{
-                marginTop: '57vh',
-                marginBottom: '1%',
-                width: '30%',
-                background: 'linear-gradient(to bottom, #30336b, #4286f4)',
-                border: '0',
-              }}
-            >
-              General token info
-              <Transition
-                visible={this.state.pulseOn}
-                animation="pulse"
-                duration={1000}
-              >
-                <Icon
-                  onClick={this.scrollInfo}
-                  name="arrow alternate circle down"
-                  link
+            <MediaContextProvider>
+              <Media greaterThan="mobile">
+                <Header
+                  as="h1"
+                  inverted
+                  textAlign="center"
                   style={{
-                    paddingTop: '5px',
-                    fontSize: '2em',
-                    color: '#1ecbe1',
+                    paddingTop: this.state.headerHeight + 50,
+                    textShadow:
+                      '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
+                    marginLeft: '5px',
+                    marginRight: '5px',
+                    fontSize: '2.2rem',
                   }}
-                />
-              </Transition>
-            </Header>
+                >
+                  Welcome to Crypto Byte Collectible!
+                  <Header.Subheader
+                    style={{ textShadow: '0px 0px 0', fontSize: '1.25rem' }}
+                  >
+                    Your unique NFT token.
+                  </Header.Subheader>
+                </Header>
+              </Media>
+
+              <Media at="mobile">
+                <Header
+                  as="h1"
+                  inverted
+                  textAlign="center"
+                  style={{
+                    paddingTop: this.state.headerHeight + 50,
+                    textShadow:
+                      '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
+                    marginLeft: '5px',
+                    marginRight: '5px',
+                    paddingTop: '50%',
+                    fontSize: '2.2rem',
+                  }}
+                >
+                  Welcome to Crypto Byte Collectible!
+                  <Header.Subheader
+                    style={{ textShadow: '0px 0px 0', fontSize: '1.25rem' }}
+                  >
+                    Your unique NFT token.
+                  </Header.Subheader>
+                </Header>
+              </Media>
+            </MediaContextProvider>
+
+            <MediaContextProvider>
+              <Media greaterThan="mobile">
+                <Header
+                  as="h2"
+                  inverted
+                  icon
+                  block
+                  textAlign="center"
+                  style={{
+                    marginTop: '57vh',
+                    marginBottom: '1%',
+                    width: '30%',
+                    background: 'linear-gradient(to bottom, #30336b, #4286f4)',
+                    border: '0',
+                  }}
+                >
+                  General token info
+                  <Transition
+                    visible={this.state.pulseOn}
+                    animation="pulse"
+                    duration={1000}
+                  >
+                    <Icon
+                      onClick={this.scrollInfo}
+                      name="arrow alternate circle down"
+                      link
+                      style={{
+                        paddingTop: '5px',
+                        fontSize: '2em',
+                        color: '#1ecbe1',
+                      }}
+                    />
+                  </Transition>
+                </Header>
+              </Media>
+
+              <Media at="mobile">
+                <Header
+                  as="h3"
+                  inverted
+                  icon
+                  block
+                  textAlign="center"
+                  style={{
+                    marginTop: '35vh',
+                    marginBottom: '1%',
+                    width: '75%',
+                    background: 'linear-gradient(to bottom, #30336b, #4286f4)',
+                    border: '0',
+                  }}
+                >
+                  General token info
+                  <Transition
+                    visible={this.state.pulseOn}
+                    animation="pulse"
+                    duration={1000}
+                  >
+                    <Icon
+                      onClick={this.scrollInfo}
+                      name="arrow alternate circle down"
+                      link
+                      style={{
+                        paddingTop: '5px',
+                        fontSize: '2em',
+                        color: '#1ecbe1',
+                      }}
+                    />
+                  </Transition>
+                </Header>
+              </Media>
+            </MediaContextProvider>
           </div>
         </Transition>
 
@@ -161,9 +230,19 @@ class CryptoByteIndex extends Component {
             inverted
             style={{ backgroundColor: 'rgba(0, 0, 0, 0)', marginTop: '20px' }}
           >
-            <video height="425" autoPlay muted>
-              <source src="/static/videos/final.mp4" type="video/mp4" />
-            </video>
+            <MediaContextProvider>
+              <Media greaterThan="tablet">
+                <video height="425" autoPlay muted>
+                  <source src="/static/videos/final.mp4" type="video/mp4" />
+                </video>
+              </Media>
+
+              <Media lessThan="computer">
+                <video width="100%" autoPlay muted>
+                  <source src="/static/videos/final.mp4" type="video/mp4" />
+                </video>
+              </Media>
+            </MediaContextProvider>
             <Header as="h2">What is Crypto Byte Collectible?</Header>
             <p style={{ fontSize: '16px' }}>
               It's an ERC721 token smart contract stored on the Ethereum
