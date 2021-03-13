@@ -1,8 +1,5 @@
 # CryptoByte
 
-**!IMPORTANT!
-This repository has been moved to https://github.com/CryptoByteCollectible/CryptoByte**
-
 This is the official repository of https://crypto-byte.com/
 
 To replicate this website in a local environment, clone the repository and run:
