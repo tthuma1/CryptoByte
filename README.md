@@ -1,4 +1,5 @@
 # CryptoByte
+
 This is the official repository of https://crypto-byte.com/
 
 To replicate this website in a local environment, clone the repository and run:
