@@ -64,12 +64,12 @@ class Header extends React.Component {
         </Media>
 
         <Media as={true} lessThan="computer">
-          <MobileHeader
+          <DesktopHeader
             visibleFull={this.state.visibleFull}
             isAdmin={this.state.isAdmin}
           >
             {this.props.children}
-          </MobileHeader>
+          </DesktopHeader>
         </Media>
       </MediaContextProvider>
     );
@@ -81,7 +81,6 @@ class DesktopHeader extends Component {
     return (
       <div>
         <Menu
-          stackable
           inverted
           fixed="top"
           id="header"

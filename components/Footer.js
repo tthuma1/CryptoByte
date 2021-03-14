@@ -56,13 +56,6 @@ class Footer extends Component {
                     style={{ color: '#ccc', marginRight: '30px' }}
                   />
                 </a>
-
-                <a
-                  href="https://github.com/CryptoByteCollectible/CryptoByte"
-                  target="_blank"
-                >
-                  <Icon name="github" size="big" style={{ color: '#ccc' }} />
-                </a>
               </Grid.Column>
             </Grid.Row>
 
@@ -126,7 +119,7 @@ class MobileFooter extends Component {
             color: 'white',
             fontSize: '23px',
           }}
-          columns={4}
+          columns={3}
         >
           <Grid.Row style={{ paddingBottom: '5px' }}>
             <Grid.Column textAlign="right">
@@ -150,15 +143,6 @@ class MobileFooter extends Component {
             <Grid.Column textAlign="right">
               <a href="https://t.me/Crypto_ByteERC721" target="_blank">
                 <Icon name="telegram" size="big" style={{ color: '#ccc' }} />
-              </a>
-            </Grid.Column>
-
-            <Grid.Column textAlign="left">
-              <a
-                href="https://github.com/CryptoByteCollectible/CryptoByte"
-                target="_blank"
-              >
-                <Icon name="github" size="big" style={{ color: '#ccc' }} />
               </a>
             </Grid.Column>
           </Grid.Row>
