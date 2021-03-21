@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Menu, Dropdown, Sidebar, Icon } from 'semantic-ui-react';
+import { Menu, Dropdown, Sidebar, Icon, Button } from 'semantic-ui-react';
 import { Link } from '../routes';
 import web3 from '../ethereum/web3';
 import cryptoByte721 from '../ethereum/cryptoByte721';
@@ -9,7 +9,6 @@ let currentAccount;
 
 class Header extends React.Component {
   state = {
-    isAdmin: 'none',
     visibleFull: 'hidden',
     pausedMounted: false,
     hasMounted: false,
@@ -17,19 +16,6 @@ class Header extends React.Component {
 
   async componentDidMount() {
     currentAccount = (await web3.eth.getAccounts())[0];
-
-    if (
-      (await web3.eth.net.getNetworkType()) === process.env.NETWORK_TYPE &&
-      typeof currentAccount !== 'undefined'
-    ) {
-      const isMinter = await cryptoByte721.methods
-        .isMinter(currentAccount)
-        .call();
-
-      if (isMinter) {
-        this.setState({ isAdmin: 'flex' });
-      }
-    }
 
     const interval = setInterval(() => {
       if (!this.state.hasMounted && this.props.mounted == true) {
@@ -55,21 +41,15 @@ class Header extends React.Component {
     return (
       <MediaContextProvider>
         <Media greaterThan="tablet">
-          <DesktopHeader
-            visibleFull={this.state.visibleFull}
-            isAdmin={this.state.isAdmin}
-          >
+          <DesktopHeader visibleFull={this.state.visibleFull}>
             {this.props.children}
           </DesktopHeader>
         </Media>
 
         <Media as={true} lessThan="computer">
-          <DesktopHeader
-            visibleFull={this.state.visibleFull}
-            isAdmin={this.state.isAdmin}
-          >
+          <MobileHeader visibleFull={this.state.visibleFull}>
             {this.props.children}
-          </DesktopHeader>
+          </MobileHeader>
         </Media>
       </MediaContextProvider>
     );
@@ -77,6 +57,8 @@ class Header extends React.Component {
 }
 
 class DesktopHeader extends Component {
+  state = { MMreq: false };
+
   render() {
     return (
       <div>
@@ -110,7 +92,7 @@ class DesktopHeader extends Component {
                   All Tokens
                 </a>
               </Link>
-              <Link href={`/tokens/${currentAccount}`}>
+              <Link href="/tokens/my">
                 <a className="item">My Tokens</a>
               </Link>
               <Link href="/create_tokens">
@@ -127,14 +109,43 @@ class DesktopHeader extends Component {
 
           <Menu.Menu
             position="right"
-            style={{
-              backgroundColor: '#444444',
-              display: this.props.isAdmin,
-            }}
+            style={
+              {
+                //backgroundColor: '#444444',
+              }
+            }
           >
-            <Link route="/">
-              <a className="item">Admin Page</a>
-            </Link>
+            {typeof currentAccount === 'undefined' && (
+              <Menu.Item
+                className="item"
+                disabled={this.state.MMreq}
+                style={{ padding: '0' }}
+                onClick={() => {
+                  try {
+                    this.setState({ MMreq: true });
+                    // Request account access
+                    ethereum.request({ method: 'eth_requestAccounts' });
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }}
+              >
+                <Button
+                  disabled={this.state.MMreq}
+                  loading={this.state.MMreq}
+                  //fluid
+                  style={{
+                    height: '100%',
+                    borderRadius: '0px',
+                    color: 'rgba(255,255,255,.9)',
+                    backgroundColor: '#444',
+                    fontWeight: 'normal',
+                  }}
+                >
+                  Log In With MetaMask
+                </Button>
+              </Menu.Item>
+            )}
           </Menu.Menu>
         </Menu>
         {this.props.children}
@@ -189,7 +200,7 @@ class MobileHeader extends Component {
                   All Tokens
                 </a>
               </Link>
-              <Link href={`/tokens/${currentAccount}`}>
+              <Link href="/tokens/my">
                 <a className="item">My Tokens</a>
               </Link>
               <Link href="/create_tokens">

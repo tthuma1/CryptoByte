@@ -20,49 +20,54 @@ import Jdenticon from '../../components/Jdenticon';
 import axios from 'axios';
 import Head from 'next/head';
 
-let currentAccount, headerEl;
-let viking = process.env.VIKING_AMOUNT.split(',');
-let vikingAmount = viking.length;
-let specialEdition = process.env.SPECIAL_EDITION.split(',');
-let specialEditionAmount = specialEdition.length;
-let specialTokens = viking.concat(specialEdition);
+let currentAccount, headerEl, footerEl;
+let vikingAll = process.env.VIKING_AMOUNT.split(',');
+let vikingAmount = vikingAll.length;
+let specialEditionAll = process.env.SPECIAL_EDITION.split(',');
+let specialEditionAmount = specialEditionAll.length;
+let specialTokens = vikingAll.concat(specialEditionAll);
 let specialTokensAmount = vikingAmount + specialEditionAmount;
 
 class TokensOfOwner extends Component {
   state = {
     mounted: false,
     headerHeight: 0,
+    footerHeight: 0,
     images: {},
     buyLoading: {},
     jdentHeigth: 220,
     tokenInfo: {},
     mmprompt: false,
+    tokens: [],
+    balance: 0,
+    isValidAccount: false,
   };
 
   static async getInitialProps({ query }) {
     try {
       let owner = web3.utils.toChecksumAddress(query.owner);
-      const balance = await cryptoByte721.methods.balanceOf(owner).call();
-
-      let tokens = [];
-      for (let i = 0; i < balance; i++) {
-        let token = await cryptoByte721.methods
-          .tokenOfOwnerByIndex(owner, i)
-          .call();
-        tokens.push(token);
-      }
-      tokens.sort(function (a, b) {
-        return a - b;
-      });
-
-      return { tokens, owner, balance, isValidAccount: true };
+      return { owner };
     } catch {
-      return { isValidAccount: false };
+      return { owner: '' };
     }
   }
 
   async componentDidMount() {
     currentAccount = (await web3.eth.getAccounts())[0];
+
+    if (this.props.owner != '') {
+      // with props
+      if (currentAccount == this.props.owner) {
+        // with props and metamask
+        this.setState({ isOwner: true });
+      } else {
+        // only props, no metamask
+        this.setState({ isOwner: false });
+      }
+    } else if (typeof currentAccount != 'undefined') {
+      // no props, logged with metamask
+      this.setState({ isOwner: true });
+    }
 
     headerEl = document.getElementById('header');
 
@@ -72,20 +77,68 @@ class TokensOfOwner extends Component {
           transVisible: true,
           headerHeight: headerEl.clientHeight,
         });
+
         clearInterval(headerVisible);
       }
     }, 100);
+
+    await this.getOwnerInfo();
 
     this.setState({ mounted: true });
 
     this.getTokenInfo();
   }
 
+  getOwnerInfo = async () => {
+    if (typeof this.state.isOwner === 'undefined') {
+      this.setState({ isValidAccount: false });
+    } else if (this.state.isOwner) {
+      const balance = await cryptoByte721.methods
+        .balanceOf(currentAccount)
+        .call();
+
+      /*let tokens = [];
+      for (let i = 0; i < balance; i++) {
+        let token = await cryptoByte721.methods
+          .tokenOfOwnerByIndex(currentAccount, i)
+          .call();
+        tokens.push(token);
+      }
+      tokens.sort(function (a, b) {
+        return a - b;
+      });*/
+
+      this.setState({ /*tokens,*/ balance, isValidAccount: true });
+    } else {
+      const balance = await cryptoByte721.methods
+        .balanceOf(this.props.owner)
+        .call();
+
+      this.setState({ balance, isValidAccount: true });
+    }
+  };
+
   getTokenInfo = async () => {
+    let tokens = [];
+    for (let i = 0; i < this.state.balance; i++) {
+      let token = await cryptoByte721.methods
+        .tokenOfOwnerByIndex(
+          this.state.isOwner ? currentAccount : this.props.owner,
+          i
+        )
+        .call();
+      tokens.push(token);
+
+      tokens.sort(function (a, b) {
+        return a - b;
+      });
+      this.setState({ tokens });
+    }
+
     let tokenInfo = {};
     let images = {};
-    for (let i = 0; i < this.props.balance; i++) {
-      let id = Number(this.props.tokens[i]);
+    for (let i = 0; i < this.state.balance; i++) {
+      let id = Number(this.state.tokens[i]);
       tokenInfo[id] = {};
 
       tokenInfo[id]['price'] = await cryptoByte721.methods
@@ -94,7 +147,7 @@ class TokensOfOwner extends Component {
 
       // check if token has image and save it in state
       try {
-        await axios.get(`../static/images/ERC721/${id}_w.jpg`);
+        await axios.get(`/static/images/ERC721/${id}_w.jpg`);
         images[id] = true;
       } catch (error) {
         images[id] = false;
@@ -142,10 +195,17 @@ class TokensOfOwner extends Component {
 
   renderTokens() {
     let items = [];
-    let classic = [];
-    for (let id = 1; id <= this.props.balance; id++) {
-      if (specialTokens.indexOf(String(id)) < 0) {
-        classic.push(id);
+    let classic = [],
+      viking = [],
+      specialEdition = [];
+
+    for (let i = 0; i < this.state.balance; i++) {
+      if (vikingAll.indexOf(String(this.state.tokens[i])) >= 0) {
+        viking.push(this.state.tokens[i]);
+      } else if (specialEditionAll.indexOf(String(this.state.tokens[i])) >= 0) {
+        specialEdition.push(this.state.tokens[i]);
+      } else {
+        classic.push(this.state.tokens[i]);
       }
     }
 
@@ -167,7 +227,7 @@ class TokensOfOwner extends Component {
     for (let i = 0; i < ids.length; i++) {
       let id = ids[i];
 
-      if (this.props.tokens.indexOf(String(id)) >= 0) {
+      if (this.state.tokens.indexOf(String(id)) >= 0) {
         items.push(
           <Card key={id}>
             {this.state.tokenInfo[id] ? (
@@ -201,11 +261,11 @@ class TokensOfOwner extends Component {
             )}
             <Card.Content>
               <Card.Header>
-                {viking.indexOf(String(id)) >= 0
-                  ? 'Viking Collection #' + id
-                  : specialEdition.indexOf(String(id)) >= 0
-                  ? 'Special Edition #' + (id - vikingAmount)
-                  : 'CRBC Token #' + (id - specialTokensAmount)}
+                {vikingAll.indexOf(String(id)) >= 0
+                  ? 'Viking Collection #' + (i + 1)
+                  : specialEditionAll.indexOf(String(id)) >= 0
+                  ? 'Special Edition #' + (i + 1)
+                  : 'CRBC Token #' + (i + 1)}
               </Card.Header>
 
               {this.state.tokenInfo[id] ? (
@@ -223,7 +283,11 @@ class TokensOfOwner extends Component {
                     </b>
                   </Card.Description>
                   <Card.Meta style={{ overflow: 'auto' }}>
-                    Owner : {this.props.owner}
+                    Owner:{' '}
+                    {this.state.isOwner ||
+                    typeof this.state.isOwner === 'undefined'
+                      ? currentAccount
+                      : this.props.owner}
                   </Card.Meta>
                 </div>
               ) : (
@@ -252,7 +316,7 @@ class TokensOfOwner extends Component {
 
               {this.state.tokenInfo[id] ? (
                 Number(this.state.tokenInfo[id]['price']) &&
-                this.props.owner != currentAccount ? (
+                !this.state.isOwner ? (
                   <Button
                     name={id}
                     primary
@@ -298,14 +362,16 @@ class TokensOfOwner extends Component {
             marginTop: this.state.headerHeight + 20,
           }}
         >
-          {this.props.isValidAccount ? (
+          {this.state.isValidAccount ? (
             <div>
               <Header as="h2" inverted dividing>
-                {this.props.owner}{' '}
+                {this.state.isOwner || typeof this.state.isOwner === 'undefined'
+                  ? currentAccount
+                  : this.props.owner}{' '}
                 <span style={{ color: '#E8E8E8' }}>owns</span>{' '}
-                {this.props.balance}{' '}
+                {this.state.balance}{' '}
                 <span style={{ color: '#E8E8E8' }}>
-                  token{this.props.balance != 1 ? 's' : ''}.
+                  token{this.state.balance != 1 ? 's' : ''}.
                 </span>
               </Header>
               {this.renderTokens()}

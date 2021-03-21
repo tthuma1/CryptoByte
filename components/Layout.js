@@ -3,6 +3,7 @@ import Head from 'next/head';
 import Header from './Header';
 import Footer from './Footer';
 import LoadingScreen from './LoadingScreen';
+import { Media, MediaContextProvider } from './Media';
 
 class Layout extends React.Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class Layout extends React.Component {
             rel="stylesheet"
             href="//cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css"
           />
-          <meta name="viewport" content="width=1024" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link
             rel="shortcut icon"
             type="image/png"
@@ -76,20 +77,48 @@ html, body {
 
         {!this.state.allMounted && <LoadingScreen />}
 
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: '100vh',
-          }}
-        >
-          <Header mounted={this.props.mounted} updateState={this.updateState}>
-            <div style={{ flex: 1 }}>
-              {this.state.allMounted && this.props.children}
+        <MediaContextProvider>
+          <Media greaterThan="mobile">
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: '100vh',
+              }}
+            >
+              <Header
+                mounted={this.props.mounted}
+                updateState={this.updateState}
+              />
+
+              <div style={{ flex: 1 }}>
+                {this.state.allMounted && this.props.children}
+              </div>
+
+              {this.state.allMounted && <Footer />}
             </div>
-            {this.state.allMounted && <Footer />}
-          </Header>
-        </div>
+          </Media>
+
+          <Media at="mobile">
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                minHeight: '100vh',
+              }}
+            >
+              <Header
+                mounted={this.props.mounted}
+                updateState={this.updateState}
+              >
+                <div style={{ flex: 1 }}>
+                  {this.state.allMounted && this.props.children}
+                </div>
+                {this.state.allMounted && <Footer />}
+              </Header>
+            </div>
+          </Media>
+        </MediaContextProvider>
       </div>
     );
   }
