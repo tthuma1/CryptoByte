@@ -21,11 +21,11 @@ import axios from 'axios';
 import Head from 'next/head';
 
 let currentAccount, headerEl, footerEl;
-let vikingAll = process.env.VIKING_AMOUNT.split(',');
-let vikingAmount = vikingAll.length;
-let specialEditionAll = process.env.SPECIAL_EDITION.split(',');
-let specialEditionAmount = specialEditionAll.length;
-let specialTokens = vikingAll.concat(specialEditionAll);
+let viking = process.env.VIKING_AMOUNT.split(',');
+let vikingAmount = viking.length;
+let specialEdition = process.env.SPECIAL_EDITION.split(',');
+let specialEditionAmount = specialEdition.length;
+let specialTokens = viking.concat(specialEdition);
 let specialTokensAmount = vikingAmount + specialEditionAmount;
 
 class TokensOfOwner extends Component {
@@ -41,6 +41,7 @@ class TokensOfOwner extends Component {
     tokens: [],
     balance: 0,
     isValidAccount: false,
+    supply: 0,
   };
 
   static async getInitialProps({ query }) {
@@ -97,18 +98,7 @@ class TokensOfOwner extends Component {
         .balanceOf(currentAccount)
         .call();
 
-      /*let tokens = [];
-      for (let i = 0; i < balance; i++) {
-        let token = await cryptoByte721.methods
-          .tokenOfOwnerByIndex(currentAccount, i)
-          .call();
-        tokens.push(token);
-      }
-      tokens.sort(function (a, b) {
-        return a - b;
-      });*/
-
-      this.setState({ /*tokens,*/ balance, isValidAccount: true });
+      this.setState({ balance, isValidAccount: true });
     } else {
       const balance = await cryptoByte721.methods
         .balanceOf(this.props.owner)
@@ -119,6 +109,9 @@ class TokensOfOwner extends Component {
   };
 
   getTokenInfo = async () => {
+    const supply = await cryptoByte721.methods.totalSupply().call();
+    this.setState({ supply });
+
     let tokens = [];
     for (let i = 0; i < this.state.balance; i++) {
       let token = await cryptoByte721.methods
@@ -195,24 +188,17 @@ class TokensOfOwner extends Component {
 
   renderTokens() {
     let items = [];
-    let classic = [],
-      viking = [],
-      specialEdition = [];
-
-    for (let i = 0; i < this.state.balance; i++) {
-      if (vikingAll.indexOf(String(this.state.tokens[i])) >= 0) {
-        viking.push(this.state.tokens[i]);
-      } else if (specialEditionAll.indexOf(String(this.state.tokens[i])) >= 0) {
-        specialEdition.push(this.state.tokens[i]);
-      } else {
-        classic.push(this.state.tokens[i]);
+    let classicAll = [];
+    for (let id = 1; id <= this.state.supply; id++) {
+      if (specialTokens.indexOf(String(id)) < 0) {
+        classicAll.push(id);
       }
     }
 
     items.push(
       this.makeCards(viking),
       this.makeCards(specialEdition),
-      this.makeCards(classic)
+      this.makeCards(classicAll)
     );
 
     return (
@@ -261,9 +247,9 @@ class TokensOfOwner extends Component {
             )}
             <Card.Content>
               <Card.Header>
-                {vikingAll.indexOf(String(id)) >= 0
+                {viking.indexOf(String(id)) >= 0
                   ? 'Viking Collection #' + (i + 1)
-                  : specialEditionAll.indexOf(String(id)) >= 0
+                  : specialEdition.indexOf(String(id)) >= 0
                   ? 'Special Edition #' + (i + 1)
                   : 'CRBC Token #' + (i + 1)}
               </Card.Header>

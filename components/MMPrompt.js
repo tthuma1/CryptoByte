@@ -58,6 +58,11 @@ class MMPrompt extends Component {
                   <br />
                   Make sure you're connected to the Ethereum Mainnet.
                 </p>
+                <p>
+                  Once you have completed these steps you may have to click the
+                  Log In With MetaMask button in the top right corner of your
+                  screen.
+                </p>
               </Modal.Description>
             </Modal.Content>
 
