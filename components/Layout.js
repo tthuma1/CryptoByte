@@ -11,10 +11,14 @@ class Layout extends React.Component {
     this.state = { allMounted: false };
     try {
       ethereum.on('accountsChanged', (_accounts) => {
-        window.location.reload();
+        //wait for 1000 ms before reloading to avoid bug not loading latest address
+        new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
+          location.reload();
+        });
       });
+
       ethereum.on('chainChanged', (chainId) => {
-        window.location.reload();
+        location.reload();
       });
     } catch {}
   }

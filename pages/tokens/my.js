@@ -14,6 +14,7 @@ import {
 } from 'semantic-ui-react';
 import MMPrompt from '../../components/MMPrompt';
 import cryptoByte721 from '../../ethereum/cryptoByte721';
+import cryptoByte721Infura from '../../ethereum/cryptoByte721Infura';
 import { Link, Router } from '../../routes';
 import web3 from '../../ethereum/web3';
 import Jdenticon from '../../components/Jdenticon';
@@ -84,6 +85,7 @@ class TokensOfOwner extends Component {
     }, 100);
 
     await this.getOwnerInfo();
+    await this.getTokenIds();
 
     this.setState({ mounted: true });
 
@@ -94,13 +96,13 @@ class TokensOfOwner extends Component {
     if (typeof this.state.isOwner === 'undefined') {
       this.setState({ isValidAccount: false });
     } else if (this.state.isOwner) {
-      const balance = await cryptoByte721.methods
+      const balance = await cryptoByte721Infura.methods
         .balanceOf(currentAccount)
         .call();
 
       this.setState({ balance, isValidAccount: true });
     } else {
-      const balance = await cryptoByte721.methods
+      const balance = await cryptoByte721Infura.methods
         .balanceOf(this.props.owner)
         .call();
 
@@ -108,13 +110,13 @@ class TokensOfOwner extends Component {
     }
   };
 
-  getTokenInfo = async () => {
-    const supply = await cryptoByte721.methods.totalSupply().call();
+  getTokenIds = async () => {
+    const supply = await cryptoByte721Infura.methods.totalSupply().call();
     this.setState({ supply });
 
     let tokens = [];
     for (let i = 0; i < this.state.balance; i++) {
-      let token = await cryptoByte721.methods
+      let token = await cryptoByte721Infura.methods
         .tokenOfOwnerByIndex(
           this.state.isOwner ? currentAccount : this.props.owner,
           i
@@ -127,7 +129,9 @@ class TokensOfOwner extends Component {
       });
       this.setState({ tokens });
     }
+  };
 
+  getTokenInfo = async () => {
     let tokenInfo = {};
     let images = {};
     for (let i = 0; i < this.state.balance; i++) {
@@ -350,7 +354,14 @@ class TokensOfOwner extends Component {
         >
           {this.state.isValidAccount ? (
             <div>
-              <Header as="h2" inverted dividing>
+              <Header
+                as="h2"
+                inverted
+                dividing
+                style={{
+                  wordBreak: 'break-all',
+                }}
+              >
                 {this.state.isOwner || typeof this.state.isOwner === 'undefined'
                   ? currentAccount
                   : this.props.owner}{' '}
