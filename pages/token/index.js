@@ -9,6 +9,7 @@ import {
   Message,
   Placeholder,
   Grid,
+  Visibility,
 } from 'semantic-ui-react';
 import Jdenticon from '../../components/Jdenticon';
 import cryptoByte721 from '../../ethereum/cryptoByte721';
@@ -23,19 +24,24 @@ let viking = process.env.VIKING_AMOUNT.split(',');
 let vikingAmount = viking.length;
 let specialEdition = process.env.SPECIAL_EDITION.split(',');
 let specialEditionAmount = specialEdition.length;
-let specialTokens = vikingAmount + specialEditionAmount;
+let specialTokens = viking.concat(specialEdition);
+let specialTokensAmount = vikingAmount + specialEditionAmount;
 
 class TokenDetails extends Component {
   state = {
     mounted: false,
     headerHeight: 0,
     image: false,
+    video: false,
     buyLoading: false,
     msgErr: '',
     tokenInfo: {},
     jdentHeigth: 310,
     jdentWidth: 563,
+    cardWidth: 1127,
     mmprompt: false,
+    supply: 0,
+    classicAll: [],
   };
 
   static async getInitialProps({ query }) {
@@ -72,13 +78,27 @@ class TokenDetails extends Component {
       .getTokenPrice(this.props.id)
       .call();
 
+    // get list of all Classic CRBC Tokens
+    const supply = await cryptoByte721.methods.totalSupply().call();
+    this.setState({ supply });
+    let classicAll = [];
+    for (let id = 1; id <= this.state.supply; id++) {
+      if (specialTokens.indexOf(String(id)) < 0) {
+        classicAll.push(id);
+      }
+    }
+    this.setState({ classicAll });
+
     // check if token has image and save it in state
     try {
       await axios.get(`/static/images/ERC721/${this.props.id}_w.jpg`);
-      await this.setState({ image: true });
-    } catch (error) {
-      await this.setState({ image: false });
-    }
+      this.setState({ image: true });
+    } catch (err) {}
+
+    try {
+      await axios.get(`/static/videos/ERC721/${this.props.id}.mp4`);
+      this.setState({ video: true });
+    } catch (err) {}
 
     this.setState({ tokenInfo });
   };
@@ -108,6 +128,10 @@ class TokenDetails extends Component {
     this.setState({ buyLoading: false });
   };
 
+  handleUpdate = (e, { calculations }) => {
+    this.setState({ cardWidth: calculations.width });
+    console.log(this.state.cardWidth);
+  };
   render() {
     return (
       <Layout mounted={this.state.mounted}>
@@ -127,188 +151,216 @@ class TokenDetails extends Component {
             marginTop: this.state.headerHeight + 20,
           }}
         >
-          <Card fluid>
-            {this.state.tokenInfo['owner'] ? (
-              this.state.image ? (
-                <Grid columns="2" style={{ height: '344px' }}>
-                  <Grid.Column style={{ paddingRight: '0' }}>
-                    <img
-                      src={`/static/images/ERC721/${this.props.id}_w.jpg`}
-                      width={this.state.jdentWidth}
-                    />
-                  </Grid.Column>
-                  <Grid.Column style={{ paddingLeft: '0' }}>
-                    <video width={this.state.jdentWidth} autoPlay loop muted>
-                      <source
-                        src={`/static/videos/ERC721/${this.props.id}.mp4`}
-                        type="video/mp4"
-                      />
-                    </video>
-                  </Grid.Column>
-                </Grid>
-              ) : (
-                <Container
-                  textAlign="center"
-                  style={{
-                    background: 'rgba(0,0,0,.05)',
-                    overflow: 'auto',
-                    paddingTop: '15px',
-                    paddingBottom: '15px',
-                  }}
-                >
-                  <Jdenticon
-                    value={this.props.id}
-                    size={this.state.jdentHeigth}
-                  />
-                </Container>
-              )
-            ) : (
-              <Placeholder fluid>
-                <Placeholder.Image style={{ height: this.state.jdentHeigth }} />
-              </Placeholder>
-            )}
-
-            <Card.Content>
-              <Card.Header>
-                {viking.indexOf(String(this.props.id)) >= 0
-                  ? 'Viking Collection #' + this.props.id
-                  : specialEdition.indexOf(String(this.props.id)) >= 0
-                  ? 'Special Edition #' + (this.props.id - vikingAmount)
-                  : 'CRBC Token #' + (this.props.id - specialTokens)}
-              </Card.Header>
-
+          <Visibility onUpdate={this.handleUpdate}>
+            <Card fluid>
               {this.state.tokenInfo['owner'] ? (
-                <div>
-                  <Card.Description>
-                    <b>
-                      {Number(this.state.tokenInfo['price'])
-                        ? 'Token price: ' +
-                          web3.utils.fromWei(
-                            this.state.tokenInfo['price'],
-                            'ether'
-                          ) +
-                          ' ETH'
-                        : 'Token not for sale'}
-                    </b>
-                  </Card.Description>
-                  <Card.Meta style={{ overflow: 'auto' }}>
-                    Owner
-                    {currentAccount == this.state.tokenInfo['owner'] ? (
-                      <b style={{ color: 'rgba(0,0,0,.68)' }}> (You)</b>
-                    ) : (
-                      ''
-                    )}
-                    : {this.state.tokenInfo['owner']}
-                  </Card.Meta>
-                </div>
-              ) : (
-                <Placeholder style={{ marginTop: '10px' }}>
-                  <Placeholder.Header>
-                    <Placeholder.Line length="very short" />
-                    <Placeholder.Line length="medium" />
-                  </Placeholder.Header>
-                  <Placeholder.Paragraph>
-                    <Placeholder.Line length="short" />
-                  </Placeholder.Paragraph>
-                </Placeholder>
-              )}
-            </Card.Content>
-
-            <Card.Content extra>
-              <Container textAlign="left">
-                <Link route="/tokens">
-                  <a
-                    onClick={() => {
-                      this.setState({ mounted: false });
+                this.state.image ? (
+                  this.state.video ? (
+                    <Grid columns="2" style={{ height: '344px' }}>
+                      <Grid.Column style={{ paddingRight: '0' }}>
+                        <img
+                          src={`/static/images/ERC721/${this.props.id}_w.jpg`}
+                          width={this.state.cardWidth / 2}
+                        />
+                      </Grid.Column>
+                      <Grid.Column style={{ paddingLeft: '0' }}>
+                        <video
+                          width={this.state.cardWidth / 2}
+                          autoPlay
+                          loop
+                          muted
+                        >
+                          <source
+                            src={`/static/videos/ERC721/${this.props.id}.mp4`}
+                            type="video/mp4"
+                          />
+                        </video>
+                      </Grid.Column>
+                    </Grid>
+                  ) : (
+                    <Container
+                      textAlign="center"
+                      style={{
+                        background: 'rgba(0,0,0,.05)',
+                        overflow: 'auto',
+                      }}
+                    >
+                      <Image
+                        src={`/static/images/ERC721/${this.props.id}_w.jpg`}
+                        size="big"
+                        wrapped
+                      />
+                    </Container>
+                  )
+                ) : (
+                  <Container
+                    textAlign="center"
+                    style={{
+                      background: 'rgba(0,0,0,.05)',
+                      overflow: 'auto',
+                      paddingTop: '15px',
+                      paddingBottom: '15px',
                     }}
                   >
-                    <Button>
-                      <Icon name="arrow alternate circle left" /> Back
-                    </Button>
-                  </a>
-                </Link>
-              </Container>
+                    <Jdenticon
+                      value={this.props.id}
+                      size={this.state.jdentHeigth}
+                    />
+                  </Container>
+                )
+              ) : (
+                <Placeholder fluid>
+                  <Placeholder.Image
+                    style={{ height: this.state.jdentHeigth }}
+                  />
+                </Placeholder>
+              )}
 
-              {this.state.tokenInfo['owner'] &&
-              this.state.tokenInfo['owner'] == currentAccount ? (
-                <div style={{ marginTop: '-35.6px' }}>
-                  <Link route={`/sell/${this.props.id}`}>
-                    <a
-                      onClick={() => {
-                        this.setState({ mounted: false });
-                      }}
-                    >
-                      <Button>
+              <Card.Content>
+                <Card.Header>
+                  {viking.indexOf(String(this.props.id)) >= 0
+                    ? 'Viking Collection #' +
+                      viking.indexOf(String(this.props.id))
+                    : specialEdition.indexOf(String(this.props.id)) >= 0
+                    ? 'Special Edition #' +
+                      specialEdition.indexOf(String(this.props.id))
+                    : 'CRBC Token #' +
+                      (this.state.classicAll.indexOf(this.props.id) + 1)}
+                </Card.Header>
+
+                {this.state.tokenInfo['owner'] ? (
+                  <div>
+                    <Card.Description>
+                      <b>
                         {Number(this.state.tokenInfo['price'])
-                          ? 'Change price or remove from sale'
-                          : 'Put up for sale'}
-                        <Icon name="tag right" />
-                      </Button>
-                    </a>
-                  </Link>
-                  <Link route={`/gift/${this.props.id}`}>
+                          ? 'Token price: ' +
+                            web3.utils.fromWei(
+                              this.state.tokenInfo['price'],
+                              'ether'
+                            ) +
+                            ' ETH'
+                          : 'Token not for sale'}
+                      </b>
+                    </Card.Description>
+                    <Card.Meta style={{ overflow: 'auto' }}>
+                      Owner
+                      {currentAccount == this.state.tokenInfo['owner'] ? (
+                        <b style={{ color: 'rgba(0,0,0,.68)' }}> (You)</b>
+                      ) : (
+                        ''
+                      )}
+                      : {this.state.tokenInfo['owner']}
+                    </Card.Meta>
+                  </div>
+                ) : (
+                  <Placeholder style={{ marginTop: '10px' }}>
+                    <Placeholder.Header>
+                      <Placeholder.Line length="very short" />
+                      <Placeholder.Line length="medium" />
+                    </Placeholder.Header>
+                    <Placeholder.Paragraph>
+                      <Placeholder.Line length="short" />
+                    </Placeholder.Paragraph>
+                  </Placeholder>
+                )}
+              </Card.Content>
+
+              <Card.Content extra>
+                <Container textAlign="left">
+                  <Link route="/tokens">
                     <a
                       onClick={() => {
                         this.setState({ mounted: false });
                       }}
                     >
                       <Button>
-                        Gift token
-                        <Icon name="gift right" />
+                        <Icon name="arrow alternate circle left" /> Back
                       </Button>
                     </a>
                   </Link>
+                </Container>
 
-                  {this.state.image && (
-                    <Container
-                      textAlign="right"
-                      style={{ marginTop: '-35.6px' }}
+                {this.state.tokenInfo['owner'] &&
+                this.state.tokenInfo['owner'] == currentAccount ? (
+                  <div style={{ marginTop: '-35.6px' }}>
+                    <Link route={`/sell/${this.props.id}`}>
+                      <a
+                        onClick={() => {
+                          this.setState({ mounted: false });
+                        }}
+                      >
+                        <Button>
+                          {Number(this.state.tokenInfo['price'])
+                            ? 'Change price or remove from sale'
+                            : 'Put up for sale'}
+                          <Icon name="tag right" />
+                        </Button>
+                      </a>
+                    </Link>
+                    <Link route={`/gift/${this.props.id}`}>
+                      <a
+                        onClick={() => {
+                          this.setState({ mounted: false });
+                        }}
+                      >
+                        <Button>
+                          Gift token
+                          <Icon name="gift right" />
+                        </Button>
+                      </a>
+                    </Link>
+
+                    {this.state.image && (
+                      <Container
+                        textAlign="right"
+                        style={{ marginTop: '-35.6px' }}
+                      >
+                        <p>
+                          <a
+                            href={`/static/images/ERC721/${this.props.id}.jpg`}
+                            download
+                          >
+                            <Button>
+                              <Icon name="download" /> Download image
+                            </Button>
+                          </a>
+                        </p>
+                        <p>
+                          <a
+                            href={`/static/images/ERC721/${this.props.id}.gif`}
+                            download
+                          >
+                            <Button>
+                              <Icon name="download" /> Download GIF
+                            </Button>
+                          </a>
+                        </p>
+                      </Container>
+                    )}
+                  </div>
+                ) : (
+                  ''
+                )}
+
+                {this.state.tokenInfo['owner'] != currentAccount &&
+                Number(this.state.tokenInfo['price']) ? (
+                  <div style={{ marginTop: '-35.6px' }}>
+                    <Button
+                      primary
+                      onClick={this.buyToken}
+                      loading={this.state.buyLoading}
+                      disabled={this.state.buyLoading}
                     >
-                      <p>
-                        <a
-                          href={`/static/images/ERC721/${this.props.id}.jpg`}
-                          download
-                        >
-                          <Button>
-                            <Icon name="download" /> Download image
-                          </Button>
-                        </a>
-                      </p>
-                      <p>
-                        <a
-                          href={`/static/images/ERC721/${this.props.id}.gif`}
-                          download
-                        >
-                          <Button>
-                            <Icon name="download" /> Download GIF
-                          </Button>
-                        </a>
-                      </p>
-                    </Container>
-                  )}
-                </div>
-              ) : (
-                ''
-              )}
-
-              {this.state.tokenInfo['owner'] != currentAccount &&
-              Number(this.state.tokenInfo['price']) ? (
-                <div style={{ marginTop: '-35.6px' }}>
-                  <Button
-                    primary
-                    onClick={this.buyToken}
-                    loading={this.state.buyLoading}
-                    disabled={this.state.buyLoading}
-                  >
-                    Buy token
-                    <Icon name="shopping cart right" />
-                  </Button>
-                </div>
-              ) : (
-                ''
-              )}
-            </Card.Content>
-          </Card>
+                      Buy token
+                      <Icon name="shopping cart right" />
+                    </Button>
+                  </div>
+                ) : (
+                  ''
+                )}
+              </Card.Content>
+            </Card>
+          </Visibility>
           {this.state.msgErr && (
             <Message negative compact>
               <Message.Header>Something went wrong!</Message.Header>
