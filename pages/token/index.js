@@ -33,12 +33,13 @@ class TokenDetails extends Component {
     headerHeight: 0,
     image: false,
     video: false,
+    description: false,
     buyLoading: false,
     msgErr: '',
     tokenInfo: {},
     jdentHeigth: 310,
     jdentWidth: 563,
-    cardWidth: 1127,
+    imgHeight: 344,
     mmprompt: false,
     supply: 0,
     classicAll: [],
@@ -100,6 +101,13 @@ class TokenDetails extends Component {
       this.setState({ video: true });
     } catch (err) {}
 
+    try {
+      let { data } = await axios.get(
+        `/static/descriptions/${this.props.id}.txt`
+      );
+      this.setState({ description: data });
+    } catch (err) {}
+
     this.setState({ tokenInfo });
   };
 
@@ -128,10 +136,10 @@ class TokenDetails extends Component {
     this.setState({ buyLoading: false });
   };
 
-  handleUpdate = (e, { calculations }) => {
-    this.setState({ cardWidth: calculations.width });
-    console.log(this.state.cardWidth);
+  handleUpdateImg = (e, { calculations }) => {
+    this.setState({ imgHeight: calculations.height });
   };
+
   render() {
     return (
       <Layout mounted={this.state.mounted}>
@@ -151,25 +159,30 @@ class TokenDetails extends Component {
             marginTop: this.state.headerHeight + 20,
           }}
         >
-          <Visibility onUpdate={this.handleUpdate}>
+          <Visibility>
             <Card fluid>
               {this.state.tokenInfo['owner'] ? (
                 this.state.image ? (
                   this.state.video ? (
-                    <Grid columns="2" style={{ height: '344px' }}>
-                      <Grid.Column style={{ paddingRight: '0' }}>
-                        <img
-                          src={`/static/images/ERC721/${this.props.id}_w.jpg`}
-                          width={this.state.cardWidth / 2}
-                        />
+                    <Grid columns="2">
+                      <Grid.Column
+                        style={{
+                          paddingRight: '0',
+                          height: this.state.imgHeight,
+                          marginBottom: '-5px',
+                        }}
+                      >
+                        <Visibility onUpdate={this.handleUpdateImg}>
+                          <Image
+                            src={`/static/images/ERC721/${this.props.id}_w.jpg`}
+                            wrapped
+                          />
+                        </Visibility>
                       </Grid.Column>
-                      <Grid.Column style={{ paddingLeft: '0' }}>
-                        <video
-                          width={this.state.cardWidth / 2}
-                          autoPlay
-                          loop
-                          muted
-                        >
+                      <Grid.Column
+                        style={{ paddingLeft: '0', marginBottom: '-5px' }}
+                      >
+                        <video width="100%" autoPlay loop muted>
                           <source
                             src={`/static/videos/ERC721/${this.props.id}.mp4`}
                             type="video/mp4"
@@ -177,7 +190,32 @@ class TokenDetails extends Component {
                         </video>
                       </Grid.Column>
                     </Grid>
+                  ) : this.state.description ? ( // has image and description
+                    <Container
+                      style={{
+                        background: 'rgba(0,0,0,.05)',
+                      }}
+                    >
+                      <Grid columns="2">
+                        <Grid.Column>
+                          <Image
+                            src={`/static/images/ERC721/${this.props.id}_w.jpg`}
+                            size="big"
+                            wrapped
+                          />
+                        </Grid.Column>
+                        <Grid.Column
+                          textAlign="left"
+                          style={{ paddingTop: '5%' }}
+                        >
+                          <p style={{ whiteSpace: 'pre-line' }}>
+                            {this.state.description}
+                          </p>
+                        </Grid.Column>
+                      </Grid>
+                    </Container>
                   ) : (
+                    // only has an image
                     <Container
                       textAlign="center"
                       style={{
@@ -192,14 +230,41 @@ class TokenDetails extends Component {
                       />
                     </Container>
                   )
+                ) : this.state.description ? ( // only has description
+                  <Container
+                    textAlign="center"
+                    style={{
+                      background: 'rgba(0,0,0,.05)',
+                      paddingTop: '5px',
+                      paddingBottom: '5px',
+                    }}
+                  >
+                    <Grid columns="2">
+                      <Grid.Column>
+                        <Jdenticon
+                          value={this.props.id}
+                          size={this.state.jdentHeigth}
+                        />
+                      </Grid.Column>
+                      <Grid.Column
+                        textAlign="left"
+                        style={{ paddingTop: '5%' }}
+                      >
+                        <p style={{ whiteSpace: 'pre-line' }}>
+                          {this.state.description}
+                        </p>
+                      </Grid.Column>
+                    </Grid>
+                  </Container>
                 ) : (
+                  // doens't have anything
                   <Container
                     textAlign="center"
                     style={{
                       background: 'rgba(0,0,0,.05)',
                       overflow: 'auto',
-                      paddingTop: '15px',
-                      paddingBottom: '15px',
+                      paddingTop: '5px',
+                      paddingBottom: '5px',
                     }}
                   >
                     <Jdenticon
@@ -220,10 +285,10 @@ class TokenDetails extends Component {
                 <Card.Header>
                   {viking.indexOf(String(this.props.id)) >= 0
                     ? 'Viking Collection #' +
-                      viking.indexOf(String(this.props.id))
+                      (viking.indexOf(String(this.props.id)) + 1)
                     : specialEdition.indexOf(String(this.props.id)) >= 0
                     ? 'Special Edition #' +
-                      specialEdition.indexOf(String(this.props.id))
+                      (specialEdition.indexOf(String(this.props.id)) + 1)
                     : 'CRBC Token #' +
                       (this.state.classicAll.indexOf(this.props.id) + 1)}
                 </Card.Header>
@@ -242,7 +307,7 @@ class TokenDetails extends Component {
                           : 'Token not for sale'}
                       </b>
                     </Card.Description>
-                    <Card.Meta style={{ overflow: 'auto' }}>
+                    <Card.Meta style={{ overflowWrap: 'break-word' }}>
                       Owner
                       {currentAccount == this.state.tokenInfo['owner'] ? (
                         <b style={{ color: 'rgba(0,0,0,.68)' }}> (You)</b>
@@ -361,6 +426,7 @@ class TokenDetails extends Component {
               </Card.Content>
             </Card>
           </Visibility>
+
           {this.state.msgErr && (
             <Message negative compact>
               <Message.Header>Something went wrong!</Message.Header>
