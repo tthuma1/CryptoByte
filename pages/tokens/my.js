@@ -230,17 +230,21 @@ class TokensOfOwner extends Component {
                   <Image src={`/static/images/ERC721/${id}_w.jpg`} wrapped />
                 )
               ) : (
-                <Container
-                  textAlign="center"
+                <div
                   style={{
                     background: 'rgba(0,0,0,.05)',
-                    overflow: 'auto',
-                    paddingTop: '25px',
-                    paddingBottom: '25px',
                   }}
                 >
-                  <Jdenticon value={id} size={this.state.jdentHeigth} />
-                </Container>
+                  <Container
+                    textAlign="center"
+                    style={{
+                      paddingTop: '20px',
+                      paddingBottom: '20px',
+                    }}
+                  >
+                    <Jdenticon value={id} size={this.state.jdentHeigth} />
+                  </Container>
+                </div>
               )
             ) : (
               <Placeholder fluid>
@@ -272,7 +276,9 @@ class TokensOfOwner extends Component {
                         : 'Token not for sale'}
                     </b>
                   </Card.Description>
-                  <Card.Meta style={{ overflow: 'auto' }}>
+                  <Card.Meta
+                    style={{ wordWrap: 'break-word', fontSize: '0.9em' }}
+                  >
                     Owner:{' '}
                     {this.state.isOwner ||
                     typeof this.state.isOwner === 'undefined'

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import Layout from '../components/Layout';
-import { Container, Header } from 'semantic-ui-react';
+import { Container, Header, Image } from 'semantic-ui-react';
 import Head from 'next/head';
+import { Media, MediaContextProvider } from '../components/Media';
 
 let headerEl;
 
-class Media extends Component {
+class MediaPage extends Component {
   state = {
     mounted: false,
     headerHeight: 0,
@@ -45,9 +46,10 @@ class Media extends Component {
             color: 'rgba(255,255,255,.9)',
           }}
         >
-          <img
+          <Image
             src="/static/images/custom-design.jpg"
-            height="400"
+            size="medium"
+            centered
             style={{
               marginBottom: '4vh',
               marginTop: '2vh',
@@ -58,22 +60,39 @@ class Media extends Component {
             How Crypto Byte Collectible tokens are made.
           </Header>
 
-          <video height="450" controls style={{ marginBottom: '4vh' }}>
-            <source src="/static/videos/film_crbc.mp4" type="video/mp4" />
-          </video>
+          <MediaContextProvider>
+            <Media greaterThan="tablet">
+              <video height="450" controls style={{ marginBottom: '4vh' }}>
+                <source src="/static/videos/film_crbc.mp4" type="video/mp4" />
+              </video>
 
-          <video height="450" controls style={{ marginBottom: '4vh' }}>
-            <source
-              src="/static/videos/GIF_viking_final.mp4"
-              type="video/mp4"
-            />
-          </video>
+              <video height="450" controls style={{ marginBottom: '4vh' }}>
+                <source
+                  src="/static/videos/GIF_viking_final.mp4"
+                  type="video/mp4"
+                />
+              </video>
+            </Media>
 
-          <img src="/static/images/comic.jpg" height="700" />
+            <Media lessThan="computer">
+              <video width="100%" controls style={{ marginBottom: '4vh' }}>
+                <source src="/static/videos/film_crbc.mp4" type="video/mp4" />
+              </video>
+
+              <video width="100%" controls style={{ marginBottom: '4vh' }}>
+                <source
+                  src="/static/videos/GIF_viking_final.mp4"
+                  type="video/mp4"
+                />
+              </video>
+            </Media>
+          </MediaContextProvider>
+
+          <Image src="/static/images/comic.jpg" size="large" centered />
         </Container>
       </Layout>
     );
   }
 }
 
-export default Media;
+export default MediaPage;

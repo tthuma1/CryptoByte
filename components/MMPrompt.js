@@ -7,14 +7,6 @@ import { Media, MediaContextProvider } from './Media';
 class MMPrompt extends Component {
   state = { modalOpen: false };
 
-  async componentDidMount() {
-    setInterval(() => {
-      if (this.props.visible == true) {
-        this.handleOpen();
-      }
-    }, 100);
-  }
-
   handleClose = () => {
     this.setState({ modalOpen: false });
   };
@@ -108,6 +100,11 @@ class MMPrompt extends Component {
                 </p>
               </Modal.Description>
               <Image size="medium" src="/static/images/metamask-network.png" />
+              <p style={{ paddingBottom: '1rem' }}>
+                Once you have completed these steps you may have to click the
+                Log In With MetaMask button in the top right corner of your
+                screen.
+              </p>
             </Modal.Content>
 
             <Modal.Actions>

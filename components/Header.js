@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Menu, Dropdown, Sidebar, Icon, Button } from 'semantic-ui-react';
 import { Link } from '../routes';
 import web3 from '../ethereum/web3';
-import cryptoByte721 from '../ethereum/cryptoByte721';
 import { Media, MediaContextProvider } from './Media';
 
 let currentAccount;
@@ -107,14 +106,7 @@ class DesktopHeader extends Component {
             <a className="item">FAQ</a>
           </Link>
 
-          <Menu.Menu
-            position="right"
-            style={
-              {
-                //backgroundColor: '#444444',
-              }
-            }
-          >
+          <Menu.Menu position="right">
             {typeof currentAccount === 'undefined' && (
               <Menu.Item
                 className="item"
@@ -157,7 +149,12 @@ class DesktopHeader extends Component {
 class MobileHeader extends Component {
   state = { open: false };
 
-  handleHide = () => this.setState({ open: false });
+  handleHide = (ev) => {
+    // prevent automatic closing (caused by MMPrompt)
+    if (ev.x >= 150) {
+      this.setState({ open: false });
+    }
+  };
 
   handleOpen = () => this.setState({ open: true });
 
@@ -172,7 +169,6 @@ class MobileHeader extends Component {
           vertical
           width="thin"
           visible={this.state.open}
-          style={{ overflow: 'visible !important' }}
         >
           <Link href="/">
             <a className="item">
@@ -230,14 +226,51 @@ class MobileHeader extends Component {
           <Menu.Item onClick={this.handleOpen}>
             <Icon name="sidebar" size="large" id="sidebar-toggle" />
           </Menu.Item>
+
+          <Menu.Menu position="right">
+            {typeof currentAccount === 'undefined' && (
+              <Menu.Item
+                className="item"
+                disabled={this.state.MMreq}
+                style={{ padding: '0' }}
+                onClick={() => {
+                  try {
+                    this.setState({ MMreq: true });
+                    // Request account access
+                    ethereum.request({ method: 'eth_requestAccounts' });
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }}
+              >
+                <Button
+                  disabled={this.state.MMreq}
+                  loading={this.state.MMreq}
+                  //fluid
+                  style={{
+                    height: '100%',
+                    borderRadius: '0px',
+                    color: 'rgba(255,255,255,.9)',
+                    backgroundColor: '#444',
+                    fontWeight: 'normal',
+                  }}
+                >
+                  Log In With MetaMask
+                </Button>
+              </Menu.Item>
+            )}
+          </Menu.Menu>
         </Menu>
 
-        <Sidebar.Pushable
-          style={{
-            visibility: this.props.visibleFull,
-          }}
-        >
-          <Sidebar.Pusher dimmed={this.state.open}>
+        <Sidebar.Pushable style={{ visibility: this.props.visibleFull }}>
+          <Sidebar.Pusher
+            dimmed={this.state.open}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: '100vh',
+            }}
+          >
             {this.props.children}
           </Sidebar.Pusher>
         </Sidebar.Pushable>

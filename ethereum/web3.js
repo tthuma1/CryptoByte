@@ -4,7 +4,7 @@ let web3;
 
 if (
   typeof window !== 'undefined' &&
-  typeof window.web3 !== 'undefined' &&
+  typeof window.ethereum !== 'undefined' &&
   window.ethereum.networkVersion === process.env.NETWORK_VERSION
 ) {
   web3 = new Web3(window.ethereum);

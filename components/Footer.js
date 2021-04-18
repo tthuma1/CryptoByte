@@ -31,30 +31,22 @@ class Footer extends Component {
               </Grid.Column>
             </Grid.Row>
 
-            <Grid.Row columns={1} style={{ fontSize: '23px' }}>
+            <Grid.Row style={{ fontSize: '23px' }}>
               <Grid.Column textAlign="center">
                 <a href="https://www.reddit.com/r/crypto_byte/" target="_blank">
-                  <Icon
-                    name="reddit"
-                    size="big"
-                    style={{ color: '#ccc', marginRight: '30px' }}
-                  />
+                  <Icon name="reddit" size="big" style={{ color: '#ccc' }} />
                 </a>
 
                 <a href="https://twitter.com/crypto_byte721" target="_blank">
                   <Icon
                     name="twitter square"
                     size="big"
-                    style={{ color: '#ccc', marginRight: '30px' }}
+                    style={{ color: '#ccc', margin: '0px 30px' }}
                   />
                 </a>
 
                 <a href="https://t.me/Crypto_ByteERC721" target="_blank">
-                  <Icon
-                    name="telegram"
-                    size="big"
-                    style={{ color: '#ccc', marginRight: '30px' }}
-                  />
+                  <Icon name="telegram" size="big" style={{ color: '#ccc' }} />
                 </a>
               </Grid.Column>
             </Grid.Row>
@@ -113,22 +105,23 @@ class MobileFooter extends Component {
         </Grid>
 
         <Grid
-          centered
+          //centered
           style={{
             backgroundColor: 'rgba(255,255,255,.05)',
             color: 'white',
             fontSize: '23px',
           }}
-          columns={3}
+          columns={5}
         >
           <Grid.Row style={{ paddingBottom: '5px' }}>
-            <Grid.Column textAlign="right">
+            {/* empy column for better positioning */}
+            <Grid.Column width={2}></Grid.Column>
+            <Grid.Column width={4}>
               <a href="https://www.reddit.com/r/crypto_byte/" target="_blank">
                 <Icon name="reddit" size="big" style={{ color: '#ccc' }} />
               </a>
             </Grid.Column>
-
-            <Grid.Column textAlign="left">
+            <Grid.Column width={4}>
               <a href="https://twitter.com/crypto_byte721" target="_blank">
                 <Icon
                   name="twitter square"
@@ -137,14 +130,13 @@ class MobileFooter extends Component {
                 />
               </a>
             </Grid.Column>
-          </Grid.Row>
-
-          <Grid.Row style={{ paddingTop: '5px' }}>
-            <Grid.Column textAlign="right">
+            <Grid.Column width={4}>
               <a href="https://t.me/Crypto_ByteERC721" target="_blank">
                 <Icon name="telegram" size="big" style={{ color: '#ccc' }} />
               </a>
             </Grid.Column>
+            {/* empy column for better positioning */}
+            <Grid.Column width={2}></Grid.Column>
           </Grid.Row>
         </Grid>
 

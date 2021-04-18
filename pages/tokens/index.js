@@ -34,7 +34,6 @@ class AllTokens extends Component {
     images: {},
     buyLoading: {},
     jdentHeigth: 174,
-    jdentWidth: 357,
     tokenInfo: {},
     mmprompt: false,
   };
@@ -123,7 +122,6 @@ class AllTokens extends Component {
   updateImage = async (e, { calculations }) => {
     this.setState({
       jdentHeigth: calculations.height - 40,
-      jdentWidth: calculations.width,
     });
   };
 
@@ -166,17 +164,21 @@ class AllTokens extends Component {
                 <Image src={`/static/images/ERC721/${id}_w.jpg`} />
               )
             ) : (
-              <Container
-                textAlign="center"
+              <div
                 style={{
                   background: 'rgba(0,0,0,.05)',
-                  overflow: 'auto',
-                  paddingTop: '20px',
-                  paddingBottom: '20px',
                 }}
               >
-                <Jdenticon value={id} size={this.state.jdentHeigth} />
-              </Container>
+                <Container
+                  textAlign="center"
+                  style={{
+                    paddingTop: '20px',
+                    paddingBottom: '20px',
+                  }}
+                >
+                  <Jdenticon value={id} size={this.state.jdentHeigth} />
+                </Container>
+              </div>
             )
           ) : (
             <Placeholder fluid>
@@ -208,7 +210,9 @@ class AllTokens extends Component {
                       : 'Token not for sale'}
                   </b>
                 </Card.Description>
-                <Card.Meta style={{ overflow: 'auto', fontSize: '0.9em' }}>
+                <Card.Meta
+                  style={{ wordWrap: 'break-word', fontSize: '0.9em' }}
+                >
                   Owner
                   {currentAccount == this.state.tokenInfo[id]['owner'] ? (
                     <b style={{ color: 'rgba(0,0,0,.68)' }}> (You)</b>

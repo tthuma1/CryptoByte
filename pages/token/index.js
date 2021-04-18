@@ -18,6 +18,7 @@ import { Link, Router } from '../../routes';
 import axios from 'axios';
 import MMPrompt from '../../components/MMPrompt';
 import Head from 'next/head';
+import { Media, MediaContextProvider } from '../../components/Media';
 
 let currentAccount, headerEl;
 let viking = process.env.VIKING_AMOUNT.split(',');
@@ -38,7 +39,6 @@ class TokenDetails extends Component {
     msgErr: '',
     tokenInfo: {},
     jdentHeigth: 310,
-    jdentWidth: 563,
     imgHeight: 344,
     mmprompt: false,
     supply: 0,
@@ -163,64 +163,107 @@ class TokenDetails extends Component {
             <Card fluid>
               {this.state.tokenInfo['owner'] ? (
                 this.state.image ? (
-                  this.state.video ? (
-                    <Grid columns="2">
-                      <Grid.Column
-                        style={{
-                          paddingRight: '0',
-                          height: this.state.imgHeight,
-                          marginBottom: '-5px',
-                        }}
-                      >
-                        <Visibility onUpdate={this.handleUpdateImg}>
-                          <Image
-                            src={`/static/images/ERC721/${this.props.id}_w.jpg`}
-                            wrapped
-                          />
-                        </Visibility>
-                      </Grid.Column>
-                      <Grid.Column
-                        style={{ paddingLeft: '0', marginBottom: '-5px' }}
-                      >
-                        <video width="100%" autoPlay loop muted>
-                          <source
-                            src={`/static/videos/ERC721/${this.props.id}.mp4`}
-                            type="video/mp4"
-                          />
-                        </video>
-                      </Grid.Column>
-                    </Grid>
-                  ) : this.state.description ? ( // has image and description
-                    <Container
+                  this.state.video ? ( // has image and video
+                    <div
                       style={{
                         background: 'rgba(0,0,0,.05)',
                       }}
                     >
-                      <Grid columns="2">
-                        <Grid.Column>
-                          <Image
-                            src={`/static/images/ERC721/${this.props.id}_w.jpg`}
-                            size="big"
-                            wrapped
-                          />
+                      <Grid columns="2" stackable>
+                        <Grid.Column
+                          style={{
+                            paddingRight: '0px',
+                            height: this.state.imgHeight,
+                            marginBottom: '-5px',
+                          }}
+                        >
+                          <Visibility onUpdate={this.handleUpdateImg}>
+                            <Image
+                              src={`/static/images/ERC721/${this.props.id}_w.jpg`}
+                              wrapped
+                            />
+                          </Visibility>
                         </Grid.Column>
                         <Grid.Column
-                          textAlign="left"
-                          style={{ paddingTop: '5%' }}
+                          style={{ paddingLeft: '0px', marginBottom: '-5px' }}
                         >
-                          <p style={{ whiteSpace: 'pre-line' }}>
-                            {this.state.description}
-                          </p>
+                          <video width="100%" autoPlay loop muted>
+                            <source
+                              src={`/static/videos/ERC721/${this.props.id}.mp4`}
+                              type="video/mp4"
+                            />
+                          </video>
                         </Grid.Column>
                       </Grid>
-                    </Container>
+                    </div>
+                  ) : this.state.description ? ( // has image and description
+                    <MediaContextProvider>
+                      <Media greaterThan="mobile">
+                        <Container
+                          style={{
+                            background: 'rgba(0,0,0,.05)',
+                            paddingTop: '5px',
+                            paddingBottom: '5px',
+                          }}
+                        >
+                          <Grid columns="2" stackable>
+                            <Grid.Column>
+                              <Visibility onUpdate={this.handleUpdateImg}>
+                                <Image
+                                  src={`/static/images/ERC721/${this.props.id}_w.jpg`}
+                                  size="big"
+                                  wrapped
+                                />
+                              </Visibility>
+                            </Grid.Column>
+                            <Grid.Column
+                              textAlign="left"
+                              style={{ paddingTop: '5%' }}
+                            >
+                              <p style={{ whiteSpace: 'pre-line' }}>
+                                {this.state.description}
+                              </p>
+                            </Grid.Column>
+                          </Grid>
+                        </Container>
+                      </Media>
+                      <Media at="mobile">
+                        <div
+                          style={{
+                            background: 'rgba(0,0,0,.05)',
+                            paddingBottom: '5px',
+                          }}
+                        >
+                          <Grid columns="2" stackable>
+                            <Grid.Column>
+                              <Visibility onUpdate={this.handleUpdateImg}>
+                                <Image
+                                  src={`/static/images/ERC721/${this.props.id}_w.jpg`}
+                                  size="big"
+                                  wrapped
+                                />
+                              </Visibility>
+                            </Grid.Column>
+                            <Grid.Column textAlign="left">
+                              <p
+                                style={{
+                                  whiteSpace: 'pre-line',
+                                  marginTop: '-0.5rem',
+                                  marginBottom: '1rem',
+                                }}
+                              >
+                                {this.state.description}
+                              </p>
+                            </Grid.Column>
+                          </Grid>
+                        </div>
+                      </Media>
+                    </MediaContextProvider>
                   ) : (
                     // only has an image
-                    <Container
-                      textAlign="center"
+                    <div
                       style={{
                         background: 'rgba(0,0,0,.05)',
-                        overflow: 'auto',
                       }}
                     >
                       <Image
@@ -228,50 +271,73 @@ class TokenDetails extends Component {
                         size="big"
                         wrapped
                       />
-                    </Container>
+                    </div>
                   )
                 ) : this.state.description ? ( // only has description
-                  <Container
-                    textAlign="center"
-                    style={{
-                      background: 'rgba(0,0,0,.05)',
-                      paddingTop: '5px',
-                      paddingBottom: '5px',
-                    }}
-                  >
-                    <Grid columns="2">
-                      <Grid.Column>
-                        <Jdenticon
-                          value={this.props.id}
-                          size={this.state.jdentHeigth}
-                        />
-                      </Grid.Column>
-                      <Grid.Column
-                        textAlign="left"
-                        style={{ paddingTop: '5%' }}
+                  <MediaContextProvider>
+                    <Media greaterThan="mobile">
+                      <div
+                        style={{
+                          background: 'rgba(0,0,0,.05)',
+                          paddingTop: '5px',
+                          paddingBottom: '5px',
+                        }}
                       >
-                        <p style={{ whiteSpace: 'pre-line' }}>
-                          {this.state.description}
-                        </p>
-                      </Grid.Column>
-                    </Grid>
-                  </Container>
+                        <Grid columns="2" stackable>
+                          <Grid.Column>
+                            <Jdenticon value={this.props.id} size="40vh" />
+                          </Grid.Column>
+                          <Grid.Column
+                            textAlign="left"
+                            style={{ paddingTop: '5%' }}
+                          >
+                            <p style={{ whiteSpace: 'pre-line' }}>
+                              {this.state.description}
+                            </p>
+                          </Grid.Column>
+                        </Grid>
+                      </div>
+                    </Media>
+                    <Media at="mobile">
+                      <div
+                        style={{
+                          background: 'rgba(0,0,0,.05)',
+                          paddingTop: '5px',
+                          paddingBottom: '5px',
+                        }}
+                      >
+                        <Grid columns="2" stackable>
+                          <Grid.Column>
+                            <Jdenticon value={this.props.id} size="40vh" />
+                          </Grid.Column>
+                          <Grid.Column textAlign="left">
+                            <Container>
+                              <p
+                                style={{
+                                  whiteSpace: 'pre-line',
+                                  marginTop: '-2rem',
+                                  marginBottom: '1rem',
+                                }}
+                              >
+                                {this.state.description}
+                              </p>
+                            </Container>
+                          </Grid.Column>
+                        </Grid>
+                      </div>
+                    </Media>
+                  </MediaContextProvider>
                 ) : (
                   // doens't have anything
-                  <Container
-                    textAlign="center"
+                  <div
                     style={{
                       background: 'rgba(0,0,0,.05)',
-                      overflow: 'auto',
                       paddingTop: '5px',
                       paddingBottom: '5px',
                     }}
                   >
-                    <Jdenticon
-                      value={this.props.id}
-                      size={this.state.jdentHeigth}
-                    />
-                  </Container>
+                    <Jdenticon value={this.props.id} size="40vh" />
+                  </div>
                 )
               ) : (
                 <Placeholder fluid>
@@ -331,98 +397,131 @@ class TokenDetails extends Component {
               </Card.Content>
 
               <Card.Content extra>
-                <Container textAlign="left">
-                  <Link route="/tokens">
-                    <a
-                      onClick={() => {
-                        this.setState({ mounted: false });
-                      }}
-                    >
-                      <Button>
-                        <Icon name="arrow alternate circle left" /> Back
-                      </Button>
-                    </a>
-                  </Link>
-                </Container>
+                <Grid columns={3} stackable>
+                  <MediaContextProvider>
+                    {typeof window !== 'undefined' &&
+                      window.screen.width > 786 && ( // if on computer, show back button on the left
+                        <Grid.Column textAlign="left">
+                          <Media greaterThan="tablet">
+                            <Link route="/tokens">
+                              <a
+                                onClick={() => {
+                                  this.setState({ mounted: false });
+                                }}
+                              >
+                                <Button>
+                                  <Icon name="arrow alternate circle left" />{' '}
+                                  Back
+                                </Button>
+                              </a>
+                            </Link>
+                          </Media>
+                        </Grid.Column>
+                      )}
 
-                {this.state.tokenInfo['owner'] &&
-                this.state.tokenInfo['owner'] == currentAccount ? (
-                  <div style={{ marginTop: '-35.6px' }}>
-                    <Link route={`/sell/${this.props.id}`}>
-                      <a
-                        onClick={() => {
-                          this.setState({ mounted: false });
-                        }}
-                      >
-                        <Button>
-                          {Number(this.state.tokenInfo['price'])
-                            ? 'Change price or remove from sale'
-                            : 'Put up for sale'}
-                          <Icon name="tag right" />
-                        </Button>
-                      </a>
-                    </Link>
-                    <Link route={`/gift/${this.props.id}`}>
-                      <a
-                        onClick={() => {
-                          this.setState({ mounted: false });
-                        }}
-                      >
-                        <Button>
-                          Gift token
-                          <Icon name="gift right" />
-                        </Button>
-                      </a>
-                    </Link>
+                    {this.state.tokenInfo['owner'] &&
+                    this.state.tokenInfo['owner'] == currentAccount ? (
+                      <>
+                        <Grid.Column textAlign="center">
+                          <Link route={`/sell/${this.props.id}`}>
+                            <a
+                              onClick={() => {
+                                this.setState({ mounted: false });
+                              }}
+                            >
+                              <Button style={{ marginBottom: '.5rem' }}>
+                                {Number(this.state.tokenInfo['price'])
+                                  ? 'Change price or remove from sale'
+                                  : 'Put up for sale'}
+                                <Icon name="tag right" />
+                              </Button>
+                            </a>
+                          </Link>
+                          <Link route={`/gift/${this.props.id}`}>
+                            <a
+                              onClick={() => {
+                                this.setState({ mounted: false });
+                              }}
+                            >
+                              <Button>
+                                Gift token
+                                <Icon name="gift right" />
+                              </Button>
+                            </a>
+                          </Link>
+                        </Grid.Column>
 
-                    {this.state.image && (
-                      <Container
-                        textAlign="right"
-                        style={{ marginTop: '-35.6px' }}
-                      >
-                        <p>
-                          <a
-                            href={`/static/images/ERC721/${this.props.id}.jpg`}
-                            download
-                          >
-                            <Button>
-                              <Icon name="download" /> Download image
-                            </Button>
-                          </a>
-                        </p>
-                        <p>
-                          <a
-                            href={`/static/images/ERC721/${this.props.id}.gif`}
-                            download
-                          >
-                            <Button>
-                              <Icon name="download" /> Download GIF
-                            </Button>
-                          </a>
-                        </p>
-                      </Container>
+                        <Grid.Column
+                          textAlign={
+                            window.screen.width > 786 ? 'right' : 'center'
+                          }
+                        >
+                          {this.state.image && (
+                            <>
+                              <p>
+                                <a
+                                  href={`/static/images/ERC721/${this.props.id}.jpg`}
+                                  download
+                                >
+                                  <Button>
+                                    <Icon name="download" /> Download image
+                                  </Button>
+                                </a>
+                              </p>
+                              <p>
+                                <a
+                                  href={`/static/images/ERC721/${this.props.id}.gif`}
+                                  download
+                                >
+                                  <Button>
+                                    <Icon name="download" /> Download GIF
+                                  </Button>
+                                </a>
+                              </p>
+                            </>
+                          )}
+                        </Grid.Column>
+                      </>
+                    ) : (
+                      ''
                     )}
-                  </div>
-                ) : (
-                  ''
-                )}
 
-                {this.state.tokenInfo['owner'] != currentAccount &&
-                Number(this.state.tokenInfo['price']) ? (
-                  <div style={{ marginTop: '-35.6px' }}>
-                    <Button
-                      primary
-                      onClick={this.buyToken}
-                      loading={this.state.buyLoading}
-                      disabled={this.state.buyLoading}
-                    >
-                      Buy token
-                      <Icon name="shopping cart right" />
-                    </Button>
-                  </div>
-                ) : (
-                  ''
-                )}
+                    {this.state.tokenInfo['owner'] != currentAccount &&
+                    Number(this.state.tokenInfo['price']) ? (
+                      <>
+                        <Grid.Column textAlign="center">
+                          <Button
+                            primary
+                            onClick={this.buyToken}
+                            loading={this.state.buyLoading}
+                            disabled={this.state.buyLoading}
+                          >
+                            Buy token
+                            <Icon name="shopping cart right" />
+                          </Button>
+                        </Grid.Column>
+                      </>
+                    ) : (
+                      ''
+                    )}
+
+                    <Grid.Column textAlign="center">
+                      <Media lessThan="computer">
+                        <Link route="/tokens">
+                          <a
+                            onClick={() => {
+                              this.setState({ mounted: false });
+                            }}
+                          >
+                            <Button>
+                              <Icon name="arrow alternate circle left" /> Back
+                            </Button>
+                          </a>
+                        </Link>
+                      </Media>
+                    </Grid.Column>
+                  </MediaContextProvider>
+                </Grid>
               </Card.Content>
             </Card>
           </Visibility>
