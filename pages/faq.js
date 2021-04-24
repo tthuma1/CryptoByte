@@ -158,7 +158,20 @@ let panels = [
     key: '9',
     title:
       'Can I purchase Crypto Byte Collectible tokens on my mobile phone or tablet?',
-    content: 'No, it is not yet supported.',
+    content: {
+      content: (
+        <div>
+          <p>
+            Yes, you can use the MetaMask mobile browser to make purchases.
+            Other browsers are currently unsupported.
+          </p>
+          <p style={{ color: '#555' }}>
+            Note: If you have 0 ETH in your account, you will get an error
+            telling you that you aren't logged into your account.
+          </p>
+        </div>
+      ),
+    },
   },
   {
     key: '10',
