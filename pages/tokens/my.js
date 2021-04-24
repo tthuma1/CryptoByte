@@ -367,17 +367,13 @@ class TokensOfOwner extends Component {
         >
           {this.state.isValidAccount ? (
             <div>
-              <Header
-                as="h2"
-                inverted
-                dividing
-                style={{
-                  wordBreak: 'break-all',
-                }}
-              >
-                {this.state.isOwner || typeof this.state.isOwner === 'undefined'
-                  ? currentAccount
-                  : this.props.owner}{' '}
+              <Header as="h2" inverted dividing>
+                <span style={{ wordBreak: 'break-all' }}>
+                  {this.state.isOwner ||
+                  typeof this.state.isOwner === 'undefined'
+                    ? currentAccount
+                    : this.props.owner}{' '}
+                </span>
                 <span style={{ color: '#E8E8E8' }}>owns</span>{' '}
                 {this.state.balance}{' '}
                 <span style={{ color: '#E8E8E8' }}>
