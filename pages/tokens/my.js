@@ -21,7 +21,7 @@ import Jdenticon from '../../components/Jdenticon';
 import axios from 'axios';
 import Head from 'next/head';
 
-let currentAccount, headerEl, footerEl;
+let currentAccount, headerEl, accountBalance;
 let viking = process.env.VIKING_AMOUNT.split(',');
 let vikingAmount = viking.length;
 let specialEdition = process.env.SPECIAL_EDITION.split(',');
@@ -60,6 +60,12 @@ class TokensOfOwner extends Component {
       currentAccount = (await web3).utils.toChecksumAddress(
         window.ethereum.selectedAddress
       );
+
+      accountBalance = await window.ethereum.request({
+        method: 'eth_getBalance',
+        params: [currentAccount, 'latest'],
+      });
+      accountBalance = (await web3).utils.fromWei(accountBalance, 'ether');
     }
 
     if (this.props.owner != '') {
@@ -175,18 +181,30 @@ class TokensOfOwner extends Component {
     });
 
     try {
+      if (accountBalance < this.state.tokenInfo[id]['priceETH']) {
+        alert(
+          'Insufficient funds! At least ' +
+            this.state.tokenInfo[id]['priceETH'] +
+            ' ETH is required for the transaction.'
+        );
+
+        throw 'Insufficient funds!';
+      }
+
       await (await cryptoByte721).methods.buyToken(id).send({
         from: currentAccount,
         value: this.state.tokenInfo[id]['price'],
       });
 
       Router.replaceRoute(`/tokens/${this.props.owner}`);
-    } catch {
-      this.setState({ mmprompt: true });
+    } catch (err) {
+      if (err != 'Insufficient funds!') {
+        this.setState({ mmprompt: true });
 
-      setTimeout(() => {
-        this.setState({ mmprompt: false });
-      }, 100);
+        setTimeout(() => {
+          this.setState({ mmprompt: false });
+        }, 100);
+      }
     }
 
     this.setState((prevState) => {

@@ -166,9 +166,9 @@ let panels = [
             Other browsers are currently unsupported.
           </p>
           <p style={{ color: '#555' }}>
-            Note: If you have 0 ETH in your account, you will get an error
-            telling you that you aren't logged into your account when attempting
-            to purchase tokens.
+            Note: You must have sufficient funds in your account for sending
+            transactions. Otherwise you will get an error telling you that you
+            aren't logged into your account when attempting to purchase tokens.
           </p>
         </div>
       ),

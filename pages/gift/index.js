@@ -13,7 +13,7 @@ import MMPrompt from '../../components/MMPrompt';
 import web3 from '../../ethereum/web3';
 import Head from 'next/head';
 
-let currentAccount, headerEl;
+let currentAccount, headerEl, accountBalance;
 
 class GiftToken extends Component {
   state = {
@@ -37,6 +37,12 @@ class GiftToken extends Component {
       currentAccount = (await web3).utils.toChecksumAddress(
         window.ethereum.selectedAddress
       );
+
+      accountBalance = await window.ethereum.request({
+        method: 'eth_getBalance',
+        params: [currentAccount, 'latest'],
+      });
+      accountBalance = (await web3).utils.fromWei(accountBalance, 'ether');
     }
 
     headerEl = document.getElementById('header');
@@ -61,6 +67,12 @@ class GiftToken extends Component {
         throw { message: 'Invalid receiver address.' };
       }
 
+      if (accountBalance == 0) {
+        alert('Insufficient funds!');
+
+        throw 'Insufficient funds!';
+      }
+
       await (await cryptoByte721).methods
         .safeTransferFrom(currentAccount, this.state.recAddr, this.props.id)
         .send({
@@ -69,11 +81,13 @@ class GiftToken extends Component {
 
       this.setState({ loading: false, success: true });
     } catch (err) {
-      await this.setState({
+      this.setState({
         loading: false,
         msgErr:
           err.message == 'Invalid receiver address.'
             ? err.message
+            : err == 'Insufficient funds!'
+            ? err
             : "You aren't logged in your MetaMask account.",
       });
 

@@ -14,7 +14,7 @@ import web3 from '../../ethereum/web3';
 import { Router } from '../../routes';
 import Head from 'next/head';
 
-let currentAccount, headerEl;
+let currentAccount, headerEl, accountBalance;
 
 class SellToken extends Component {
   state = {
@@ -40,6 +40,12 @@ class SellToken extends Component {
       currentAccount = (await web3).utils.toChecksumAddress(
         window.ethereum.selectedAddress
       );
+
+      accountBalance = await window.ethereum.request({
+        method: 'eth_getBalance',
+        params: [currentAccount, 'latest'],
+      });
+      accountBalance = (await web3).utils.fromWei(accountBalance, 'ether');
     }
 
     headerEl = document.getElementById('header');
@@ -69,6 +75,12 @@ class SellToken extends Component {
     event.preventDefault();
     this.setState({ saleLoading: true, msgErr: '' });
     try {
+      if (accountBalance == 0) {
+        alert('Insufficient funds!');
+
+        throw 'Insufficient funds!';
+      }
+
       await (await cryptoByte721).methods.setTokenPrice(this.props.id, 0).send({
         from: currentAccount,
       });
@@ -76,30 +88,45 @@ class SellToken extends Component {
       this.setState({ saleLoading: false, success: true });
       Router.pushRoute(`/token/${this.props.id}`);
     } catch (err) {
-      this.setState({
-        saleLoading: false,
-        msgErr: "You aren't logged in your MetaMask account.",
-        mmprompt: true,
-      });
+      if (err != 'Insufficient funds!') {
+        this.setState({
+          msgErr: "You aren't logged in your MetaMask account.",
+          mmprompt: true,
+        });
 
-      setTimeout(() => {
-        this.setState({ mmprompt: false });
-      }, 100);
+        setTimeout(() => {
+          this.setState({ mmprompt: false });
+        }, 100);
+      } else {
+        // if insufficient funds
+        this.setState({ msgErr: err });
+      }
     }
 
+    let currentPrice = await (await cryptoByte721).methods
+      .getTokenPrice(this.props.id)
+      .call();
+    currentPrice = (await web3).utils.fromWei(currentPrice, 'ether');
+
     this.setState({
-      currentPrice: await (await cryptoByte721).methods
-        .getTokenPrice(this.props.id)
-        .call(),
+      currentPrice,
+      saleLoading: false,
     });
   };
 
   onSubmit = async (event) => {
     event.preventDefault();
     this.setState({ loading: true, msgErr: '' });
+
     try {
       if (this.state.newPriceErr || this.state.newPrice === '') {
         throw { message: 'Invalid token price.' };
+      }
+
+      if (accountBalance == 0) {
+        alert('Insufficient funds!');
+
+        throw 'Insufficient funds!';
       }
 
       await (await cryptoByte721).methods
@@ -114,11 +141,13 @@ class SellToken extends Component {
       this.setState({ loading: false, success: true });
       Router.pushRoute(`/token/${this.props.id}`);
     } catch (err) {
-      await this.setState({
+      this.setState({
         loading: false,
         msgErr:
           err.message == 'Invalid token price.'
             ? err.message
+            : err == 'Insufficient funds!'
+            ? err
             : "You aren't logged in your MetaMask account.",
       });
 

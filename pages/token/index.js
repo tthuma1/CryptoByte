@@ -20,7 +20,7 @@ import MMPrompt from '../../components/MMPrompt';
 import Head from 'next/head';
 import { Media, MediaContextProvider } from '../../components/Media';
 
-let currentAccount, headerEl;
+let currentAccount, headerEl, accountBalance;
 let viking = process.env.VIKING_AMOUNT.split(',');
 let vikingAmount = viking.length;
 let specialEdition = process.env.SPECIAL_EDITION.split(',');
@@ -55,6 +55,12 @@ class TokenDetails extends Component {
       currentAccount = (await web3).utils.toChecksumAddress(
         window.ethereum.selectedAddress
       );
+
+      accountBalance = await window.ethereum.request({
+        method: 'eth_getBalance',
+        params: [currentAccount, 'latest'],
+      });
+      accountBalance = (await web3).utils.fromWei(accountBalance, 'ether');
     }
 
     headerEl = document.getElementById('header');
@@ -125,6 +131,16 @@ class TokenDetails extends Component {
 
     this.setState({ buyLoading: true, msgErr: '' });
     try {
+      if (accountBalance < this.state.tokenInfo['priceETH']) {
+        alert(
+          'Insufficient funds! At least ' +
+            this.state.tokenInfo['priceETH'] +
+            ' ETH is required for the transaction.'
+        );
+
+        throw 'Insufficient funds!';
+      }
+
       await (await cryptoByte721).methods.buyToken(this.props.id).send({
         from: currentAccount,
         value: this.state.tokenInfo['price'],
@@ -132,16 +148,21 @@ class TokenDetails extends Component {
 
       Router.replaceRoute(`/token/${this.props.id}`);
     } catch (err) {
-      console.log(err);
+      if (err != 'Insufficient funds!') {
+        this.setState({
+          msgErr: "You aren't logged in your MetaMask account.",
+          mmprompt: true,
+        });
 
-      this.setState({
-        msgErr: "You aren't logged in your MetaMask account.",
-        mmprompt: true,
-      });
-
-      setTimeout(() => {
-        this.setState({ mmprompt: false });
-      }, 100);
+        setTimeout(() => {
+          this.setState({ mmprompt: false });
+        }, 100);
+      } else {
+        // if insufficient funds
+        this.setState({
+          msgErr: err,
+        });
+      }
     }
 
     this.setState({ buyLoading: false });

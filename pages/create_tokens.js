@@ -16,7 +16,7 @@ import Jdenticon from '../components/Jdenticon';
 import { Router } from '../routes';
 import Head from 'next/head';
 
-let headerEl, currentAccount;
+let headerEl, currentAccount, accountBalance;
 let priceETH = 0;
 let viking = process.env.VIKING_AMOUNT.split(',');
 let vikingAmount = viking.length;
@@ -43,6 +43,12 @@ class BuyToken721 extends Component {
       currentAccount = (await web3).utils.toChecksumAddress(
         window.ethereum.selectedAddress
       );
+
+      accountBalance = await window.ethereum.request({
+        method: 'eth_getBalance',
+        params: [currentAccount, 'latest'],
+      });
+      accountBalance = (await web3).utils.fromWei(accountBalance, 'ether');
     }
 
     headerEl = document.getElementById('header');
@@ -85,6 +91,16 @@ class BuyToken721 extends Component {
     this.setState({ loading: true, msgErr: '', success: false });
 
     try {
+      if (accountBalance < priceETH.toFixed()) {
+        alert(
+          'Insufficient funds! At least ' +
+            priceETH.toFixed() +
+            ' ETH is required for the transaction.'
+        );
+
+        throw 'Insufficient funds!';
+      }
+
       await (await cryptoByte721).methods.safeMint(currentAccount).send({
         from: currentAccount,
         value: (await web3).utils.toWei(priceETH.toFixed(), 'ether'),
@@ -93,16 +109,22 @@ class BuyToken721 extends Component {
       this.setState({ loading: false, success: true });
       Router.pushRoute(`/token/${this.state.id}`);
     } catch (err) {
-      this.setState({
-        loading: false,
-        msgErr: "You aren't logged in your MetaMask account.",
-        mmprompt: true,
-      });
+      if (err != 'Insufficient funds!') {
+        this.setState({
+          msgErr: "You aren't logged in your MetaMask account.",
+          mmprompt: true,
+        });
 
-      setTimeout(() => {
-        this.setState({ mmprompt: false });
-      }, 100);
+        setTimeout(() => {
+          this.setState({ mmprompt: false });
+        }, 100);
+      } else {
+        // if insufficient funds
+        this.setState({ msgErr: err });
+      }
     }
+
+    this.setState({ loading: false });
   };
 
   render() {
