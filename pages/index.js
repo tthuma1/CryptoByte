@@ -10,7 +10,6 @@ import {
   Grid,
   Message,
   Image,
-  Embed,
 } from 'semantic-ui-react';
 import cryptoByte721 from '../ethereum/cryptoByte721';
 import { Link } from '../routes';
@@ -50,10 +49,11 @@ class CryptoByteIndex extends Component {
   }
 
   getCryptoByteInfo = async () => {
-    name = await cryptoByte721.methods.name().call();
-    symbol = await cryptoByte721.methods.symbol().call();
-    mintPrice = await cryptoByte721.methods.getMintPrice().call();
-    totalSupply = await cryptoByte721.methods.totalSupply().call();
+    name = await (await cryptoByte721).methods.name().call();
+    symbol = await (await cryptoByte721).methods.symbol().call();
+    mintPrice = await (await cryptoByte721).methods.getMintPrice().call();
+    mintPrice = (await web3).utils.fromWei(mintPrice, 'ether');
+    totalSupply = await (await cryptoByte721).methods.totalSupply().call();
   };
 
   pulse = () => {
@@ -275,8 +275,7 @@ class CryptoByteIndex extends Component {
               <Grid.Row>
                 <Grid.Column>
                   <p>
-                    Price to create a new token:{' '}
-                    <b>{web3.utils.fromWei(mintPrice, 'ether')} ETH</b>
+                    Price to create a new token: <b>{mintPrice} ETH</b>
                   </p>
                 </Grid.Column>
                 <Grid.Column>

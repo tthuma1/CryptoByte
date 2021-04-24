@@ -1,17 +1,37 @@
 import Web3 from 'web3';
+import detectEthereumProvider from '@metamask/detect-provider';
 
-let web3;
+async function web3() {
+  let provider;
 
-if (
-  typeof window !== 'undefined' &&
-  typeof window.ethereum !== 'undefined' &&
-  window.ethereum.networkVersion === process.env.NETWORK_VERSION
-) {
-  web3 = new Web3(window.ethereum);
-} else {
-  const provider = new Web3.providers.HttpProvider(process.env.INFURA_ENDPOINT);
+  try {
+    if (typeof window !== 'undefined') {
+      provider = await detectEthereumProvider();
+    } else {
+      throw 'window is not defined due to SSR';
+    }
 
-  web3 = new Web3(provider);
+    // provider === window.ethereum
+    if (provider) {
+      const chainId = await provider.request({
+        method: 'eth_chainId',
+      });
+
+      if (chainId != process.env.CHAIN_ID) {
+        // if MetaMask is installed but connected to wrong network
+        provider = new Web3.providers.HttpProvider(process.env.INFURA_ENDPOINT);
+      }
+    } else {
+      // if MetaMask is not installed
+      provider = new Web3.providers.HttpProvider(process.env.INFURA_ENDPOINT);
+    }
+  } catch (err) {
+    // if window isn't defined (SSR)
+    provider = new Web3.providers.HttpProvider(process.env.INFURA_ENDPOINT);
+  }
+
+  // provider will be either window.ethereum or Infura
+  return new Web3(provider);
 }
 
-export default web3;
+export default web3();

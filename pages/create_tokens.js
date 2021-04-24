@@ -38,7 +38,12 @@ class BuyToken721 extends Component {
   };
 
   async componentDidMount() {
-    currentAccount = (await web3.eth.getAccounts())[0];
+    await web3;
+    if (window.ethereum && window.ethereum.selectedAddress) {
+      currentAccount = (await web3).utils.toChecksumAddress(
+        window.ethereum.selectedAddress
+      );
+    }
 
     headerEl = document.getElementById('header');
 
@@ -51,17 +56,19 @@ class BuyToken721 extends Component {
       }
     }, 100);
 
-    priceETH = await cryptoByte721.methods.getMintPrice().call();
+    priceETH = await (await cryptoByte721).methods.getMintPrice().call();
     priceETH = BigNumber(priceETH).div('1e+18');
 
     this.setState({
-      initialId: Number(await cryptoByte721.methods.totalSupply().call()) + 1,
-      id: Number(await cryptoByte721.methods.totalSupply().call()) + 1,
+      initialId:
+        Number(await (await cryptoByte721).methods.totalSupply().call()) + 1,
+      id: Number(await (await cryptoByte721).methods.totalSupply().call()) + 1,
     });
 
     setInterval(async () => {
       this.setState({
-        id: Number(await cryptoByte721.methods.totalSupply().call()) + 1,
+        id:
+          Number(await (await cryptoByte721).methods.totalSupply().call()) + 1,
       });
 
       if (this.state.id != this.state.initialId) {
@@ -78,9 +85,9 @@ class BuyToken721 extends Component {
     this.setState({ loading: true, msgErr: '', success: false });
 
     try {
-      await cryptoByte721.methods.safeMint(currentAccount).send({
+      await (await cryptoByte721).methods.safeMint(currentAccount).send({
         from: currentAccount,
-        value: web3.utils.toWei(priceETH.toFixed(), 'ether'),
+        value: (await web3).utils.toWei(priceETH.toFixed(), 'ether'),
       });
 
       this.setState({ loading: false, success: true });

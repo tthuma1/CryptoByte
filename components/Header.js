@@ -3,6 +3,7 @@ import { Menu, Dropdown, Sidebar, Icon, Button } from 'semantic-ui-react';
 import { Link } from '../routes';
 import web3 from '../ethereum/web3';
 import { Media, MediaContextProvider } from './Media';
+import MMPrompt from './MMPrompt';
 
 let currentAccount;
 
@@ -14,7 +15,10 @@ class Header extends React.Component {
   };
 
   async componentDidMount() {
-    currentAccount = (await web3.eth.getAccounts())[0];
+    await web3;
+    if (window.ethereum) {
+      currentAccount = window.ethereum.selectedAddress;
+    }
 
     const interval = setInterval(() => {
       if (!this.state.hasMounted && this.props.mounted == true) {
@@ -56,11 +60,38 @@ class Header extends React.Component {
 }
 
 class DesktopHeader extends Component {
-  state = { MMreq: false };
+  state = { MMreq: false, mmprompt: false };
+
+  handleConnect = async () => {
+    try {
+      this.setState({ MMreq: true });
+
+      // if window.ethereum is undefined
+      if (!window.ethereum) throw 'MetaMask not installed';
+      // if provider isn't MetaMask
+      else if (!window.ethereum.isMetaMask) throw 'MetaMask not installed';
+
+      // Request account access
+      await ethereum.request({ method: 'eth_requestAccounts' });
+    } catch (error) {
+      console.log(error);
+      this.setState({ MMreq: false });
+
+      if (error == 'MetaMask not installed') {
+        this.setState({ mmprompt: true });
+
+        setTimeout(() => {
+          this.setState({ mmprompt: false });
+        }, 100);
+      }
+    }
+  };
 
   render() {
     return (
       <div>
+        <MMPrompt visible={this.state.mmprompt} />
+
         <Menu
           inverted
           fixed="top"
@@ -107,20 +138,12 @@ class DesktopHeader extends Component {
           </Link>
 
           <Menu.Menu position="right">
-            {typeof currentAccount === 'undefined' && (
+            {!currentAccount && (
               <Menu.Item
                 className="item"
                 disabled={this.state.MMreq}
                 style={{ padding: '0' }}
-                onClick={() => {
-                  try {
-                    this.setState({ MMreq: true });
-                    // Request account access
-                    ethereum.request({ method: 'eth_requestAccounts' });
-                  } catch (error) {
-                    console.log(error);
-                  }
-                }}
+                onClick={this.handleConnect}
               >
                 <Button
                   disabled={this.state.MMreq}
@@ -147,7 +170,7 @@ class DesktopHeader extends Component {
 }
 
 class MobileHeader extends Component {
-  state = { open: false };
+  state = { open: false, MMreq: false, mmprompt: false };
 
   handleHide = (ev) => {
     // prevent automatic closing (caused by MMPrompt)
@@ -158,9 +181,34 @@ class MobileHeader extends Component {
 
   handleOpen = () => this.setState({ open: true });
 
+  handleConnect = async () => {
+    try {
+      this.setState({ MMreq: true });
+
+      if (!window.ethereum) throw 'MetaMask not installed';
+      else if (!window.ethereum.isMetaMask) throw 'MetaMask not installed';
+
+      // Request account access
+      await ethereum.request({ method: 'eth_requestAccounts' });
+    } catch (error) {
+      console.log(error);
+      this.setState({ MMreq: false });
+
+      if (error == 'MetaMask not installed') {
+        this.setState({ mmprompt: true });
+
+        setTimeout(() => {
+          this.setState({ mmprompt: false });
+        }, 100);
+      }
+    }
+  };
+
   render() {
     return (
       <div>
+        <MMPrompt visible={this.state.mmprompt} />
+
         <Sidebar
           as={Menu}
           animation="overlay"
@@ -228,20 +276,12 @@ class MobileHeader extends Component {
           </Menu.Item>
 
           <Menu.Menu position="right">
-            {typeof currentAccount === 'undefined' && (
+            {!currentAccount && (
               <Menu.Item
                 className="item"
                 disabled={this.state.MMreq}
                 style={{ padding: '0' }}
-                onClick={() => {
-                  try {
-                    this.setState({ MMreq: true });
-                    // Request account access
-                    ethereum.request({ method: 'eth_requestAccounts' });
-                  } catch (error) {
-                    console.log(error);
-                  }
-                }}
+                onClick={this.handleConnect}
               >
                 <Button
                   disabled={this.state.MMreq}

@@ -35,7 +35,12 @@ class SellToken extends Component {
   }
 
   async componentDidMount() {
-    currentAccount = (await web3.eth.getAccounts())[0];
+    await web3;
+    if (window.ethereum && window.ethereum.selectedAddress) {
+      currentAccount = (await web3).utils.toChecksumAddress(
+        window.ethereum.selectedAddress
+      );
+    }
 
     headerEl = document.getElementById('header');
 
@@ -48,10 +53,13 @@ class SellToken extends Component {
       }
     }, 100);
 
+    let currentPrice = await (await cryptoByte721).methods
+      .getTokenPrice(this.props.id)
+      .call();
+    currentPrice = (await web3).utils.fromWei(currentPrice, 'ether');
+
     this.setState({
-      currentPrice: await cryptoByte721.methods
-        .getTokenPrice(this.props.id)
-        .call(),
+      currentPrice,
     });
 
     this.setState({ mounted: true });
@@ -61,7 +69,7 @@ class SellToken extends Component {
     event.preventDefault();
     this.setState({ saleLoading: true, msgErr: '' });
     try {
-      await cryptoByte721.methods.setTokenPrice(this.props.id, 0).send({
+      await (await cryptoByte721).methods.setTokenPrice(this.props.id, 0).send({
         from: currentAccount,
       });
 
@@ -80,7 +88,7 @@ class SellToken extends Component {
     }
 
     this.setState({
-      currentPrice: await cryptoByte721.methods
+      currentPrice: await (await cryptoByte721).methods
         .getTokenPrice(this.props.id)
         .call(),
     });
@@ -94,10 +102,10 @@ class SellToken extends Component {
         throw { message: 'Invalid token price.' };
       }
 
-      await cryptoByte721.methods
+      await (await cryptoByte721).methods
         .setTokenPrice(
           this.props.id,
-          web3.utils.toWei(this.state.newPrice, 'ether')
+          (await web3).utils.toWei(this.state.newPrice, 'ether')
         )
         .send({
           from: currentAccount,
@@ -219,8 +227,8 @@ class SellToken extends Component {
                   }}
                 >
                   This token is currently up for sale for{' '}
-                  {web3.utils.fromWei(this.state.currentPrice, 'ether')} ETH. To
-                  remove it from sale, click the button bellow.
+                  {this.state.currentPrice} ETH. To remove it from sale, click
+                  the button bellow.
                 </p>
                 <Button
                   color="red"

@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import { Modal, Button, Header, Image } from 'semantic-ui-react';
 import { Link } from '../routes';
-import web3 from '../ethereum/web3';
 import { Media, MediaContextProvider } from './Media';
 
 class MMPrompt extends Component {
   state = { modalOpen: false };
+
+  async componentDidMount() {
+    setInterval(() => {
+      if (this.props.visible == true) {
+        this.handleOpen();
+      }
+    }, 100);
+  }
 
   handleClose = () => {
     this.setState({ modalOpen: false });

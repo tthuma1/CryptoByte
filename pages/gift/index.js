@@ -32,7 +32,12 @@ class GiftToken extends Component {
   }
 
   async componentDidMount() {
-    currentAccount = (await web3.eth.getAccounts())[0];
+    await web3;
+    if (window.ethereum && window.ethereum.selectedAddress) {
+      currentAccount = (await web3).utils.toChecksumAddress(
+        window.ethereum.selectedAddress
+      );
+    }
 
     headerEl = document.getElementById('header');
 
@@ -56,7 +61,7 @@ class GiftToken extends Component {
         throw { message: 'Invalid receiver address.' };
       }
 
-      await cryptoByte721.methods
+      await (await cryptoByte721).methods
         .safeTransferFrom(currentAccount, this.state.recAddr, this.props.id)
         .send({
           from: currentAccount,

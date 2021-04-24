@@ -18,8 +18,7 @@ import axios from 'axios';
 import MMPrompt from '../../components/MMPrompt';
 import Head from 'next/head';
 
-let headerEl;
-let currentAccount;
+let headerEl, currentAccount;
 let viking = process.env.VIKING_AMOUNT.split(',');
 let vikingAmount = viking.length;
 let specialEdition = process.env.SPECIAL_EDITION.split(',');
@@ -39,12 +38,17 @@ class AllTokens extends Component {
   };
 
   static async getInitialProps() {
-    const supply = await cryptoByte721.methods.totalSupply().call();
+    const supply = await (await cryptoByte721).methods.totalSupply().call();
     return { supply };
   }
 
   async componentDidMount() {
-    currentAccount = (await web3.eth.getAccounts())[0];
+    await web3;
+    if (window.ethereum && window.ethereum.selectedAddress) {
+      currentAccount = (await web3).utils.toChecksumAddress(
+        window.ethereum.selectedAddress
+      );
+    }
 
     headerEl = document.getElementById('header');
 
@@ -69,11 +73,18 @@ class AllTokens extends Component {
     for (let id = 1; id <= this.props.supply; id++) {
       tokenInfo[id] = {};
 
-      tokenInfo[id]['owner'] = await cryptoByte721.methods.ownerOf(id).call();
+      tokenInfo[id]['owner'] = await (await cryptoByte721).methods
+        .ownerOf(id)
+        .call();
 
-      tokenInfo[id]['price'] = await cryptoByte721.methods
+      tokenInfo[id]['price'] = await (await cryptoByte721).methods
         .getTokenPrice(id)
         .call();
+
+      tokenInfo[id]['priceETH'] = (await web3).utils.fromWei(
+        tokenInfo[id]['price'],
+        'ether'
+      );
 
       // check if token has image and save it in state
       try {
@@ -98,7 +109,7 @@ class AllTokens extends Component {
     });
 
     try {
-      await cryptoByte721.methods.buyToken(id).send({
+      await (await cryptoByte721).methods.buyToken(id).send({
         from: currentAccount,
         value: this.state.tokenInfo[id]['price'],
       });
@@ -202,10 +213,7 @@ class AllTokens extends Component {
                   <b>
                     {Number(this.state.tokenInfo[id]['price'])
                       ? 'Token price: ' +
-                        web3.utils.fromWei(
-                          this.state.tokenInfo[id]['price'],
-                          'ether'
-                        ) +
+                        this.state.tokenInfo[id]['priceETH'] +
                         ' ETH'
                       : 'Token not for sale'}
                   </b>

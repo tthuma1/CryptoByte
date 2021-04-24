@@ -50,7 +50,12 @@ class TokenDetails extends Component {
   }
 
   async componentDidMount() {
-    currentAccount = (await web3.eth.getAccounts())[0];
+    await web3;
+    if (window.ethereum && window.ethereum.selectedAddress) {
+      currentAccount = (await web3).utils.toChecksumAddress(
+        window.ethereum.selectedAddress
+      );
+    }
 
     headerEl = document.getElementById('header');
 
@@ -72,15 +77,19 @@ class TokenDetails extends Component {
   getTokenInfo = async () => {
     let tokenInfo = {};
 
-    tokenInfo['owner'] = await cryptoByte721.methods
+    tokenInfo['owner'] = await (await cryptoByte721).methods
       .ownerOf(this.props.id)
       .call();
-    tokenInfo['price'] = await cryptoByte721.methods
+    tokenInfo['price'] = await (await cryptoByte721).methods
       .getTokenPrice(this.props.id)
       .call();
+    tokenInfo['priceETH'] = (await web3).utils.fromWei(
+      tokenInfo['price'],
+      'ether'
+    );
 
     // get list of all Classic CRBC Tokens
-    const supply = await cryptoByte721.methods.totalSupply().call();
+    const supply = await (await cryptoByte721).methods.totalSupply().call();
     this.setState({ supply });
     let classicAll = [];
     for (let id = 1; id <= this.state.supply; id++) {
@@ -116,13 +125,15 @@ class TokenDetails extends Component {
 
     this.setState({ buyLoading: true, msgErr: '' });
     try {
-      await cryptoByte721.methods.buyToken(this.props.id).send({
+      await (await cryptoByte721).methods.buyToken(this.props.id).send({
         from: currentAccount,
         value: this.state.tokenInfo['price'],
       });
 
       Router.replaceRoute(`/token/${this.props.id}`);
     } catch (err) {
+      console.log(err);
+
       this.setState({
         msgErr: "You aren't logged in your MetaMask account.",
         mmprompt: true,
@@ -365,10 +376,7 @@ class TokenDetails extends Component {
                       <b>
                         {Number(this.state.tokenInfo['price'])
                           ? 'Token price: ' +
-                            web3.utils.fromWei(
-                              this.state.tokenInfo['price'],
-                              'ether'
-                            ) +
+                            this.state.tokenInfo['priceETH'] +
                             ' ETH'
                           : 'Token not for sale'}
                       </b>

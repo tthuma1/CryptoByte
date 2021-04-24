@@ -27,7 +27,12 @@ class SellToken extends Component {
   };
 
   async componentDidMount() {
-    currentAccount = (await web3.eth.getAccounts())[0];
+    await web3;
+    if (window.ethereum && window.ethereum.selectedAddress) {
+      currentAccount = (await web3).utils.toChecksumAddress(
+        window.ethereum.selectedAddress
+      );
+    }
 
     headerEl = document.getElementById('header');
 
@@ -52,6 +57,8 @@ class SellToken extends Component {
     totalSupply = await cryptoByte20.totalSupply();
     balance = currentAccount ? await cryptoByte20.balanceOf(currentAccount) : 0;
     */
+
+    buyPrice = (await web3).utils.fromWei(buyPrice, 'ether');
   };
 
   render() {
@@ -63,7 +70,8 @@ class SellToken extends Component {
             name="description"
             content="General information about the Crypto Byte ERC20 token."
           />
-          <meta name="robots" content="index, follow" />
+          {/* when page is done change noindex to index! */}
+          <meta name="robots" content="noindex, follow" />
         </Head>
         <MMPrompt visible={this.state.mmprompt} />
 
@@ -103,8 +111,7 @@ class SellToken extends Component {
               <Grid.Row>
                 <Grid.Column>
                   <p>
-                    Price to buy one token:{' '}
-                    <b>{web3.utils.fromWei(buyPrice, 'ether')} ETH</b>
+                    Price to buy one token: <b>{buyPrice} ETH</b>
                   </p>
                 </Grid.Column>
                 <Grid.Column>
