@@ -294,7 +294,7 @@ class CryptoByteIndex extends Component {
                 <Link route="https://metamask.io/">
                   <a target="_blank"> MetaMask</a>
                 </Link>{' '}
-                browser extension.
+                browser extension or MetaMask mobile browser installed.
               </p>
               <Image
                 src="/static/images/metamask-logo.jpg"

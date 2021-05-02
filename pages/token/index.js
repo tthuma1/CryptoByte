@@ -126,16 +126,14 @@ class TokenDetails extends Component {
     this.setState({ tokenInfo });
   };
 
-  buyToken = async (event) => {
-    event.preventDefault();
-
+  buyToken = async () => {
     this.setState({ buyLoading: true, msgErr: '' });
     try {
       if (accountBalance < this.state.tokenInfo['priceETH']) {
         alert(
           'Insufficient funds! At least ' +
             this.state.tokenInfo['priceETH'] +
-            ' ETH is required for the transaction.'
+            ' ETH + gas is required for the transaction.'
         );
 
         throw 'Insufficient funds!';

@@ -73,7 +73,10 @@ let panels = [
     content: {
       content: (
         <div>
-          <p>Chrome, Firefox, Brave and Edge browser.</p>
+          <p>
+            Chrome, Firefox, Brave and Edge browser. On mobile you can use the
+            MetaMask mobile browser.
+          </p>
           <p>
             Note: for security reasons always install browser extensions from
             verified sources.
@@ -168,7 +171,7 @@ let panels = [
           <p style={{ color: '#555' }}>
             Note: You must have sufficient funds in your account for sending
             transactions. Otherwise you will get an error telling you that you
-            aren't logged into your account when attempting to purchase tokens.
+            aren't logged in your account when attempting to purchase tokens.
           </p>
         </div>
       ),

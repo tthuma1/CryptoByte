@@ -170,10 +170,7 @@ class TokensOfOwner extends Component {
     }
   };
 
-  buyToken = async (event) => {
-    var id = event.target.name;
-    event.preventDefault();
-
+  buyToken = async (id) => {
     this.setState((prevState) => {
       let buyLoading = Object.assign({}, prevState.buyLoading);
       buyLoading[id] = true;
@@ -185,7 +182,7 @@ class TokensOfOwner extends Component {
         alert(
           'Insufficient funds! At least ' +
             this.state.tokenInfo[id]['priceETH'] +
-            ' ETH is required for the transaction.'
+            ' ETH + gas is required for the transaction.'
         );
 
         throw 'Insufficient funds!';
@@ -339,9 +336,10 @@ class TokensOfOwner extends Component {
                 Number(this.state.tokenInfo[id]['price']) &&
                 !this.state.isOwner ? (
                   <Button
-                    name={id}
                     primary
-                    onClick={this.buyToken}
+                    onClick={() => {
+                      this.buyToken(id);
+                    }}
                     loading={this.state.buyLoading[id]}
                     disabled={this.state.buyLoading[id]}
                     style={{ marginTop: '5px' }}
