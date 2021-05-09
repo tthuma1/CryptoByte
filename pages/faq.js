@@ -170,8 +170,8 @@ let panels = [
           </p>
           <p style={{ color: '#555' }}>
             Note: You must have sufficient funds in your account for sending
-            transactions. Otherwise you will get an error telling you that you
-            aren't logged in your account when attempting to purchase tokens.
+            transactions. Otherwise you will get an error when attempting to
+            purchase tokens.
           </p>
         </div>
       ),
