@@ -130,6 +130,30 @@ class DesktopHeader extends Component {
               </Link>
             </Dropdown.Menu>
           </Dropdown>
+
+          <Dropdown item text="ERC20 Tokens">
+            <Dropdown.Menu>
+              <Link href="/ERC20">
+                <a
+                  className="item"
+                  onClick={() => {
+                    if (location.pathname == '/ERC20') {
+                      location.reload();
+                    }
+                  }}
+                >
+                  ERC20 Tokens
+                </a>
+              </Link>
+              <Link href="/ERC20/buy">
+                <a className="item">Buy Tokens</a>
+              </Link>
+              <Link href="/ERC20/transfer">
+                <a className="item">Transfer Tokens</a>
+              </Link>
+            </Dropdown.Menu>
+          </Dropdown>
+
           <Link href="/media">
             <a className="item">Media</a>
           </Link>
@@ -249,6 +273,34 @@ class MobileHeader extends Component {
               </Link>
               <Link href="/create_tokens">
                 <a className="item">Create New Tokens</a>
+              </Link>
+            </Menu.Menu>
+          </Menu.Item>
+          {/*</Dropdown.Menu>
+          </Dropdown>*/}
+
+          {/*<Dropdown item text="Collectible Tokens" pointing="left">
+            <Dropdown.Menu>*/}
+          <Menu.Item>
+            ERC20 Tokens
+            <Menu.Menu>
+              <Link href="/ERC20">
+                <a
+                  className="item"
+                  onClick={() => {
+                    if (location.pathname == '/ERC20') {
+                      location.reload();
+                    }
+                  }}
+                >
+                  ERC20 Tokens
+                </a>
+              </Link>
+              <Link href="/ERC20/buy">
+                <a className="item">Buy Tokens</a>
+              </Link>
+              <Link href="/ERC20/transfer">
+                <a className="item">Transfer Tokens</a>
               </Link>
             </Menu.Menu>
           </Menu.Item>

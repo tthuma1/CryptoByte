@@ -281,7 +281,7 @@ class CryptoByteIndex extends Component {
                 <Grid.Column>
                   <p>
                     Current amount of existing tokens:{' '}
-                    <b>{totalSupply.toLocaleString('en-US')}</b>
+                    <b>{parseInt(totalSupply).toLocaleString('en-US')}</b>
                   </p>
                 </Grid.Column>
               </Grid.Row>
