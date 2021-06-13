@@ -3,18 +3,13 @@ import Layout from '../../components/Layout';
 import {
   Container,
   Header,
-  Grid,
   Message,
-  Segment,
-  Divider,
   Button,
-  Icon,
   Form,
   Input,
 } from 'semantic-ui-react';
 import cryptoByte20 from '../../ethereum/solidity/ERC20/cryptoByte20';
 import MMPrompt from '../../components/MMPrompt';
-import { Link } from '../../routes';
 import web3 from '../../ethereum/web3';
 import Head from 'next/head';
 import BigNumber from 'bignumber.js';
