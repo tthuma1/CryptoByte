@@ -17,23 +17,17 @@ async function web3() {
         method: 'eth_chainId',
       });
 
-      if (chainId != process.env.RINKEBY_CHAIN_ID) {
+      if (chainId != process.env.CHAIN_ID) {
         // if MetaMask is installed but connected to wrong network
-        provider = new Web3.providers.HttpProvider(
-          process.env.RINKEBY_INFURA_ENDPOINT
-        );
+        provider = new Web3.providers.HttpProvider(process.env.INFURA_ENDPOINT);
       }
     } else {
       // if MetaMask is not installed
-      provider = new Web3.providers.HttpProvider(
-        process.env.RINKEBY_INFURA_ENDPOINT
-      );
+      provider = new Web3.providers.HttpProvider(process.env.INFURA_ENDPOINT);
     }
   } catch (err) {
     // if window isn't defined (SSR)
-    provider = new Web3.providers.HttpProvider(
-      process.env.RINKEBY_INFURA_ENDPOINT
-    );
+    provider = new Web3.providers.HttpProvider(process.env.INFURA_ENDPOINT);
   }
 
   // provider will be either window.ethereum or Infura
