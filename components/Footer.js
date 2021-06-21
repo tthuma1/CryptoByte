@@ -3,6 +3,13 @@ import { Icon, Grid, Container } from 'semantic-ui-react';
 import { Media, MediaContextProvider } from './Media';
 
 class Footer extends Component {
+  state = {
+    contractAddr:
+      window.location.pathname.search('/ERC20') == 0 // if true, we are at ERC20 section of page
+        ? process.env.ADDRESS_20 // if we are at ERC20 section of page, display ERC20 contract address in footer
+        : process.env.ADDRESS_721, // otherwise display ERC721 contract address
+  };
+
   render() {
     return (
       <MediaContextProvider>
@@ -19,10 +26,10 @@ class Footer extends Component {
               <Grid.Column textAlign="right">
                 <span>Contract address:</span>{' '}
                 <a
-                  href={`https://etherscan.io/token/${process.env.ADDRESS_721}`}
+                  href={`https://etherscan.io/token/${this.state.contractAddr}`}
                   target="_blank"
                 >
-                  {process.env.ADDRESS_721}
+                  {this.state.contractAddr}
                 </a>
               </Grid.Column>
               <Grid.Column textAlign="left">
@@ -91,10 +98,10 @@ class MobileFooter extends Component {
             >
               <span>Contract address:</span>{' '}
               <a
-                href={`https://etherscan.io/token/${process.env.ADDRESS_721}`}
+                href={`https://etherscan.io/token/${this.state.contractAddr}`}
                 target="_blank"
               >
-                {process.env.ADDRESS_721}
+                {this.state.contractAddr}
               </a>
             </Grid.Column>
             <Grid.Column>

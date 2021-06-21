@@ -7,6 +7,7 @@ if (dotEnvResult.error) {
 module.exports = {
   env: {
     ADDRESS_721: process.env.ADDRESS_721,
+    ADDRESS_20: process.env.ADDRESS_20,
     NETWORK_TYPE: process.env.NETWORK_TYPE,
     CHAIN_ID: process.env.CHAIN_ID,
     INFURA_ENDPOINT: process.env.INFURA_ENDPOINT,

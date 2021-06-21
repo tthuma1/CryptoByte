@@ -235,10 +235,6 @@ class ERC20Transfer extends Component {
                       {this.state.amount} {symbol}
                     </b>{' '}
                     from your account to <b>{this.state.addr}</b>.
-                    <br />
-                    Your final balance will be{' '}
-                    {this.state.balance.minus(this.state.amount).toFixed()}{' '}
-                    {symbol}.
                   </p>
                 </Message>
               )}

@@ -11,6 +11,7 @@ import {
   Form,
   Input,
   Loader,
+  Image,
 } from 'semantic-ui-react';
 import cryptoByte20 from '../../ethereum/solidity/ERC20/cryptoByte20';
 import MMPrompt from '../../components/MMPrompt';
@@ -181,7 +182,12 @@ class ERC20Index extends Component {
                 </Grid.Column>
               </Grid.Row>
             </Grid>
-            <br />
+
+            <Image
+              src="/static/images/erc20-transparent.png"
+              size="medium"
+              centered
+            />
 
             <Divider />
 
@@ -297,7 +303,8 @@ class ERC20Index extends Component {
                   <p style={{ wordWrap: 'break-word' }}>
                     <b>{this.state.searchAddr}</b> owns{' '}
                     <b>
-                      {this.state.result} {symbol}
+                      {parseInt(this.state.result).toLocaleString('en-US')}{' '}
+                      {symbol}
                     </b>
                     .
                   </p>
