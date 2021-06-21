@@ -215,6 +215,23 @@ let panels = [
       ),
     },
   },
+  {
+    key: '12',
+    title: 'What are Crypto Byte ERC20 tokens?',
+    content: {
+      content: (
+        <p>
+          Crypto Byte ERC20 tokens are blockchain-based assets that have value
+          and can be sent and received. Tokens are issued on the Ethereum
+          network.
+          <br /> <br />
+          Token symbol: CBTN
+          <br />
+          Max supply: {parseInt(1000000000).toLocaleString('en-US')}
+        </p>
+      ),
+    },
+  },
 ];
 
 class FAQ extends Component {

@@ -166,7 +166,7 @@ class ERC20Index extends Component {
                 </Grid.Column>
                 <Grid.Column>
                   <p>
-                    Current amount of tokens in circulation:{' '}
+                    Total supply:{' '}
                     <b>
                       {parseInt(totalSupply.toFixed()).toLocaleString('en-US')}
                     </b>
@@ -176,8 +176,7 @@ class ERC20Index extends Component {
               <Grid.Row>
                 <Grid.Column width={16}>
                   <p>
-                    Maximum amount of tokens to be minted:{' '}
-                    <b>{parseInt(cap).toLocaleString('en-US')}</b>
+                    Max supply: <b>{parseInt(cap).toLocaleString('en-US')}</b>
                   </p>
                 </Grid.Column>
               </Grid.Row>
