@@ -77,6 +77,13 @@ class Footer extends Component {
 
 // seperate version for mobile because else grid acts weird
 class MobileFooter extends Component {
+  state = {
+    contractAddr:
+      window.location.pathname.search('/ERC20') == 0 // if true, we are at ERC20 section of page
+        ? process.env.ADDRESS_20 // if we are at ERC20 section of page, display ERC20 contract address in footer
+        : process.env.ADDRESS_721, // otherwise display ERC721 contract address
+  };
+
   render() {
     return (
       <div>
