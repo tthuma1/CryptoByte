@@ -19,7 +19,8 @@ let panels = [
           </p>
           <p>Token symbol: CRBC</p>
           <p>
-            Each customer who buys one collectible token receives 10,000 CBTN.
+            Each customer who purchases one collectible token receives 10,000
+            CBTN.
           </p>
         </div>
       ),

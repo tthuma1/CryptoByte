@@ -324,7 +324,8 @@ class AllTokens extends Component {
             There are currently {this.props.supply} existing tokens.
           </Header>
           <p style={{ color: '#fff', fontSize: '1.2em' }}>
-            Each customer who buys one collectible token receives 10,000 CBTN.
+            Each customer who purchases one collectible token receives 10,000
+            CBTN.
           </p>
           {this.renderTokens()}
         </Container>
